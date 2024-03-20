@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:unischedule/presentation/calendar_page/calendar_page.dart';
 import 'package:unischedule/presentation/shell/app_shell.dart';
 import 'package:unischedule/presentation/home_page/home_page.dart';
+import 'package:unischedule/presentation/authentication_page/authentication_page.dart';
+
 
 
 
@@ -47,7 +49,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: '/friends',
             name: 'friends',
             pageBuilder: (context, state) {
-              return NoTransitionPage(child: HomePage(key: state.pageKey));
+              return NoTransitionPage(child: AuthenticationPage(key: state.pageKey));
             }
           ),
           GoRoute(

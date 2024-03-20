@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:local_auth/local_auth.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -9,26 +10,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0;
-  final List<Widget> _children = [
-    HomePageBackground(),
-    PlaceholderWidget(Colors.white),
-    PlaceholderWidget(Colors.deepOrange),
-    PlaceholderWidget(Colors.green),
-  ];
-
-  void onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          _children[_currentIndex],
+          HomePageBackground(),
           Positioned(
             top: 0,
             left: 0,
@@ -290,20 +277,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-class PlaceholderWidget extends StatelessWidget {
-  final Color color;
-
-  PlaceholderWidget(this.color);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: color,
-    );
-  }
-}
-
 class HomePageBackground extends StatelessWidget {
   const HomePageBackground({Key? key}) : super(key: key);
 
