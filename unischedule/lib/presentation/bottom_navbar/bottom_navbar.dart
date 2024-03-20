@@ -64,7 +64,7 @@ class _BottomNavigationWidgetState extends ConsumerState<BottomNavigationWidget>
     switch (index){
       case 0:
         // Navega a la página de inicio
-        context.go('/');
+        context.go('/home');
         break;
       case 1:
         // Navega a la página de calendario

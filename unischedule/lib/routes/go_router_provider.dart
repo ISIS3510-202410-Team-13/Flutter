@@ -17,14 +17,14 @@ final GlobalKey<NavigatorState> shellNavigator = GlobalKey(debugLabel: 'shell');
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     navigatorKey: rootNavigator,
-    initialLocation: '/',
+    initialLocation: '/auth', // Cambio a la ruta de autenticación como inicial
     routes: [
-      GoRoute( 
-        path: '/home',
-        name: 'root',
+      GoRoute(
+        path: '/auth',
+        name: 'auth',
         builder: (context, state) {
-          return HomePage(key: state.pageKey);
-        }
+          return AuthenticationPage(key: state.pageKey);
+        },
       ),
 
       ShellRoute(
@@ -32,7 +32,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state, child) => AppShell(key:state.pageKey, child: child),
         routes: [
           GoRoute(
-            path: '/',
+            path: '/home',
             name: 'home',
             pageBuilder: (context, state) {
               return NoTransitionPage(child: HomePage(key: state.pageKey));
@@ -49,7 +49,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: '/friends',
             name: 'friends',
             pageBuilder: (context, state) {
-              return NoTransitionPage(child: AuthenticationPage(key: state.pageKey));
+              return NoTransitionPage(child: HomePage(key: state.pageKey));
             }
           ),
           GoRoute(
