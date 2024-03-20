@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:unischedule/controllers/home_controller.dart';
+import 'package:unischedule/providers/navigation/navigation_bar_controller.dart';
 
 class BottomNavigationWidget extends ConsumerStatefulWidget {
   const BottomNavigationWidget({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class BottomNavigationWidget extends ConsumerStatefulWidget {
 class _BottomNavigationWidgetState extends ConsumerState<BottomNavigationWidget> {
   @override
   Widget build(BuildContext context) {
-    final currentIndex = ref.watch(homeControllerProvider);
+    final currentIndex = ref.watch(navigationBarControllerProvider);
     return BottomNavigationBar(
         onTap: onTabTapped,
         currentIndex: currentIndex,
@@ -59,7 +59,7 @@ class _BottomNavigationWidgetState extends ConsumerState<BottomNavigationWidget>
   }
 
   void onTabTapped(int index) {
-    ref.read(homeControllerProvider.notifier).setIndex(index);
+    ref.read(navigationBarControllerProvider.notifier).setIndex(index);
 
     switch (index){
       case 0:

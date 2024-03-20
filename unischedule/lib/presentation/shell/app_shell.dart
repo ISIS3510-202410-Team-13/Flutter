@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:unischedule/presentation/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:unischedule/presentation/bottom_navbar/bottom_navbar.dart';
 
 class AppShell extends StatefulWidget {
   final Widget child;
