@@ -49,7 +49,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
           ),
         ]
       ),
-      backgroundColor: Color(0xFFF8F8F8),
+      backgroundColor: const Color(0xFFF8F8F8),
     );
   }
 
@@ -132,11 +132,11 @@ class _CreateClassPageState extends State<CreateClassPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: const Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                  border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
                 ),
                 child: const Text(
                   'One-Time',
@@ -147,13 +147,13 @@ class _CreateClassPageState extends State<CreateClassPage> {
                   ),
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Color(0xFF9DCC18),
+                  color: const Color(0xFF9DCC18),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Color(0xFF9DCC18), width: 1),
+                  border: Border.all(color: const Color(0xFF9DCC18), width: 1),
                 ),
                 child: const Text(
                   'Recurrent',
@@ -170,9 +170,9 @@ class _CreateClassPageState extends State<CreateClassPage> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: Color(0xFFFFFFFF),
+              color: const Color(0xFFFFFFFF),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+              border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
             ),
             child: Column(
               children: <Widget>[
@@ -209,7 +209,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color(0xFFD0D5DD),
+                      color: const Color(0xFFD0D5DD),
                       width: 1,
                     ),
                   ),
@@ -264,7 +264,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color(0xFFD0D5DD),
+                      color: const Color(0xFFD0D5DD),
                       width: 1,
                     ),
                   ),
@@ -309,7 +309,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                       SizedBox(
                           width: 30,
                           child: SvgPicture.asset('assets/icons/stopwatch.svg',
-                              width: 24, height: 24, color: Color(0xFF475569)),
+                              width: 24, height: 24, color: const Color(0xFF475569)),
                       ),
                     ],
                   ),
@@ -317,7 +317,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color(0xFFD0D5DD),
+                      color: const Color(0xFFD0D5DD),
                       width: 1,
                     ),
                   ),
@@ -350,8 +350,8 @@ class _CreateClassPageState extends State<CreateClassPage> {
                           focusedBorderColor: Colors.transparent,
                           borderWidth: 0,
                           focusedBorderWidth: 0,
-                          clearIcon: Icon(Icons.clear),
-                          padding: EdgeInsets.all(0),
+                          clearIcon: const Icon(Icons.clear),
+                          padding: const EdgeInsets.all(0),
                           hint: 'Labels',
                           hintStyle: const TextStyle(
                             fontFamily: 'Poppins',
@@ -376,9 +376,9 @@ class _CreateClassPageState extends State<CreateClassPage> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             decoration: BoxDecoration(
-              color: Color(0xFFFFFFFF),
+              color: const Color(0xFFFFFFFF),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+              border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
             ),
             width: double.infinity,
             child: const Row(
@@ -416,9 +416,9 @@ class _CreateClassPageState extends State<CreateClassPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24), // Ajustado para aumentar la altura
               decoration: BoxDecoration(
-                color: Color(0xFFFFFFFF),
+                color: const Color(0xFFFFFFFF),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
               ),
               width: double.infinity,
               child: Row(
@@ -449,9 +449,9 @@ class _CreateClassPageState extends State<CreateClassPage> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24), // Ajustado para aumentar la altura
                   decoration: BoxDecoration(
-                    color: Color(0xFFFFFFFF),
+                    color: const Color(0xFFFFFFFF),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                    border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -476,9 +476,9 @@ class _CreateClassPageState extends State<CreateClassPage> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Ajustado para aumentar la altura
                   decoration: BoxDecoration(
-                    color: Color(0xFFFFFFFF),
+                    color: const Color(0xFFFFFFFF),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                    border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
@@ -494,7 +494,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                           _selectedDuration = newValue!; // Actualiza la variable de estado con la nueva selección
                         });
                       },
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         color: Color(0xFF475569),
@@ -530,9 +530,9 @@ class _CreateClassPageState extends State<CreateClassPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               decoration: BoxDecoration(
-                color: Color(0xFF9DCC18).withOpacity(0.15),
+                color: const Color(0xFF9DCC18).withOpacity(0.15),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
               ),
               width: double.infinity,
               child: Row(
@@ -570,7 +570,7 @@ class PlaceRecommendationsDialog extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Center(
+      child: const Center(
         child: Text(
           'Hello, this is my dialog!',
           style: TextStyle(
@@ -619,7 +619,7 @@ class _EventColorInputState extends State<EventColorInput> {
                     displayThumbColor: true,
                     enableAlpha: false,
                     paletteType: PaletteType.hsv,
-                    pickerAreaBorderRadius: BorderRadius.all(Radius.circular(16)),
+                    pickerAreaBorderRadius: const BorderRadius.all(Radius.circular(16)),
                   ),
                 ),
               );
