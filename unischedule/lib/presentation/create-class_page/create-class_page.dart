@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class CreateClassPage extends StatefulWidget {
   const CreateClassPage({Key? key}) : super(key: key);
@@ -91,7 +92,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
       padding: const EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
-          Row(
+          Row(  // TODO add a toggle to switch between one-time and recurrent events
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
@@ -344,24 +345,27 @@ class _CreateClassPageState extends State<CreateClassPage> {
               border: Border.all(color: Color(0xFFD0D5DD), width: 1),
             ),
             width: double.infinity,
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  "Event Color",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    color: Color(0xFF475569)
-                  )
+                Expanded(
+                  child: Text(
+                      "Event Color",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          color: Color(0xFF475569)
+                      )
+                  ),
                 ),
+                EventColorInput(),
               ]
             ),
           ),
           const SizedBox(height: 20),
           Row(
             children: <Widget>[
-              Expanded(
+              Expanded(  // TODO - Add a date picker
                 flex: 1,
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -371,14 +375,22 @@ class _CreateClassPageState extends State<CreateClassPage> {
                     border: Border.all(color: Color(0xFFD0D5DD), width: 1),
                   ),
                   width: double.infinity,
-                  child: const Text(
-                      "Wednesday",
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          color: Color(0xFF475569)
-                      )
-                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SvgPicture.asset('assets/icons/calendar-check.svg',
+                            width: 24, height: 24, color: const Color(0xFF475569)),
+                        const SizedBox(width: 12),
+                        const Text(
+                            "Wednesday",
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                color: Color(0xFF475569)
+                            )
+                        ),
+                      ]
+                  )
                 ),
               ),
               const SizedBox(width: 8),
@@ -392,20 +404,28 @@ class _CreateClassPageState extends State<CreateClassPage> {
                     border: Border.all(color: Color(0xFFD0D5DD), width: 1),
                   ),
                   width: double.infinity,
-                  child: const Text(
-                      "Wednesday",
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          color: Color(0xFF475569)
-                      )
-                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SvgPicture.asset('assets/icons/note-sticky.svg',
+                            width: 24, height: 24, color: const Color(0xFF475569)),
+                        const SizedBox(width: 12),
+                        const Text(
+                            "Notes",
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                color: Color(0xFF475569)
+                            )
+                        ),
+                      ]
+                  )
                 ),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          Row(
+          Row(  // TODO - Add a time picker
             children: <Widget>[
               Expanded(
                 flex: 1,
@@ -417,14 +437,22 @@ class _CreateClassPageState extends State<CreateClassPage> {
                     border: Border.all(color: Color(0xFFD0D5DD), width: 1),
                   ),
                   width: double.infinity,
-                  child: const Text(
-                      "Wednesday",
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          color: Color(0xFF475569)
-                      )
-                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SvgPicture.asset('assets/icons/hourglass-start.svg',
+                          width: 24, height: 24, color: const Color(0xFF475569)),
+                      const SizedBox(width: 12),
+                      const Text(
+                          "2:00 PM",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              color: Color(0xFF475569)
+                          )
+                      ),
+                    ]
+                  )
                 ),
               ),
               const SizedBox(width: 8),
@@ -438,14 +466,22 @@ class _CreateClassPageState extends State<CreateClassPage> {
                     border: Border.all(color: Color(0xFFD0D5DD), width: 1),
                   ),
                   width: double.infinity,
-                  child: const Text(
-                      "Wednesday",
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          color: Color(0xFF475569)
-                      )
-                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SvgPicture.asset('assets/icons/hourglass-end.svg',
+                            width: 24, height: 24, color: const Color(0xFF475569)),
+                        const SizedBox(width: 12),
+                        const Text(
+                            "3:00 PM",
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                color: Color(0xFF475569)
+                            )
+                        ),
+                      ]
+                  )
                 ),
               ),
             ],
@@ -489,3 +525,61 @@ class _CreateClassPageState extends State<CreateClassPage> {
     );
   }
 }
+
+
+class EventColorInput extends StatefulWidget {
+  const EventColorInput({Key? key}) : super(key: key);
+
+  @override
+  _EventColorInputState createState() => _EventColorInputState();
+}
+
+class _EventColorInputState extends State<EventColorInput> {
+
+  Color currentColor = Colors.deepPurpleAccent;
+  void changeColor(Color color) {
+    setState(() => currentColor = color);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                titlePadding: const EdgeInsets.all(0.0),
+                contentPadding: const EdgeInsets.all(0.0),
+                content: SingleChildScrollView(
+                  child: ColorPicker(
+                    pickerColor: currentColor,
+                    onColorChanged: changeColor,
+                    colorPickerWidth: 300.0,
+                    pickerAreaHeightPercent: 0.7,
+                    displayThumbColor: true,
+                    enableAlpha: false,
+                    paletteType: PaletteType.hsv,
+                    pickerAreaBorderRadius: BorderRadius.all(Radius.circular(16)),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(currentColor),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+        ),
+        child: const SizedBox(
+          width: 24,
+          height: 24,
+        )
+    );
+  }
+}
+
