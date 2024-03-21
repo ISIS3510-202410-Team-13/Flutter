@@ -36,6 +36,7 @@ dependencies:
   flutter_riverpod: ^2.5.1
   local_auth: ^2.2.0
   multi_dropdown: ^2.1.4
+  flutter_colorpicker: ^1.0.3
 
 dev_dependencies:
   flutter_test:
