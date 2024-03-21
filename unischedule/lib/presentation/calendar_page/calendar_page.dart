@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class CalendarApp extends StatefulWidget {
   const CalendarApp({Key? key}) : super(key: key);
@@ -75,11 +76,16 @@ class _CalendarAppState extends State<CalendarApp> {
       Positioned(
         right: 11,
         bottom: 11 + MediaQuery.of(context).padding.bottom,
-        child: SvgPicture.asset(
-          'assets/icons/square-plus.svg',
-          width: 50,
-          height: 56,
-          color: Colors.white,
+        child: InkWell(
+          onTap: () {
+            GoRouter.of(context).go('/create-class');
+          },
+          child: SvgPicture.asset(
+            'assets/icons/square-plus.svg',
+            width: 50,
+            height: 56,
+            color: Colors.white,
+          ),
         ),
       ),
     ];

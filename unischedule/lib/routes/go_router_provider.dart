@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unischedule/presentation/calendar_page/calendar_page.dart';
+import 'package:unischedule/presentation/create-class_page/create-class_page.dart';
 import 'package:unischedule/presentation/shell/app_shell.dart';
 import 'package:unischedule/presentation/home_page/home_page.dart';
 import 'package:unischedule/presentation/authentication_page/authentication_page.dart';
@@ -25,6 +26,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           return AuthenticationPage(key: state.pageKey);
         },
+      ),
+
+      GoRoute(
+        path: '/create-class',
+        name: 'create-class',
+        builder: (context, state) {
+          return CreateClassPage(key: state.pageKey);
+        }
       ),
 
       ShellRoute(
