@@ -6,6 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:unischedule/services/notifications_service.dart';
+import 'package:intl/intl.dart';
+
+
 class CreateClassPage extends StatefulWidget {
   const CreateClassPage({Key? key}) : super(key: key);
 
@@ -14,6 +19,25 @@ class CreateClassPage extends StatefulWidget {
 }
 
 class _CreateClassPageState extends State<CreateClassPage> {
+  DateTime _eventStartTime = DateTime.now();
+  String? _selectedReminder;
+  String _selectedDuration = '1h'; // Valor inicial
+
+
+  int _getReminderMinutes(String? reminder) {
+    switch (reminder) {
+      case '5 minutes before':
+        return 5;
+      case '15 minutes before':
+        return 15;
+      case '30 minutes before':
+        return 30;
+      case '1 hour before':
+        return 60;
+      default:
+        return 0; // No reminder or unhandled value
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,8 +78,18 @@ class _CreateClassPageState extends State<CreateClassPage> {
         IconButton(
           icon: SvgPicture.asset('assets/icons/plus.svg',
               width: 24, height: 24, color: Colors.black),
-          onPressed: () {},
+          onPressed: () {
+
+            DateTime notificationTime = _eventStartTime.subtract(Duration(minutes: _getReminderMinutes(_selectedReminder)));
+            print('Hora notificacion: ${notificationTime} , minutos antes para el recordatorio:  ${Duration(minutes: _getReminderMinutes(_selectedReminder))} ');
+            NotificationService().scheduleNotification(
+                title: 'Scheduled Event Reminder',
+                body: 'Your event is about to start at ${DateFormat('HH:mm').format(_eventStartTime)}',
+                scheduledNotificationDateTime: notificationTime);
+            context.go('/calendar');
+          },
         ),
+
       ],
     );
   }
@@ -79,7 +113,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
       '30 minutes before',
       '1 hour before',
     ];
-    String? selectedReminder;
+
 
     const labels = <String>[
       'Uniandes 📚',
@@ -266,10 +300,10 @@ class _CreateClassPageState extends State<CreateClassPage> {
                           }).toList(),
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedReminder = newValue;
+                              _selectedReminder = newValue;
                             });
                           },
-                          value: selectedReminder,
+                          value: _selectedReminder,
                         ),
                       ),
                       SizedBox(
@@ -355,7 +389,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                       "Event Color",
                       style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 16,
+                          fontSize: 18,
                           color: Color(0xFF475569)
                       )
                   ),
@@ -365,130 +399,116 @@ class _CreateClassPageState extends State<CreateClassPage> {
             ),
           ),
           const SizedBox(height: 20),
+          InkWell(
+            onTap: () {
+              DatePicker.showDateTimePicker(
+                context,
+                showTitleActions: true,
+                minTime: DateTime.now(),
+                onConfirm: (date) {
+                  setState(() {
+                    _eventStartTime = date;
+                  });
+                },
+                currentTime: _eventStartTime,
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24), // Ajustado para aumentar la altura
+              decoration: BoxDecoration(
+                color: Color(0xFFFFFFFF),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+              ),
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(width: 35), // Aumentado para mover el icono a la derecha
+                  SvgPicture.asset('assets/icons/hourglass-start.svg',
+                      width: 24, height: 24, color: const Color(0xFF475569)),
+                  const SizedBox(width: 20), // Espacio entre el icono y el texto
+                  Text(
+                    DateFormat('MMMM dd - HH:mm').format(_eventStartTime),
+                    style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 18,
+                        color: Color(0xFF475569)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+
+          const SizedBox(height: 12),
           Row(
             children: <Widget>[
-              Expanded(  // TODO - Add a date picker
-                flex: 1,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFFFFF),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Color(0xFFD0D5DD), width: 1),
-                  ),
-                  width: double.infinity,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SvgPicture.asset('assets/icons/calendar-check.svg',
-                            width: 24, height: 24, color: const Color(0xFF475569)),
-                        const SizedBox(width: 12),
-                        const Text(
-                            "Wednesday",
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 16,
-                                color: Color(0xFF475569)
-                            )
-                        ),
-                      ]
-                  )
-                ),
-              ),
-              const SizedBox(width: 8),
               Expanded(
                 flex: 1,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24), // Ajustado para aumentar la altura
                   decoration: BoxDecoration(
                     color: Color(0xFFFFFFFF),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: Color(0xFFD0D5DD), width: 1),
                   ),
-                  width: double.infinity,
                   child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SvgPicture.asset('assets/icons/note-sticky.svg',
-                            width: 24, height: 24, color: const Color(0xFF475569)),
-                        const SizedBox(width: 12),
-                        const Text(
-                            "Notes",
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 16,
-                                color: Color(0xFF475569)
-                            )
-                        ),
-                      ]
-                  )
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(  // TODO - Add a time picker
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFFFFF),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Color(0xFFD0D5DD), width: 1),
-                  ),
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SvgPicture.asset('assets/icons/hourglass-start.svg',
+                      SvgPicture.asset('assets/icons/calendar-day.svg',
                           width: 24, height: 24, color: const Color(0xFF475569)),
-                      const SizedBox(width: 12),
-                      const Text(
-                          "2:00 PM",
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 16,
-                              color: Color(0xFF475569)
-                          )
+                      const SizedBox(width: 12), // Espaciado entre el icono y el texto
+                      Text(
+                        DateFormat('EEEE').format(_eventStartTime), // Muestra el día de la semana
+                        style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                            color: Color(0xFF475569)),
                       ),
-                    ]
-                  )
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 flex: 1,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Ajustado para aumentar la altura
                   decoration: BoxDecoration(
                     color: Color(0xFFFFFFFF),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: Color(0xFFD0D5DD), width: 1),
                   ),
-                  width: double.infinity,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SvgPicture.asset('assets/icons/hourglass-end.svg',
-                            width: 24, height: 24, color: const Color(0xFF475569)),
-                        const SizedBox(width: 12),
-                        const Text(
-                            "3:00 PM",
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 16,
-                                color: Color(0xFF475569)
-                            )
-                        ),
-                      ]
-                  )
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: _selectedDuration, // Usa la variable de estado para el valor actual
+                      items: <String>['1h', '2h', '3h', '4h'].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedDuration = newValue!; // Actualiza la variable de estado con la nueva selección
+                        });
+                      },
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                        color: Color(0xFF475569),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 20),
+
+
+
+          const SizedBox(height: 12),
           InkWell(
             onTap: () {
               showGeneralDialog(

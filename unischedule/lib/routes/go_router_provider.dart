@@ -7,7 +7,7 @@ import 'package:unischedule/presentation/notifications_page/notifications_page.d
 import 'package:unischedule/presentation/shell/app_shell.dart';
 import 'package:unischedule/presentation/home_page/home_page.dart';
 import 'package:unischedule/presentation/authentication_page/authentication_page.dart';
-import 'package:unischedule/presentation/notifications_page/notifications_page.dart';
+
 
 
 
