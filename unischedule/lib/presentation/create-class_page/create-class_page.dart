@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -487,41 +489,78 @@ class _CreateClassPageState extends State<CreateClassPage> {
             ],
           ),
           const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-            decoration: BoxDecoration(
-              color: Color(0xFF9DCC18).withOpacity(0.15),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Color(0xFFD0D5DD), width: 1),
-            ),
-            width: double.infinity,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text(
-                    "Find a Place on Campus",
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        color: Color(0xFF475569),
-                        fontWeight: FontWeight.bold
-                    )
-                ),
-                const SizedBox(width: 12),
-                SvgPicture.asset('assets/icons/location-dot.svg',
-                    width: 24, height: 24, color: const Color(0xFF475569)),
-              ]
+          InkWell(
+            onTap: () {
+              showGeneralDialog(
+                context: context,
+                barrierDismissible: true,
+                barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                barrierColor: Colors.black45,
+                transitionDuration: const Duration(milliseconds: 200),
+                pageBuilder: (BuildContext buildContext, Animation animation, Animation secondaryAnimation) {
+                  return Center(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: PlaceRecommendationsDialog(),
+                    ),
+                  );
+                },
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              decoration: BoxDecoration(
+                color: Color(0xFF9DCC18).withOpacity(0.15),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+              ),
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                      "Find a Place on Campus",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          color: Color(0xFF475569),
+                          fontWeight: FontWeight.bold
+                      )
+                  ),
+                  const SizedBox(width: 12),
+                  SvgPicture.asset('assets/icons/location-dot.svg',
+                      width: 24, height: 24, color: const Color(0xFF475569)),
+                ]
+              ),
             ),
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildPlaceRecommendationPopup() {
-    return Column(
-      children: <Widget>[
-      ],
+class PlaceRecommendationsDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 300,
+      height: 200,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Center(
+        child: Text(
+          'Hello, this is my dialog!',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 16,
+            color: Color(0xFF475569),
+            decoration: TextDecoration.none,
+          )
+        ),
+      ),
     );
   }
 }
