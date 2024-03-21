@@ -88,7 +88,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
     final MultiSelectController labelsMultiSelectController = MultiSelectController();
 
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
           Row(
@@ -129,7 +129,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
@@ -149,7 +149,6 @@ class _CreateClassPageState extends State<CreateClassPage> {
                             fontFamily: 'Poppins',
                             fontSize: 16,
                             color: Color(0xFF475569),
-                            fontWeight: FontWeight.bold,
                           ),
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -158,7 +157,6 @@ class _CreateClassPageState extends State<CreateClassPage> {
                               fontFamily: 'Poppins',
                               fontSize: 16,
                               color: Color(0xFF475569),
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -190,12 +188,18 @@ class _CreateClassPageState extends State<CreateClassPage> {
                           onOptionSelected: (List<ValueItem> selectedOptions) {},
                           options: assistants.map((key) => ValueItem(label: key, value: key)).toList(),
                           selectionType: SelectionType.multi,
-                          chipConfig: const ChipConfig(wrapType: WrapType.scroll),
+                          chipConfig: const ChipConfig(
+                            wrapType: WrapType.scroll,
+                            labelStyle: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              color: Color(0xFFFFFFFF),
+                            ),
+                          ),
                           optionTextStyle: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
                             color: Color(0xFF475569),
-                            fontWeight: FontWeight.bold,
                           ),
                           borderColor: Colors.transparent,
                           focusedBorderColor: Colors.transparent,
@@ -208,7 +212,6 @@ class _CreateClassPageState extends State<CreateClassPage> {
                             fontFamily: 'Poppins',
                             fontSize: 16,
                             color: Color(0xFF475569),
-                            fontWeight: FontWeight.bold,
                           ),
                           hintPadding: const EdgeInsets.all(0),
                         ),
@@ -243,7 +246,6 @@ class _CreateClassPageState extends State<CreateClassPage> {
                               fontFamily: 'Poppins',
                               fontSize: 16,
                               color: Color(0xFF475569),
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           items: reminders.map((String value) {
@@ -255,7 +257,6 @@ class _CreateClassPageState extends State<CreateClassPage> {
                                   fontFamily: 'Poppins',
                                   fontSize: 16,
                                   color: Color(0xFF475569),
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             );
@@ -295,12 +296,18 @@ class _CreateClassPageState extends State<CreateClassPage> {
                           onOptionSelected: (List<ValueItem> selectedOptions) {},
                           options: labels.map((key) => ValueItem(label: key, value: key)).toList(),
                           selectionType: SelectionType.multi,
-                          chipConfig: const ChipConfig(wrapType: WrapType.scroll),
-                          optionTextStyle: TextStyle(
+                          chipConfig: const ChipConfig(
+                              wrapType: WrapType.scroll,
+                              labelStyle: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                color: Color(0xFFFFFFFF),
+                              ),
+                          ),
+                          optionTextStyle: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
                             color: Color(0xFF475569),
-                            fontWeight: FontWeight.bold,
                           ),
                           borderColor: Colors.transparent,
                           focusedBorderColor: Colors.transparent,
@@ -308,12 +315,11 @@ class _CreateClassPageState extends State<CreateClassPage> {
                           focusedBorderWidth: 0,
                           clearIcon: Icon(Icons.clear),
                           padding: EdgeInsets.all(0),
-                          hint: 'Assistants',
-                          hintStyle: TextStyle(
+                          hint: 'Labels',
+                          hintStyle: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
                             color: Color(0xFF475569),
-                            fontWeight: FontWeight.bold,
                           ),
                           hintPadding: const EdgeInsets.all(0),
                         ),
@@ -329,10 +335,148 @@ class _CreateClassPageState extends State<CreateClassPage> {
               ],
             ),
           ),
-          Card(),
-          Row(),
-          Row(),
-          Card(),
+          const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            decoration: BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+            ),
+            width: double.infinity,
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Event Color",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    color: Color(0xFF475569)
+                  )
+                ),
+              ]
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                  ),
+                  width: double.infinity,
+                  child: const Text(
+                      "Wednesday",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          color: Color(0xFF475569)
+                      )
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                  ),
+                  width: double.infinity,
+                  child: const Text(
+                      "Wednesday",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          color: Color(0xFF475569)
+                      )
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                  ),
+                  width: double.infinity,
+                  child: const Text(
+                      "Wednesday",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          color: Color(0xFF475569)
+                      )
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                  ),
+                  width: double.infinity,
+                  child: const Text(
+                      "Wednesday",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          color: Color(0xFF475569)
+                      )
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            decoration: BoxDecoration(
+              color: Color(0xFF9DCC18).withOpacity(0.15),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+            ),
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                    "Find a Place on Campus",
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                        color: Color(0xFF475569),
+                        fontWeight: FontWeight.bold
+                    )
+                ),
+                const SizedBox(width: 12),
+                SvgPicture.asset('assets/icons/location-dot.svg',
+                    width: 24, height: 24, color: const Color(0xFF475569)),
+              ]
+            ),
+          ),
         ],
       ),
     );
