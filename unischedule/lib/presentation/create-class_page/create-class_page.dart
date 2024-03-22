@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
@@ -8,17 +9,18 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:unischedule/services/notifications_service.dart';
+import '../../../providers/create-class_page/create-class_provider.dart';
 import 'package:intl/intl.dart';
 
 
-class CreateClassPage extends StatefulWidget {
+class CreateClassPage extends ConsumerStatefulWidget {
   const CreateClassPage({Key? key}) : super(key: key);
 
   @override
   _CreateClassPageState createState() => _CreateClassPageState();
 }
 
-class _CreateClassPageState extends State<CreateClassPage> {
+class _CreateClassPageState extends ConsumerState<CreateClassPage> {
   DateTime _eventStartTime = DateTime.now();
   String? _selectedReminder;
   String _selectedDuration = '1h'; // Valor inicial
@@ -40,6 +42,9 @@ class _CreateClassPageState extends State<CreateClassPage> {
   }
   @override
   Widget build(BuildContext context) {
+
+    var availableSpacesParams = ref.watch(availableSpacesParamsProvider);
+
     return Scaffold(
       body: Column(
         children: <Widget>[

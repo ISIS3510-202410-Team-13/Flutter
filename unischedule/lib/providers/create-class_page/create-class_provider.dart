@@ -5,7 +5,7 @@ import '../../../models/create-class_page/create-class_model.dart';
 
 
 @riverpod
-Future<List<AvailableSpacesResponseModel>> explore(ref) async {
+Future<List<AvailableSpacesResponseModel>> availableSpaces(ref) async {
   final availableSpacesRepository = ref.watch(availableSpacesRepositoryProvider);
   final availableSpacesParams = ref.watch(availableSpacesParamsProvider);
 
@@ -13,7 +13,7 @@ Future<List<AvailableSpacesResponseModel>> explore(ref) async {
 }
 
 final availableSpacesParamsProvider = StateProvider<AvailableSpacesParamsModel>(
-      (ref) => AvailableSpacesParamsModel("Monday", const TimeOfDay(hour: 8, minute: 0), 60),
+      (ref) => AvailableSpacesParamsModel("Monday", const TimeOfDay(hour: 8, minute: 0), 60), // FIXME - Change default values
 );
 
 class AvailableSpacesParamsModel {
