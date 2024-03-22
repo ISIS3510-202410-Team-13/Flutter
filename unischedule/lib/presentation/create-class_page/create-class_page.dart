@@ -389,7 +389,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                       "Event Color",
                       style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 18,
+                          fontSize: 16,
                           color: Color(0xFF475569)
                       )
                   ),
@@ -423,24 +423,21 @@ class _CreateClassPageState extends State<CreateClassPage> {
               width: double.infinity,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  const SizedBox(width: 35), // Aumentado para mover el icono a la derecha
+                children: <Widget>[ // Aumentado para mover el icono a la derecha
                   SvgPicture.asset('assets/icons/hourglass-start.svg',
                       width: 24, height: 24, color: const Color(0xFF475569)),
-                  const SizedBox(width: 20), // Espacio entre el icono y el texto
+                  const SizedBox(width: 12), // Espacio entre el icono y el texto
                   Text(
                     DateFormat('MMMM dd - HH:mm').format(_eventStartTime),
                     style: const TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: 18,
+                        fontSize: 16,
                         color: Color(0xFF475569)),
                   ),
                 ],
               ),
             ),
           ),
-
-
           const SizedBox(height: 12),
           Row(
             children: <Widget>[
@@ -454,7 +451,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                     border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       SvgPicture.asset('assets/icons/calendar-day.svg',
                           width: 24, height: 24, color: const Color(0xFF475569)),
@@ -480,34 +477,41 @@ class _CreateClassPageState extends State<CreateClassPage> {
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: _selectedDuration, // Usa la variable de estado para el valor actual
-                      items: <String>['1h', '2h', '3h', '4h'].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedDuration = newValue!; // Actualiza la variable de estado con la nueva selección
-                        });
-                      },
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        color: Color(0xFF475569),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SvgPicture.asset('assets/icons/clock.svg',
+                          width: 24, height: 24, color: const Color(0xFF475569)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: _selectedDuration, // Usa la variable de estado para el valor actual
+                            items: <String>['1h', '2h', '3h', '4h'].map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedDuration = newValue!; // Actualiza la variable de estado con la nueva selección
+                              });
+                            },
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              color: Color(0xFF475569),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),
             ],
           ),
-
-
-
           const SizedBox(height: 12),
           InkWell(
             onTap: () {
