@@ -25,7 +25,7 @@ class CreateClassPage extends ConsumerStatefulWidget {
 
 class _CreateClassPageState extends ConsumerState<CreateClassPage> {
   DateTime _eventStartTime = DateTime.now();
-  String _selectedDuration = '1 Hora'; // Valor inicial
+  String _selectedDuration = '1 Hour'; // Valor inicial
   String? _selectedReminder;
 
 
@@ -131,7 +131,7 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
 
     var availableSpacesParams = ref.watch(availableSpacesParamsProvider);
     _eventStartTime = DateTime(_eventStartTime.year, _eventStartTime.month, _eventStartTime.day, availableSpacesParams.startTime.hour, availableSpacesParams.startTime.minute);
-    _selectedDuration = '${availableSpacesParams.duration ~/ 60} Hora${availableSpacesParams.duration ~/ 60 > 1 ? 's' : ''}';
+    _selectedDuration = '${availableSpacesParams.duration ~/ 60} Hour${availableSpacesParams.duration ~/ 60 > 1 ? 's' : ''}';
 
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -501,7 +501,7 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             value: _selectedDuration, // Usa la variable de estado para el valor actual
-                            items: <String>['1 Hora', '2 Horas', '3 Horas', '4 Horas'].map((String value) {
+                            items: <String>['1 Hour', '2 Hours', '3 Hours', '4 Hours'].map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
