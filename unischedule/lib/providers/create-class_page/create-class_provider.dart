@@ -7,7 +7,7 @@ import '../../../repositories/create-class_page/create-class_repository.dart';
 part 'create-class_provider.g.dart';
 
 @riverpod
-Future<List<AvailableSpacesResponseModel>> availableSpaces(ref) async {
+Future<List<AvailableSpacesResponseModel>> availableSpaces(AvailableSpacesRef ref) async {
   final availableSpacesRepository = ref.watch(availableSpacesRepositoryProvider);
   final availableSpacesParams = ref.watch(availableSpacesParamsProvider);
 

@@ -16,7 +16,13 @@ class AvailableSpacesRepositoryImpl extends AvailableSpacesRepository {
   @override
   Future<List<AvailableSpacesResponseModel>> fetchAvailableSpaces(AvailableSpacesRequestModel request) async {
     var response = await client.getRequest('', request.toJson());
-    return response as List<AvailableSpacesResponseModel>;
+    if (response is List<dynamic>) {
+      // Convert each dynamic element to AvailableSpacesResponseModel
+      return response.map((e) => AvailableSpacesResponseModel.fromJson(e)).toList();
+    } else {
+      // Handle the case where the response is not a list
+      throw Exception('Unexpected response format');
+    }
   }
 }
 

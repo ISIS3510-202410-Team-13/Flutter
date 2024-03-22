@@ -8,6 +8,7 @@ import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:unischedule/models/create-class_page/create-class_model.dart';
 import 'package:unischedule/services/notifications_service.dart';
 import '../../../providers/create-class_page/create-class_provider.dart';
 import 'package:intl/intl.dart';
@@ -42,9 +43,6 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
   }
   @override
   Widget build(BuildContext context) {
-
-    var availableSpacesParams = ref.watch(availableSpacesParamsProvider);
-
     return Scaffold(
       body: Column(
         children: <Widget>[
@@ -128,6 +126,8 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
       'Friends 👯‍',
     ];
     final MultiSelectController labelsMultiSelectController = MultiSelectController();
+
+    var availableSpacesParams = ref.watch(availableSpacesParamsProvider);
 
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -569,9 +569,13 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
   }
 }
 
-class PlaceRecommendationsDialog extends StatelessWidget {
+class PlaceRecommendationsDialog extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    print(ref.watch(availableSpacesProvider));
+    var availableSpaces = ref.watch(availableSpacesProvider).value ?? <AvailableSpacesResponseModel>[];
+
     return ConstrainedBox(
       constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height * 0.6,
@@ -586,7 +590,7 @@ class PlaceRecommendationsDialog extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(
+            const Text(
                 'Place Recommendations',
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -604,12 +608,12 @@ class PlaceRecommendationsDialog extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                                'SD-402',
-                                style: TextStyle(
+                                '${availableSpaces[index].building}-${availableSpaces[index].room}',
+                                style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 20,
                                   color: Color(0xFF475569),
@@ -617,10 +621,10 @@ class PlaceRecommendationsDialog extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 )
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Text(
-                                'Available from 11:00 am to 5:30 pm',
-                                style: TextStyle(
+                                'Available from ${availableSpaces[index].availableFrom.substring(0, 2)}:${availableSpaces[index].availableFrom.substring(2)} to ${availableSpaces[index].availableUntil.substring(0, 2)}:${availableSpaces[index].availableUntil.substring(2)}',
+                                style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 12,
                                   color: Color(0xFF475569),
@@ -635,8 +639,8 @@ class PlaceRecommendationsDialog extends StatelessWidget {
                           height: 60,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8), // Borde redondeado
-                            image: const DecorationImage(
-                              image: AssetImage('assets/images/buildings/sd.jpg'),
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/buildings/${availableSpaces[index].building}.jpg'),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -645,7 +649,7 @@ class PlaceRecommendationsDialog extends StatelessWidget {
                     ),
                   ),
                   separatorBuilder: (BuildContext context, int index) => const Divider(height: 1, color: Color(0xFFD0D5DD)),
-                  itemCount: 10
+                  itemCount: availableSpaces.length
               ),
             ),
             Row(
@@ -655,7 +659,7 @@ class PlaceRecommendationsDialog extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text(
+                  child: const Text(
                       'Cancel',
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -670,7 +674,7 @@ class PlaceRecommendationsDialog extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text(
+                  child: const Text(
                       'Confirm',
                       style: TextStyle(
                         fontFamily: 'Poppins',
