@@ -23,8 +23,8 @@ class CreateClassPage extends ConsumerStatefulWidget {
 
 class _CreateClassPageState extends ConsumerState<CreateClassPage> {
   DateTime _eventStartTime = DateTime.now();
-  String? _selectedReminder;
   String _selectedDuration = '1 Hora'; // Valor inicial
+  String? _selectedReminder;
 
 
   int _getReminderMinutes(String? reminder) {
@@ -416,7 +416,7 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                   setState(() {
                     _eventStartTime = date;
                     ref.read(availableSpacesParamsProvider.notifier).state = AvailableSpacesParamsModel(
-                        availableSpacesParams.dayOfWeek,
+                        DateFormat('EEEE').format(date),
                         TimeOfDay(hour: date.hour, minute: date.minute),
                         availableSpacesParams.duration
                     );

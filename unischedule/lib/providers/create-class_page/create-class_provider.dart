@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../models/create-class_page/create-class_model.dart';
@@ -15,7 +16,7 @@ Future<List<AvailableSpacesResponseModel>> availableSpaces(AvailableSpacesRef re
 }
 
 final availableSpacesParamsProvider = StateProvider<AvailableSpacesParamsModel>(
-      (ref) => AvailableSpacesParamsModel("Monday", const TimeOfDay(hour: 8, minute: 0), 60), // FIXME - Change default values
+      (ref) => AvailableSpacesParamsModel(DateFormat('EEEE').format(DateTime.now()), const TimeOfDay(hour: 8, minute: 0), 60), // FIXME - Change default values, keep in mind that setting with now can have potential issues in the future (specially around midnight)
 );
 
 class AvailableSpacesParamsModel {
