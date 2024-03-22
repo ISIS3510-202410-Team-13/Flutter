@@ -1,27 +1,30 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:unischedule/models/create-class_page/create-class_model.dart';
 import 'package:unischedule/services/notifications_service.dart';
+import '../../../providers/create-class_page/create-class_provider.dart';
 import 'package:intl/intl.dart';
 
 
-class CreateClassPage extends StatefulWidget {
+class CreateClassPage extends ConsumerStatefulWidget {
   const CreateClassPage({Key? key}) : super(key: key);
 
   @override
   _CreateClassPageState createState() => _CreateClassPageState();
 }
 
-class _CreateClassPageState extends State<CreateClassPage> {
+class _CreateClassPageState extends ConsumerState<CreateClassPage> {
   DateTime _eventStartTime = DateTime.now();
+  String _selectedDuration = '1 Hora'; // Valor inicial
   String? _selectedReminder;
-  String _selectedDuration = '1h'; // Valor inicial
 
 
   int _getReminderMinutes(String? reminder) {
@@ -49,7 +52,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
           ),
         ]
       ),
-      backgroundColor: Color(0xFFF8F8F8),
+      backgroundColor: const Color(0xFFF8F8F8),
     );
   }
 
@@ -124,6 +127,10 @@ class _CreateClassPageState extends State<CreateClassPage> {
     ];
     final MultiSelectController labelsMultiSelectController = MultiSelectController();
 
+    var availableSpacesParams = ref.watch(availableSpacesParamsProvider);
+    _eventStartTime = DateTime(_eventStartTime.year, _eventStartTime.month, _eventStartTime.day, availableSpacesParams.startTime.hour, availableSpacesParams.startTime.minute);
+    _selectedDuration = '${availableSpacesParams.duration ~/ 60} Hora${availableSpacesParams.duration ~/ 60 > 1 ? 's' : ''}';
+
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -132,11 +139,11 @@ class _CreateClassPageState extends State<CreateClassPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: const Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                  border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
                 ),
                 child: const Text(
                   'One-Time',
@@ -147,13 +154,13 @@ class _CreateClassPageState extends State<CreateClassPage> {
                   ),
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Color(0xFF9DCC18),
+                  color: const Color(0xFF9DCC18),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Color(0xFF9DCC18), width: 1),
+                  border: Border.all(color: const Color(0xFF9DCC18), width: 1),
                 ),
                 child: const Text(
                   'Recurrent',
@@ -170,9 +177,9 @@ class _CreateClassPageState extends State<CreateClassPage> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: Color(0xFFFFFFFF),
+              color: const Color(0xFFFFFFFF),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+              border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
             ),
             child: Column(
               children: <Widget>[
@@ -209,7 +216,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color(0xFFD0D5DD),
+                      color: const Color(0xFFD0D5DD),
                       width: 1,
                     ),
                   ),
@@ -264,7 +271,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color(0xFFD0D5DD),
+                      color: const Color(0xFFD0D5DD),
                       width: 1,
                     ),
                   ),
@@ -309,7 +316,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                       SizedBox(
                           width: 30,
                           child: SvgPicture.asset('assets/icons/stopwatch.svg',
-                              width: 24, height: 24, color: Color(0xFF475569)),
+                              width: 24, height: 24, color: const Color(0xFF475569)),
                       ),
                     ],
                   ),
@@ -317,7 +324,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color(0xFFD0D5DD),
+                      color: const Color(0xFFD0D5DD),
                       width: 1,
                     ),
                   ),
@@ -350,8 +357,8 @@ class _CreateClassPageState extends State<CreateClassPage> {
                           focusedBorderColor: Colors.transparent,
                           borderWidth: 0,
                           focusedBorderWidth: 0,
-                          clearIcon: Icon(Icons.clear),
-                          padding: EdgeInsets.all(0),
+                          clearIcon: const Icon(Icons.clear),
+                          padding: const EdgeInsets.all(0),
                           hint: 'Labels',
                           hintStyle: const TextStyle(
                             fontFamily: 'Poppins',
@@ -376,9 +383,9 @@ class _CreateClassPageState extends State<CreateClassPage> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             decoration: BoxDecoration(
-              color: Color(0xFFFFFFFF),
+              color: const Color(0xFFFFFFFF),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+              border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
             ),
             width: double.infinity,
             child: const Row(
@@ -389,7 +396,7 @@ class _CreateClassPageState extends State<CreateClassPage> {
                       "Event Color",
                       style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 18,
+                          fontSize: 16,
                           color: Color(0xFF475569)
                       )
                   ),
@@ -408,6 +415,11 @@ class _CreateClassPageState extends State<CreateClassPage> {
                 onConfirm: (date) {
                   setState(() {
                     _eventStartTime = date;
+                    ref.read(availableSpacesParamsProvider.notifier).state = AvailableSpacesParamsModel(
+                        DateFormat('EEEE').format(date),
+                        TimeOfDay(hour: date.hour, minute: date.minute),
+                        availableSpacesParams.duration
+                    );
                   });
                 },
                 currentTime: _eventStartTime,
@@ -416,31 +428,28 @@ class _CreateClassPageState extends State<CreateClassPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24), // Ajustado para aumentar la altura
               decoration: BoxDecoration(
-                color: Color(0xFFFFFFFF),
+                color: const Color(0xFFFFFFFF),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
               ),
               width: double.infinity,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  const SizedBox(width: 35), // Aumentado para mover el icono a la derecha
+                children: <Widget>[ // Aumentado para mover el icono a la derecha
                   SvgPicture.asset('assets/icons/hourglass-start.svg',
                       width: 24, height: 24, color: const Color(0xFF475569)),
-                  const SizedBox(width: 20), // Espacio entre el icono y el texto
+                  const SizedBox(width: 12), // Espacio entre el icono y el texto
                   Text(
                     DateFormat('MMMM dd - HH:mm').format(_eventStartTime),
                     style: const TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: 18,
+                        fontSize: 16,
                         color: Color(0xFF475569)),
                   ),
                 ],
               ),
             ),
           ),
-
-
           const SizedBox(height: 12),
           Row(
             children: <Widget>[
@@ -449,12 +458,12 @@ class _CreateClassPageState extends State<CreateClassPage> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24), // Ajustado para aumentar la altura
                   decoration: BoxDecoration(
-                    color: Color(0xFFFFFFFF),
+                    color: const Color(0xFFFFFFFF),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                    border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       SvgPicture.asset('assets/icons/calendar-day.svg',
                           width: 24, height: 24, color: const Color(0xFF475569)),
@@ -476,38 +485,50 @@ class _CreateClassPageState extends State<CreateClassPage> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Ajustado para aumentar la altura
                   decoration: BoxDecoration(
-                    color: Color(0xFFFFFFFF),
+                    color: const Color(0xFFFFFFFF),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                    border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: _selectedDuration, // Usa la variable de estado para el valor actual
-                      items: <String>['1h', '2h', '3h', '4h'].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedDuration = newValue!; // Actualiza la variable de estado con la nueva selección
-                        });
-                      },
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        color: Color(0xFF475569),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SvgPicture.asset('assets/icons/clock.svg',
+                          width: 24, height: 24, color: const Color(0xFF475569)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: _selectedDuration, // Usa la variable de estado para el valor actual
+                            items: <String>['1 Hora', '2 Horas', '3 Horas', '4 Horas'].map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedDuration = newValue!; // Actualiza la variable de estado con la nueva selección
+                                ref.read(availableSpacesParamsProvider.notifier).state = AvailableSpacesParamsModel(
+                                    availableSpacesParams.dayOfWeek,
+                                    availableSpacesParams.startTime,
+                                    int.parse(newValue.substring(0, 1)) * 60 // FIXME - This is highly coupled with the format of the string
+                                );
+                              });
+                            },
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              color: Color(0xFF475569),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),
             ],
           ),
-
-
-
           const SizedBox(height: 12),
           InkWell(
             onTap: () {
@@ -530,9 +551,9 @@ class _CreateClassPageState extends State<CreateClassPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               decoration: BoxDecoration(
-                color: Color(0xFF9DCC18).withOpacity(0.15),
+                color: const Color(0xFF9DCC18).withOpacity(0.15),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Color(0xFFD0D5DD), width: 1),
+                border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
               ),
               width: double.infinity,
               child: Row(
@@ -560,25 +581,123 @@ class _CreateClassPageState extends State<CreateClassPage> {
   }
 }
 
-class PlaceRecommendationsDialog extends StatelessWidget {
+class PlaceRecommendationsDialog extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      height: 200,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    var availableSpaces = ref.watch(availableSpacesProvider).value ?? <AvailableSpacesResponseModel>[];
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.6,
       ),
-      child: Center(
-        child: Text(
-          'Hello, this is my dialog!',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 16,
-            color: Color(0xFF475569),
-            decoration: TextDecoration.none,
-          )
+      child: Container(
+        width: MediaQuery.of(context).size.width - 24,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            const Text(
+                'Place Recommendations',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF000000),
+                  decoration: TextDecoration.none,
+                )
+            ),
+            Expanded(
+              child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  itemBuilder: (BuildContext context, int index) => Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                                '${availableSpaces[index].building}-${availableSpaces[index].room}',
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 20,
+                                  color: Color(0xFF475569),
+                                  decoration: TextDecoration.none,
+                                  fontWeight: FontWeight.bold,
+                                )
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                                'Available from ${availableSpaces[index].availableFrom.substring(0, 2)}:${availableSpaces[index].availableFrom.substring(2)} to ${availableSpaces[index].availableUntil.substring(0, 2)}:${availableSpaces[index].availableUntil.substring(2)}',
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12,
+                                  color: Color(0xFF475569),
+                                  decoration: TextDecoration.none,
+                                  fontWeight: FontWeight.normal,
+                                )
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: 80,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8), // Borde redondeado
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/buildings/${availableSpaces[index].building}.jpg'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  separatorBuilder: (BuildContext context, int index) => const Divider(height: 1, color: Color(0xFFD0D5DD)),
+                  itemCount: availableSpaces.length
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                      'Cancel',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 20,
+                        color: Color(0xFF9FA5C0),
+                        decoration: TextDecoration.none,
+                      )
+                  ),
+                ),
+                const SizedBox(width: 48),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                      'Confirm',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 20,
+                        color: Color(0xFF9DCC18),
+                        decoration: TextDecoration.none,
+                      )
+                  ),
+                )
+              ],
+            )
+          ],
         ),
       ),
     );
@@ -619,7 +738,7 @@ class _EventColorInputState extends State<EventColorInput> {
                     displayThumbColor: true,
                     enableAlpha: false,
                     paletteType: PaletteType.hsv,
-                    pickerAreaBorderRadius: BorderRadius.all(Radius.circular(16)),
+                    pickerAreaBorderRadius: const BorderRadius.all(Radius.circular(16)),
                   ),
                 ),
               );
