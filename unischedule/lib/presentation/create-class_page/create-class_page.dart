@@ -128,6 +128,7 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
     final MultiSelectController labelsMultiSelectController = MultiSelectController();
 
     var availableSpacesParams = ref.watch(availableSpacesParamsProvider);
+    _eventStartTime = DateTime(_eventStartTime.year, _eventStartTime.month, _eventStartTime.day, availableSpacesParams.startTime.hour, availableSpacesParams.startTime.minute);
 
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -413,6 +414,11 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                 onConfirm: (date) {
                   setState(() {
                     _eventStartTime = date;
+                    ref.read(availableSpacesParamsProvider.notifier).state = AvailableSpacesParamsModel(
+                        availableSpacesParams.dayOfWeek,
+                        TimeOfDay(hour: date.hour, minute: date.minute),
+                        availableSpacesParams.duration
+                    );
                   });
                 },
                 currentTime: _eventStartTime,
@@ -573,7 +579,6 @@ class PlaceRecommendationsDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    print(ref.watch(availableSpacesProvider));
     var availableSpaces = ref.watch(availableSpacesProvider).value ?? <AvailableSpacesResponseModel>[];
 
     return ConstrainedBox(
