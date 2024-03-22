@@ -563,22 +563,117 @@ class _CreateClassPageState extends State<CreateClassPage> {
 class PlaceRecommendationsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      height: 200,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.6,
       ),
-      child: const Center(
-        child: Text(
-          'Hello, this is my dialog!',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 16,
-            color: Color(0xFF475569),
-            decoration: TextDecoration.none,
-          )
+      child: Container(
+        width: MediaQuery.of(context).size.width - 24,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+                'Place Recommendations',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF000000),
+                  decoration: TextDecoration.none,
+                )
+            ),
+            Expanded(
+              child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  itemBuilder: (BuildContext context, int index) => Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                                'SD-402',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 20,
+                                  color: Color(0xFF475569),
+                                  decoration: TextDecoration.none,
+                                  fontWeight: FontWeight.bold,
+                                )
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                                'Available from 11:00 am to 5:30 pm',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12,
+                                  color: Color(0xFF475569),
+                                  decoration: TextDecoration.none,
+                                  fontWeight: FontWeight.normal,
+                                )
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: 80,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8), // Borde redondeado
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/buildings/sd.jpg'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  separatorBuilder: (BuildContext context, int index) => const Divider(height: 1, color: Color(0xFFD0D5DD)),
+                  itemCount: 10
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 20,
+                        color: Color(0xFF9FA5C0),
+                        decoration: TextDecoration.none,
+                      )
+                  ),
+                ),
+                const SizedBox(width: 48),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                      'Confirm',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 20,
+                        color: Color(0xFF9DCC18),
+                        decoration: TextDecoration.none,
+                      )
+                  ),
+                )
+              ],
+            )
+          ],
         ),
       ),
     );
