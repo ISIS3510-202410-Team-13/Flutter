@@ -70,7 +70,16 @@ flutter:
       - assets/icons/
       - assets/images/bg.jpg
       - assets/images/sticker.png
-      - assets/images/buildings/sd.jpg
+      - assets/images/buildings/AU.jpg
+      - assets/images/buildings/B.jpg
+      - assets/images/buildings/C.jpg
+      - assets/images/buildings/LL.jpg
+      - assets/images/buildings/ML.jpg
+      - assets/images/buildings/O.jpg
+      - assets/images/buildings/R.jpg
+      - assets/images/buildings/RGD.jpg
+      - assets/images/buildings/SD.jpg
+      - assets/images/buildings/W.jpg
 
   #   - images/a_dot_ham.jpeg
 
