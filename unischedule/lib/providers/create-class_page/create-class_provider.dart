@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../models/create-class_page/create-class_model.dart';
+import '../../../repositories/create-class_page/create-class_repository.dart';
 
+part 'create-class_provider.g.dart';
 
 @riverpod
 Future<List<AvailableSpacesResponseModel>> availableSpaces(ref) async {
