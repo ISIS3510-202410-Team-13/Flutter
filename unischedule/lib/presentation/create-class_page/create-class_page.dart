@@ -24,7 +24,7 @@ class CreateClassPage extends ConsumerStatefulWidget {
 class _CreateClassPageState extends ConsumerState<CreateClassPage> {
   DateTime _eventStartTime = DateTime.now();
   String? _selectedReminder;
-  String _selectedDuration = '1h'; // Valor inicial
+  String _selectedDuration = '1 Hora'; // Valor inicial
 
 
   int _getReminderMinutes(String? reminder) {
@@ -129,6 +129,7 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
 
     var availableSpacesParams = ref.watch(availableSpacesParamsProvider);
     _eventStartTime = DateTime(_eventStartTime.year, _eventStartTime.month, _eventStartTime.day, availableSpacesParams.startTime.hour, availableSpacesParams.startTime.minute);
+    _selectedDuration = '${availableSpacesParams.duration ~/ 60} Hora${availableSpacesParams.duration ~/ 60 > 1 ? 's' : ''}';
 
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -498,7 +499,7 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             value: _selectedDuration, // Usa la variable de estado para el valor actual
-                            items: <String>['1h', '2h', '3h', '4h'].map((String value) {
+                            items: <String>['1 Hora', '2 Horas', '3 Horas', '4 Horas'].map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
@@ -507,6 +508,11 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                             onChanged: (newValue) {
                               setState(() {
                                 _selectedDuration = newValue!; // Actualiza la variable de estado con la nueva selección
+                                ref.read(availableSpacesParamsProvider.notifier).state = AvailableSpacesParamsModel(
+                                    availableSpacesParams.dayOfWeek,
+                                    availableSpacesParams.startTime,
+                                    int.parse(newValue.substring(0, 1)) * 60 // FIXME - This is highly coupled with the format of the string
+                                );
                               });
                             },
                             style: const TextStyle(
