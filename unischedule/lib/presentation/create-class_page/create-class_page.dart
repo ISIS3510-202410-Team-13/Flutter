@@ -683,18 +683,50 @@ class PlaceRecommendationsDialog extends ConsumerWidget {
                 const SizedBox(width: 48),
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(); // Cierra el pop-up actual
+
+                    // Muestra el nuevo pop-up desde abajo
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.5, // Ocupa media pantalla
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Hola mundo',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      isScrollControlled: true, // Permite que el sheet ocupe más espacio
+                      backgroundColor: Colors.transparent, // Hace el fondo transparente para permitir el efecto blur
+                    );
                   },
                   child: const Text(
-                      'Confirm',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 20,
-                        color: Color(0xFF9DCC18),
-                        decoration: TextDecoration.none,
-                      )
+                    'Confirm',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 20,
+                      color: Color(0xFF9DCC18),
+                      decoration: TextDecoration.none,
+                    ),
                   ),
                 )
+
               ],
             )
           ],
