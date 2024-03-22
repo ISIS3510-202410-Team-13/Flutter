@@ -47,6 +47,7 @@ dependencies:
   dio: ^5.4.1
   sentry_flutter: ^7.18.0
   riverpod_generator: ^2.4.0
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
