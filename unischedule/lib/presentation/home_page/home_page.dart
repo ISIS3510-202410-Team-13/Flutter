@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Align(
                                   alignment: Alignment.bottomLeft,
                                   child: Text(
-                                    'Grupo $index',
+                                    'Group $index',
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 16,
@@ -192,7 +192,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Align(
                                   alignment: Alignment.bottomLeft,
                                   child: Text(
-                                    'Evento $index', // $index será reemplazado por el valor actual de la variable index
+                                    'Event $index', // $index será reemplazado por el valor actual de la variable index
                                     style: TextStyle(
                                       fontFamily:
                                       'Poppins', // Especifica la familia de fuentes
@@ -297,7 +297,7 @@ class HomePageBackground extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 50.0, top: 120.0),
                 child: Text(
-                  'Hola, David!',
+                  'Hey, David!',
                   style: TextStyle(
                     fontFamily:
                     'Poppins', // Asegúrate de que 'Poppins' esté agregada y configurada en tu pubspec.yaml

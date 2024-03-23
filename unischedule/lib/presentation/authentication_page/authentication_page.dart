@@ -85,12 +85,12 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
               padding: const EdgeInsets.only(bottom: 20.0),
               child: ElevatedButton(
                 onPressed: _authenticate,
-                child: Text('Entrar con huella'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white, // Esto establecerá el color del texto a blanco
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                 ),
+                child: const Text('Login with Fingerprint'),
               ),
             ),
           ],
