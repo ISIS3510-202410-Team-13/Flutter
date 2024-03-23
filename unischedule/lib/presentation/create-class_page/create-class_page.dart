@@ -133,10 +133,11 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
     _eventStartTime = DateTime(_eventStartTime.year, _eventStartTime.month, _eventStartTime.day, availableSpacesParams.startTime.hour, availableSpacesParams.startTime.minute);
     _selectedDuration = '${availableSpacesParams.duration ~/ 60} Hour${availableSpacesParams.duration ~/ 60 > 1 ? 's' : ''}';
 
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        children: <Widget>[
+    return SingleChildScrollView( // Añade SingleChildScrollView
+        child: Padding(
+        padding: const EdgeInsets.all(8),
+    child: Column(
+    children: <Widget>[
           Row(  // TODO add a toggle to switch between one-time and recurrent events
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -579,6 +580,7 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
           ),
         ],
       ),
+    ),
     );
   }
 }

@@ -44,14 +44,14 @@ class _BottomNavigationWidgetState extends ConsumerState<BottomNavigationWidget>
             icon: SvgPicture.asset('assets/icons/address-book.svg',
                 width: 24, height: 24, color: Color(0xFF9FA5C0)),
             activeIcon: SvgPicture.asset('assets/icons/address-book.svg',
-                width: 24, height: 24, color: Color(0xFF9DCC18)),
+                width: 24, height: 24, color: Color(0xFF9FA5C0)),
             label: 'Friends',
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset('assets/icons/user-group.svg',
                 width: 30, height: 24, color: Color(0xFF9FA5C0)),
             activeIcon: SvgPicture.asset('assets/icons/user-group.svg',
-                width: 30, height: 24, color: Color(0xFF9DCC18)),
+                width: 30, height: 24, color: Color(0xFF9FA5C0)),
             label: 'Groups',
           ),
         ],
@@ -72,11 +72,11 @@ class _BottomNavigationWidgetState extends ConsumerState<BottomNavigationWidget>
         break;
       case 2:
         // Navega a la página de amigos
-        context.go('/friends');
+        //context.go('/friends');
         break;
       case 3:
         // Navega a la página de grupos
-        context.go('/groups');
+        //context.go('/groups');
         break;
     }
   }
