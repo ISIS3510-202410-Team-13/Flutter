@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unischedule/presentation/calendar_page/calendar_page.dart';
 import 'package:unischedule/presentation/create-class_page/create-class_page.dart';
+import 'package:unischedule/presentation/groups_page/groups_page.dart';
 import 'package:unischedule/presentation/notifications_page/notifications_page.dart';
 import 'package:unischedule/presentation/rating-bar_page/rating-bar_page.dart';
 import 'package:unischedule/presentation/shell/app_shell.dart';
@@ -68,7 +69,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: '/groups',
             name: 'groups',
             pageBuilder: (context, state) {
-              return NoTransitionPage(child: HomePage(key: state.pageKey));
+              return NoTransitionPage(child: GroupsPage(key: state.pageKey));
             }
           )
         ],
