@@ -44,7 +44,7 @@ class _BottomNavigationWidgetState extends ConsumerState<BottomNavigationWidget>
             icon: SvgPicture.asset('assets/icons/address-book.svg',
                 width: 24, height: 24, color: Color(0xFF9FA5C0)),
             activeIcon: SvgPicture.asset('assets/icons/address-book.svg',
-                width: 24, height: 24, color: Color(0xFF9FA5C0)),
+                width: 24, height: 24, color: Color(0xFF9DCC18)),
             label: 'Friends',
           ),
           BottomNavigationBarItem(
@@ -72,7 +72,7 @@ class _BottomNavigationWidgetState extends ConsumerState<BottomNavigationWidget>
         break;
       case 2:
         // Navega a la página de amigos
-        //context.go('/friends');
+        context.go('/friends');
         break;
       case 3:
         // Navega a la página de grupos
