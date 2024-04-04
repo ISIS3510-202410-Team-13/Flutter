@@ -9,6 +9,7 @@ import 'package:unischedule/presentation/authentication_page/authentication_page
 import 'package:unischedule/presentation/friends_page/friends_page.dart';
 import 'package:unischedule/presentation/groups_page/groups_page.dart';
 
+
 final GlobalKey<NavigatorState> rootNavigator = GlobalKey(debugLabel: 'root');
 final GlobalKey<NavigatorState> shellNavigator = GlobalKey(debugLabel: 'shell');
 
