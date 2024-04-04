@@ -8,6 +8,8 @@ import 'package:unischedule/presentation/rating-bar_page/rating-bar_page.dart';
 import 'package:unischedule/presentation/shell/app_shell.dart';
 import 'package:unischedule/presentation/home_page/home_page.dart';
 import 'package:unischedule/presentation/authentication_page/authentication_page.dart';
+import 'package:unischedule/presentation/friends_page/friends_page.dart';
+import 'package:unischedule/presentation/groups_page/groups_page.dart';
 
 
 
@@ -61,14 +63,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: '/friends',
             name: 'friends',
             pageBuilder: (context, state) {
-              return NoTransitionPage(child: RatingPage(key: state.pageKey, title: "Snow"));
+              return NoTransitionPage(child: FriendsApp(key: state.pageKey));
             }
           ),
           GoRoute(
             path: '/groups',
             name: 'groups',
             pageBuilder: (context, state) {
-              return NoTransitionPage(child: HomePage(key: state.pageKey));
+              return NoTransitionPage(child: GroupsPage(key: state.pageKey));
             }
           )
         ],

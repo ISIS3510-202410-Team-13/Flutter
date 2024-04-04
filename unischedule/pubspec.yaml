@@ -94,6 +94,17 @@ flutter:
       - assets/images/buildings/RGD.jpg
       - assets/images/buildings/SD.jpg
       - assets/images/buildings/W.jpg
+      - assets/images/profile_pics/user_1.png
+      - assets/images/profile_pics/user_2.png
+      - assets/images/profile_pics/user_3.png
+      - assets/images/profile_pics/user_4.png
+      - assets/images/profile_pics/user_5.png
+      - assets/images/profile_pics/user_6.png
+      - assets/images/profile_pics/user_7.png
+      - assets/images/profile_pics/user_8.png
+      - assets/images/profile_pics/user_9.png
+      - assets/images/profile_pics/user_10.png
+      - assets/images/profile_pics/user_11.png
 
   #   - images/a_dot_ham.jpeg
 

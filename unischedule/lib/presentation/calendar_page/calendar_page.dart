@@ -74,8 +74,8 @@ class _CalendarAppState extends State<CalendarApp> {
   List<Widget> _buildSquarePlusIcon(BuildContext context) {
     return [
       Positioned(
-        right: 11,
-        bottom: 11 + MediaQuery.of(context).padding.bottom,
+        right: 20,
+        bottom: 15 + MediaQuery.of(context).padding.bottom,
         child: InkWell(
           onTap: () {
             GoRouter.of(context).go('/create-class');
@@ -401,7 +401,7 @@ class _CalendarAppState extends State<CalendarApp> {
                 ),
                 child: Center(
                   child: Text(
-                    'Soccer',
+                     'Soccer',
                     style: TextStyle(color: Colors.white, fontSize: 12),
                   ),
                 ),
