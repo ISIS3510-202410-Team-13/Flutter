@@ -51,7 +51,7 @@ class _BottomNavigationWidgetState extends ConsumerState<BottomNavigationWidget>
             icon: SvgPicture.asset('assets/icons/user-group.svg',
                 width: 30, height: 24, color: Color(0xFF9FA5C0)),
             activeIcon: SvgPicture.asset('assets/icons/user-group.svg',
-                width: 30, height: 24, color: Color(0xFF9FA5C0)),
+                width: 30, height: 24, color: Color(0xFF9DCC18)),
             label: 'Groups',
           ),
         ],
@@ -76,7 +76,7 @@ class _BottomNavigationWidgetState extends ConsumerState<BottomNavigationWidget>
         break;
       case 3:
         // Navega a la página de grupos
-        //context.go('/groups');
+        context.go('/groups');
         break;
     }
   }
