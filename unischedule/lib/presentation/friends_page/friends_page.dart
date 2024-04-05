@@ -16,6 +16,8 @@ class FriendsApp extends StatefulWidget {
 }
 
 class _FriendsAppState extends State<FriendsApp> {
+  final TextEditingController _searchController = TextEditingController(); // Controlador para la barra de búsqueda
+
   @override
   Widget build(BuildContext context) {
     final double itemWidth = MediaQuery.of(context).size.width - 60; // Margen de 30px a cada lado
@@ -61,6 +63,7 @@ class _FriendsAppState extends State<FriendsApp> {
             itemCount: 15, // Incrementa el conteo en 1 para la barra de búsqueda
             itemBuilder: (context, index) {
               if (index == 0) { // Primera posición para la barra de búsqueda
+                // Barra de búsqueda actualizada en el archivo 1
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                   child: Container(
@@ -69,9 +72,23 @@ class _FriendsAppState extends State<FriendsApp> {
                       color: Color(0xFFD9D9D9),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Row(
-                      children: [
-                        Padding(
+                    child: TextField(
+                      controller: _searchController,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF686868),
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Search',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF686868),
+                        ),
+                        prefixIcon: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: SvgPicture.asset(
                             'assets/icons/magnifying-glass.svg',
@@ -80,19 +97,12 @@ class _FriendsAppState extends State<FriendsApp> {
                             color: Color(0xFF686868),
                           ),
                         ),
-                        Text(
-                          'Search',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF686868),
-                          ),
-                        ),
-                      ],
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
                 );
+
               } else {
                 // Ajusta el índice para los elementos de la lista debido a la barra de búsqueda adicional
                 int adjustedIndex = index - 1;
@@ -146,8 +156,8 @@ class _FriendsAppState extends State<FriendsApp> {
             },
           ),
           Positioned(
-            right: 10, // Ajusta estos valores según tus necesidades
-            bottom: 10,
+            right: 16, // Ajusta estos valores según tus necesidades
+            bottom: 16,
             child: FloatingActionButton(
               onPressed: () {},
               child: Container(
