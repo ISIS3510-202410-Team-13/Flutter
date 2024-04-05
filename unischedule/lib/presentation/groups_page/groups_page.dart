@@ -12,7 +12,7 @@ class GroupsPage extends StatefulWidget {
 
 class _GroupsPageState extends State<GroupsPage> {
   TextEditingController _searchController =
-      TextEditingController(); // Add a TextEditingController for the search bar
+  TextEditingController(); // Add a TextEditingController for the search bar
   List<Color> colors_bg = [
     Color(0XFFFF7648), // Color for index 0
     Color(0XFF78BEFF), // Example color for index 4
@@ -67,35 +67,46 @@ class _GroupsPageState extends State<GroupsPage> {
       ),
       body: Column(
         children: [
+          // Barra de búsqueda actualizada en el archivo 2
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
             child: Container(
-              width: 350,
+              height: 45,
               decoration: BoxDecoration(
-                color: Color(
-                    0xFFD9D9D9), // Set the background color of the search bar
+                color: Color(0xFFD9D9D9),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: TextField(
                 controller: _searchController,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF686868),
+                ),
                 decoration: InputDecoration(
                   hintText: 'Search',
                   hintStyle: TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 16,
+                    fontSize: 18,
                     fontWeight: FontWeight.w600,
+                    color: Color(0xFF686868),
                   ),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color:
-                        Color(0xFF686868), // Set the color of the search icon
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: SvgPicture.asset(
+                      'assets/icons/magnifying-glass.svg',
+                      width: 24,
+                      height: 24,
+                      color: Color(0xFF686868),
+                    ),
                   ),
-                  border:
-                      InputBorder.none, // Remove the border of the search bar
+                  border: InputBorder.none,
                 ),
               ),
             ),
           ),
+
           Expanded(
             child: ListView.builder(
               itemCount: 10, // Número de grupos
@@ -170,9 +181,7 @@ class _GroupsPageState extends State<GroupsPage> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                        height:
-                            10), // Add a SizedBox to separate the elements vertically
+                    SizedBox(height: 10), // Add a SizedBox to separate the elements vertically
                   ],
                 );
               },
@@ -186,11 +195,9 @@ class _GroupsPageState extends State<GroupsPage> {
           child: Container(
             decoration: BoxDecoration(
               color: Color(0xFF9DCC18), // Color de fondo verde
-              shape: BoxShape
-                  .circle, // Forma circular para que coincida con el FAB
+              shape: BoxShape.circle, // Forma circular para que coincida con el FAB
             ),
-            padding: EdgeInsets.all(
-                0), // Espacio alrededor del icono para reducir el tamaño del fondo verde
+            padding: EdgeInsets.all(0), // Espacio alrededor del icono para reducir el tamaño del fondo verde
             child: SvgPicture.asset(
               'assets/icons/square-plus.svg',
               width: 50, // Ancho del icono reducido
