@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:local_auth/local_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:math';
+import '../../../providers/groups_page/groups_provider.dart'; // Asegúrate de que este sea el proveedor correcto
+import '../../../models/groups_page/group_model.dart'; // Importa el modelo de grupo
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final groupsAsyncValue = ref.watch(groupsProvider('0MebgXs8fBYREjDKMlwq'));
 
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          HomePageBackground(),
+          const HomePageBackground(),
           Positioned(
             top: 0,
             left: 0,
@@ -42,18 +42,16 @@ class _HomePageState extends State<HomePage> {
             left: 0,
             right: 0,
             child: Container(
-              padding: EdgeInsets.only(top: 20),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.only(top: 20),
+              decoration: const BoxDecoration(
                 color: Color(0xFFF8F8F8),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(37),
-                ),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(37)),
               ),
-              height: 393,
+              height: 393, // Ajusta esta altura según sea necesario
               child: Column(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -61,200 +59,49 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 24,
-                          fontWeight:
-                          FontWeight.w600, // 600 corresponde a SemiBold
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                   ),
-                  Container(
-                    height: 120,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return Stack(
-                          children: [
-                            Container(
-                              width: 137,
-                              height: 112,
-                              margin: EdgeInsets.symmetric(horizontal: 19),
-                              decoration: BoxDecoration(
-                                color: index % 2 == 0
-                                    ? Color(0XFFFF7648)
-                                    : Color(0XFF8F98FF),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 20, bottom: 10),
-                                child: Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text(
-                                    'Group $index',
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight
-                                          .w600, // Puedes ajustar esto según lo "negrita" que quieras que sea el texto. w600 es aproximadamente semibold
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              right: 18.9,
-                              top: 0,
-                              child: CustomPaint(
-                                size: Size(100, 100),
-                                painter: MyCustomPainter(
-                                  index % 2 == 0
-                                      ? Color(0xFFFFC278)
-                                      : Color(0xFF182A88),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              right: 25,
-                              top: 5,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: 5,
-                                    height: 5,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(height: 3),
-                                  Container(
-                                    width: 5,
-                                    height: 5,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              left: 36,
-                              top: 12,
-                              child: SvgPicture.asset(
-                                'assets/icons/face-angry.svg',
-                                width: 24,
-                                height: 24,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        );
-                      },
+                  Expanded(
+                    child: groupsAsyncValue.when(
+                      data: (groups) => ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: groups.length,
+                        itemBuilder: (context, index) {
+                          final Group group = groups[index];
+                          return buildGroupCard(group, index); // Pasando ambos argumentos requeridos aquí
+                        },
+                      ),
+                      loading: () => const Center(child: CircularProgressIndicator()),
+                      error: (error, stack) => Center(child: Text('Error: $error')),
                     ),
+
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '   My events',
+                        '   My Events',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 24,
-                          fontWeight:
-                          FontWeight.w600, // 600 corresponde a SemiBold
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                   ),
-                  Container(
-                    height: 120,
+                  Expanded(
+
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: 10,
+                      itemCount:
+                          10, // Define la cantidad de eventos estáticos que quieres mostrar
                       itemBuilder: (context, index) {
-                        return Stack(
-                          children: [
-                            Container(
-                              width: 234,
-                              height: 112,
-                              margin: EdgeInsets.symmetric(horizontal: 19),
-                              decoration: BoxDecoration(
-                                color: index % 2 == 0
-                                    ? Color(0xFFFF7878)
-                                    : Color(0xFF78BEFF),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 20, bottom: 10),
-                                child: Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text(
-                                    'Event $index', // $index será reemplazado por el valor actual de la variable index
-                                    style: TextStyle(
-                                      fontFamily:
-                                      'Poppins', // Especifica la familia de fuentes
-                                      fontSize:
-                                      16, // Establece el tamaño de fuente a 16
-                                      fontWeight: FontWeight
-                                          .w600, // Puedes ajustar esto según lo "negrita" que quieras que sea el texto. w600 es aproximadamente semibold
-                                      color: Colors
-                                          .white, // 600 corresponde a SemiBold en muchas fuentes, incluida Poppins
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              right: 18.9,
-                              top: 0,
-                              child: CustomPaint(
-                                size: Size(100,
-                                    100), // Tamaño del pintor personalizado
-                                painter: MyCustomPainter(index % 2 == 0
-                                    ? Color(0xFFFF4848)
-                                    : Color(0XFF4870FF)),
-                              ),
-                            ),
-                            Positioned(
-                              right: 25,
-                              top: 5,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: 5,
-                                    height: 5,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(height: 3),
-                                  Container(
-                                    width: 5,
-                                    height: 5,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                                left: 36,
-                                top: 12,
-                                child: SvgPicture.asset(
-                                  'assets/icons/fire.svg',
-                                  width: 24,
-                                  height: 24,
-                                  color: Colors
-                                      .white, // Esto aplica el color blanco al icono
-                                )),
-                          ],
-                        );
+                        return buildEventCard(
+                            index); // Usa una función helper para construir las tarjetas de eventos
                       },
                     ),
                   ),
@@ -262,13 +109,86 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildGroupCard(Group group, int index) {
+    String formattedName = group.name.length > 7 ? '${group.name.substring(0, 7)}...' : group.name;
+    final bgColor = Color(int.parse(group.color.replaceAll('#', '0xff')));
+    Color colorMasOscuro = bgColor
+        .withRed(max(0, bgColor.red - 30))
+        .withGreen(max(0, bgColor.green - 30))
+        .withBlue(max(0, bgColor.blue - 30));
+
+    return Container(
+      width: 150,
+      height: 112,
+      margin: const EdgeInsets.only(left: 19, right: 19, bottom: 15),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 20, bottom: 10),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                formattedName,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
           Positioned(
-            right: 10,
-            bottom: 353,
-            child: Container(
-              child: Image.asset(
-                "assets/images/sticker.png",
-                height: 197,
+            right: 0,
+            top: 0,
+            child: CustomPaint(
+              size: const Size(100, 100),
+              painter: MyCustomPainter(colorMasOscuro),
+            ),
+          ),
+          Positioned(
+            right: 8,
+            top: 5,
+            child: Column(
+              children: [
+                Container(
+                  width: 5,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 3),
+                Container(
+                  width: 5,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            left: 14,
+            top: 8,
+            // Usa un widget Text para mostrar el icono
+            child: Text(
+              group.icon, // Usa directamente el atributo icon del objeto group
+              style: TextStyle(
+                fontSize: 20, // Puedes ajustar el tamaño según sea necesario
+                color: Colors.white,
               ),
             ),
           ),
@@ -276,7 +196,86 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+
+  Widget buildEventCard(int index) {
+    return Container(
+      width: 234,
+      height: 112,
+      // Añade un margen en la parte inferior además de los márgenes horizontales
+      margin: const EdgeInsets.only(left: 19, right: 19, bottom: 20),
+      decoration: BoxDecoration(
+        color: index % 2 == 0 ? Color(0xFFFF7878) : Color(0xFF78BEFF),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 20, bottom: 10),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                'Event $index',
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: CustomPaint(
+              size: const Size(100, 100),
+              painter: MyCustomPainter(index % 2 == 0 ? Color(0xFFFF4848) : Color(0XFF4870FF)),
+            ),
+          ),
+          Positioned(
+            right: 8,
+            top: 5,
+            child: Column(
+              children: [
+                Container(
+                  width: 5,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 3),
+                Container(
+                  width: 5,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            left: 12,
+            top: 12,
+            child: SvgPicture.asset(
+              'assets/icons/fire.svg',
+              width: 24,
+              height: 24,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 }
+
 class HomePageBackground extends StatelessWidget {
   const HomePageBackground({Key? key}) : super(key: key);
 
@@ -300,7 +299,7 @@ class HomePageBackground extends StatelessWidget {
                   'Hey, David!',
                   style: TextStyle(
                     fontFamily:
-                    'Poppins', // Asegúrate de que 'Poppins' esté agregada y configurada en tu pubspec.yaml
+                        'Poppins', // Asegúrate de que 'Poppins' esté agregada y configurada en tu pubspec.yaml
                     fontSize: 40,
                     fontWeight: FontWeight.w700,
                     color: Colors
