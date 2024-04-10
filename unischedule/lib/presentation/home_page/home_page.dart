@@ -105,8 +105,17 @@ class HomePage extends ConsumerWidget {
                       },
                     ),
                   ),
+
                 ],
               ),
+            ),
+          ),
+          Positioned(
+            right: 10,
+            bottom: 353,
+            child: Image.asset(
+              "assets/images/sticker.png",
+              height: 197,
             ),
           ),
         ],
