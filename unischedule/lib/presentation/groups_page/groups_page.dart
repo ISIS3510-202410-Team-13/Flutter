@@ -36,27 +36,72 @@ class _GroupsPageState extends ConsumerState<GroupsPage> {
             context.pop();
           },
         ),
-        title: const Text('Groups', style: TextStyle(fontFamily: 'Poppins', fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black)),
+        title: const Text('Groups',
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black)),
       ),
       body: Column(
         children: [
           // Barra de búsqueda, si es necesaria
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+            child: Container(
+              height: 45,
+              decoration: BoxDecoration(
+                color: Color(0xFFD9D9D9),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: TextField(
+                controller: _searchController,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF686868),
+                ),
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF686868),
+                  ),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: SvgPicture.asset(
+                      'assets/icons/magnifying-glass.svg',
+                      width: 24,
+                      height: 24,
+                      color: Color(0xFF686868),
+                    ),
+                  ),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: groupsAsyncValue.when(
               data: (groups) => ListView.builder(
                 itemCount: groups.length,
                 itemBuilder: (context, index) {
                   final Group group = groups[index];
-                  final colorMasOscuro = Color(int.parse(group.color.replaceAll('#', '0xff')));
-                  Color bgColor = colorMasOscuro
-                      .withRed(max(0, colorMasOscuro.red - 30))
-                      .withGreen(max(0, colorMasOscuro.green - 30))
-                      .withBlue(max(0, colorMasOscuro.blue - 30));
+                  final bgColor =
+                      Color(int.parse(group.color.replaceAll('#', '0xff')));
+                  Color colorMasOscuro = bgColor
+                      .withRed(max(0, bgColor.red - 30))
+                      .withGreen(max(0, bgColor.green - 30))
+                      .withBlue(max(0, bgColor.blue - 30));
 
                   return Container(
                     width: double.infinity,
                     height: 133,
-                    margin: const EdgeInsets.symmetric(horizontal: 19, vertical: 10),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                     decoration: BoxDecoration(
                       color: bgColor,
                       borderRadius: BorderRadius.circular(20),
@@ -93,16 +138,19 @@ class _GroupsPageState extends ConsumerState<GroupsPage> {
                           top: 10,
                           child: Column(
                             children: const [
-                              CircleAvatar(radius: 5, backgroundColor: Colors.white),
+                              CircleAvatar(
+                                  radius: 3, backgroundColor: Colors.white),
                               SizedBox(height: 3),
-                              CircleAvatar(radius: 5, backgroundColor: Colors.white),
+                              CircleAvatar(
+                                  radius: 3, backgroundColor: Colors.white),
                             ],
                           ),
                         ),
                         Positioned(
                           left: 10,
                           top: 12,
-                          child: ProfileIconsRow(memberCount: group.members.length),
+                          child: ProfileIconsRow(
+                              memberCount: group.members.length),
                         ),
                       ],
                     ),
@@ -114,6 +162,35 @@ class _GroupsPageState extends ConsumerState<GroupsPage> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: Container(
+        child: FloatingActionButton(
+          onPressed: () {},
+          child: Container(
+            decoration: BoxDecoration(
+              color: Color(0xFF9DCC18), // Color de fondo verde
+              shape: BoxShape
+                  .circle, // Forma circular para que coincida con el FAB
+            ),
+            padding: EdgeInsets.all(
+                0), // Espacio alrededor del icono para reducir el tamaño del fondo verde
+            child: SvgPicture.asset(
+              'assets/icons/square-plus.svg',
+              width: 50, // Ancho del icono reducido
+              height: 56, // Altura del icono reducida
+              color: Colors.white,
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10), // Bordes redondeados
+            side: BorderSide(
+              color: Color(0xFF9DCC18), // Color del borde
+              width: 3.8, // Ancho del borde
+            ),
+          ),
+          elevation: 0,
+        ),
       ),
     );
   }
@@ -211,10 +288,14 @@ class MyCustomPainter extends CustomPainter {
 
     var path = Path();
     path.moveTo(size.width * 0.25, 0);
-    path.quadraticBezierTo(size.width * 0.75, size.height * 0.25, size.width * 0.5, size.height * 0.3);
-    path.quadraticBezierTo(size.width * 0.25, size.height * 0.35, size.width * 0.4, size.height * 0.6);
-    path.quadraticBezierTo(size.width * 0.55, size.height * 0.8, size.width * 0.7, size.height * 0.9);
-    path.quadraticBezierTo(size.width * 0.85, size.height, size.width, size.height * 0.75);
+    path.quadraticBezierTo(size.width * 0.75, size.height * 0.25,
+        size.width * 0.5, size.height * 0.3);
+    path.quadraticBezierTo(size.width * 0.25, size.height * 0.35,
+        size.width * 0.4, size.height * 0.6);
+    path.quadraticBezierTo(size.width * 0.55, size.height * 0.8,
+        size.width * 0.7, size.height * 0.9);
+    path.quadraticBezierTo(
+        size.width * 0.85, size.height, size.width, size.height * 0.75);
     path.lineTo(size.width, 0);
     path.close();
 
