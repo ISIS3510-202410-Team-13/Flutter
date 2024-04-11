@@ -1,36 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math';
 import 'package:go_router/go_router.dart';
+import '../../../providers/groups_page/groups_provider.dart'; // Asegúrate de que este sea el proveedor correcto
+import '../../../models/groups_page/group_model.dart'; // Importa el modelo de grupo
 
-class GroupsPage extends StatefulWidget {
+class GroupsPage extends ConsumerStatefulWidget {
   const GroupsPage({Key? key}) : super(key: key);
 
   @override
   _GroupsPageState createState() => _GroupsPageState();
 }
 
-class _GroupsPageState extends State<GroupsPage> {
-  TextEditingController _searchController =
-  TextEditingController(); // Add a TextEditingController for the search bar
-  List<Color> colors_bg = [
-    Color(0XFFFF7648), // Color for index 0
-    Color(0XFF78BEFF), // Example color for index 4
-    Color(0XFFFF8FB7), // Example color for index 2
-    Color(0XFFFF7878), // Example color for index 3
-    Color(0XFF8F98FF), // Color for index 1
-  ];
-
-  List<Color> colors_bubble = [
-    Color(0xFFFFC278),
-    Color(0xFF182A88),
-    Color(0xFF881869),
-    Color(0xFFFF4848),
-    Color(0xFF182A88),
-  ];
+class _GroupsPageState extends ConsumerState<GroupsPage> {
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    // Observa el proveedor de grupos con el ID del usuario especificado
+    final groupsAsyncValue = ref.watch(groupsProvider('0MebgXs8fBYREjDKMlwq'));
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -42,32 +32,20 @@ class _GroupsPageState extends State<GroupsPage> {
             height: 24,
             color: Colors.black,
           ),
-          onPressed: () {},
+          onPressed: () {
+            context.pop();
+          },
         ),
-        title: Text(
-          'Groups',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: SvgPicture.asset(
-              'assets/icons/bell.svg',
-              width: 21,
-              height: 24,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
-        ],
+        title: const Text('Groups',
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black)),
       ),
       body: Column(
         children: [
-          // Barra de búsqueda actualizada en el archivo 2
+          // Barra de búsqueda, si es necesaria
           Padding(
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
             child: Container(
@@ -106,85 +84,81 @@ class _GroupsPageState extends State<GroupsPage> {
               ),
             ),
           ),
-
           Expanded(
-            child: ListView.builder(
-              itemCount: 10, // Número de grupos
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Container(
-                      width: 350,
-                      height: 133,
-                      margin: EdgeInsets.symmetric(horizontal: 19),
-                      decoration: BoxDecoration(
-                        color: colors_bg[index %
-                            colors_bg.length], // Select color based on index
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 20, bottom: 10),
-                            child: Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                'Group ${index+1}',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.white,
-                                ),
+            child: groupsAsyncValue.when(
+              data: (groups) => ListView.builder(
+                itemCount: groups.length,
+                itemBuilder: (context, index) {
+                  final Group group = groups[index];
+                  final bgColor =
+                      Color(int.parse(group.color.replaceAll('#', '0xff')));
+                  Color colorMasOscuro = bgColor
+                      .withRed(max(0, bgColor.red - 30))
+                      .withGreen(max(0, bgColor.green - 30))
+                      .withBlue(max(0, bgColor.blue - 30));
+
+                  return Container(
+                    width: double.infinity,
+                    height: 133,
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: bgColor,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20, bottom: 10),
+                          child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Text(
+                              group.name.length > 15
+                                  ? '${group.name.substring(0, 15)}...'
+                                  : group.name,
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 30,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white,
                               ),
                             ),
                           ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: CustomPaint(
-                              size: Size(100, 100),
-                              painter: MyCustomPainter(
-                                  colors_bubble[index % colors_bubble.length]),
-                            ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: CustomPaint(
+                            size: const Size(100, 100),
+                            painter: MyCustomPainter(colorMasOscuro),
                           ),
-                          Positioned(
-                            right: 10,
-                            top: 10,
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: 5,
-                                  height: 5,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(height: 3),
-                                Container(
-                                  width: 5,
-                                  height: 5,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
+                        ),
+                        Positioned(
+                          right: 10,
+                          top: 10,
+                          child: Column(
+                            children: const [
+                              CircleAvatar(
+                                  radius: 3, backgroundColor: Colors.white),
+                              SizedBox(height: 3),
+                              CircleAvatar(
+                                  radius: 3, backgroundColor: Colors.white),
+                            ],
                           ),
-                          Positioned(
-                            left: 10,
-                            top: 12,
-                            child: ProfileIconsRow(),
-                          ),
-                        ],
-                      ),
+                        ),
+                        Positioned(
+                          left: 10,
+                          top: 12,
+                          child: ProfileIconsRow(
+                              memberCount: group.members.length),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 10), // Add a SizedBox to separate the elements vertically
-                  ],
-                );
-              },
+                  );
+                },
+              ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Center(child: Text('Error: $error')),
             ),
           ),
         ],
@@ -195,9 +169,11 @@ class _GroupsPageState extends State<GroupsPage> {
           child: Container(
             decoration: BoxDecoration(
               color: Color(0xFF9DCC18), // Color de fondo verde
-              shape: BoxShape.circle, // Forma circular para que coincida con el FAB
+              shape: BoxShape
+                  .circle, // Forma circular para que coincida con el FAB
             ),
-            padding: EdgeInsets.all(0), // Espacio alrededor del icono para reducir el tamaño del fondo verde
+            padding: EdgeInsets.all(
+                0), // Espacio alrededor del icono para reducir el tamaño del fondo verde
             child: SvgPicture.asset(
               'assets/icons/square-plus.svg',
               width: 50, // Ancho del icono reducido
@@ -220,44 +196,11 @@ class _GroupsPageState extends State<GroupsPage> {
   }
 }
 
-// Rest of the code...
-class MyCustomPainter extends CustomPainter {
-  final Paint myPaint;
-
-  MyCustomPainter(Color color) : myPaint = Paint()..color = color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    var paint = Paint()..color = myPaint.color;
-
-    var path = Path();
-    // Comienza en la esquina superior derecha
-    path.moveTo(size.width * 0.25, 0);
-
-    // Agrega puntos al Path que describan la forma de la mancha de manera irregular
-    path.quadraticBezierTo(size.width * 0.75, size.height * 0.25,
-        size.width * 0.5, size.height * 0.3);
-    path.quadraticBezierTo(size.width * 0.25, size.height * 0.35,
-        size.width * 0.4, size.height * 0.6);
-    path.quadraticBezierTo(size.width * 0.55, size.height * 0.8,
-        size.width * 0.7, size.height * 0.9);
-    path.quadraticBezierTo(
-        size.width * 0.85, size.height, size.width, size.height * 0.75);
-
-    // Regresa a la esquina superior derecha para cerrar el Path
-    path.lineTo(size.width, 0);
-    path.close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}
-
 class ProfileIconsRow extends StatelessWidget {
+  final int memberCount;
+
+  const ProfileIconsRow({required this.memberCount});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -324,7 +267,7 @@ class ProfileIconsRow extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(6, 8, 16, 8),
             alignment: Alignment.centerRight,
             child: Text(
-              '+${Random().nextInt(5) + 1}',
+              '+${memberCount - 3}',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
@@ -332,4 +275,33 @@ class ProfileIconsRow extends StatelessWidget {
       ),
     );
   }
+}
+
+class MyCustomPainter extends CustomPainter {
+  final Color color;
+
+  MyCustomPainter(this.color);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()..color = color;
+
+    var path = Path();
+    path.moveTo(size.width * 0.25, 0);
+    path.quadraticBezierTo(size.width * 0.75, size.height * 0.25,
+        size.width * 0.5, size.height * 0.3);
+    path.quadraticBezierTo(size.width * 0.25, size.height * 0.35,
+        size.width * 0.4, size.height * 0.6);
+    path.quadraticBezierTo(size.width * 0.55, size.height * 0.8,
+        size.width * 0.7, size.height * 0.9);
+    path.quadraticBezierTo(
+        size.width * 0.85, size.height, size.width, size.height * 0.75);
+    path.lineTo(size.width, 0);
+    path.close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
