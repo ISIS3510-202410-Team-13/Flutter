@@ -15,14 +15,17 @@ class FriendsApp extends ConsumerStatefulWidget {
 }
 
 class _FriendsAppState extends ConsumerState<FriendsApp> {
-  final TextEditingController _searchController = TextEditingController(); // Controlador para la barra de búsqueda
-  final String userId = "0MebgXs8fBYREjDKMlwq"; // ID de usuario para la demostración
+  final TextEditingController _searchController =
+      TextEditingController(); // Controlador para la barra de búsqueda
+  final String userId =
+      "0MebgXs8fBYREjDKMlwq"; // ID de usuario para la demostración
 
   @override
   Widget build(BuildContext context) {
     final friendsAsyncValue = ref.watch(friendsProvider(userId));
 
-    final double itemWidth = MediaQuery.of(context).size.width - 60; // Margen de 30px a cada lado
+    final double itemWidth =
+        MediaQuery.of(context).size.width - 60; // Margen de 30px a cada lado
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F8F8),
@@ -30,13 +33,20 @@ class _FriendsAppState extends ConsumerState<FriendsApp> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: SvgPicture.asset('assets/icons/bars.svg', width: 21, height: 24, color: Colors.black),
+          icon: SvgPicture.asset('assets/icons/bars.svg',
+              width: 21, height: 24, color: Colors.black),
           onPressed: () {},
         ),
-        title: const Text('Friends', style: TextStyle(fontFamily: 'Poppins', fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black)),
+        title: const Text('Friends',
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black)),
         actions: <Widget>[
           IconButton(
-            icon: SvgPicture.asset('assets/icons/bell.svg', width: 21, height: 24, color: Colors.black),
+            icon: SvgPicture.asset('assets/icons/bell.svg',
+                width: 21, height: 24, color: Colors.black),
             onPressed: () {},
           ),
         ],
@@ -60,13 +70,26 @@ class _FriendsAppState extends ConsumerState<FriendsApp> {
                         ),
                         child: TextField(
                           controller: _searchController,
-                          style: const TextStyle(fontFamily: 'Poppins', fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF686868)),
+                          style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF686868)),
                           decoration: InputDecoration(
                             hintText: 'Search',
-                            hintStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF686868)),
+                            hintStyle: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF686868)),
                             prefixIcon: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: SvgPicture.asset('assets/icons/magnifying-glass.svg', width: 24, height: 24, color: Color(0xFF686868)),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: SvgPicture.asset(
+                                  'assets/icons/magnifying-glass.svg',
+                                  width: 24,
+                                  height: 24,
+                                  color: Color(0xFF686868)),
                             ),
                             border: InputBorder.none,
                           ),
@@ -76,13 +99,16 @@ class _FriendsAppState extends ConsumerState<FriendsApp> {
                   } else {
                     final friend = friends[index - 1];
                     return Container(
-                      margin: const EdgeInsets.fromLTRB(30, 8, 30, 6), // 8px de separación entre las cajas
+                      margin: const EdgeInsets.fromLTRB(
+                          30, 8, 30, 6), // 8px de separación entre las cajas
                       height: 55, // Altura de la caja a 55px
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(30), // Lado izquierdo totalmente redondeado
-                          right: Radius.circular(16), // Lado derecho ligeramente redondeado
+                          left: Radius.circular(
+                              30), // Lado izquierdo totalmente redondeado
+                          right: Radius.circular(
+                              16), // Lado derecho ligeramente redondeado
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -95,13 +121,18 @@ class _FriendsAppState extends ConsumerState<FriendsApp> {
                       child: Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(2.0), // Padding ajustado para mantener el círculo del avatar dentro de la altura de 55px
+                            padding: const EdgeInsets.all(
+                                2.0), // Padding ajustado para mantener el círculo del avatar dentro de la altura de 55px
                             child: CircleAvatar(
-                              radius: 26.5, // El radio se ajusta para que el diámetro sea de 53px
-                              backgroundImage: NetworkImage(friend.profilePicture),
+                              radius:
+                                  26.5, // El radio se ajusta para que el diámetro sea de 53px
+                              backgroundImage:
+                                  NetworkImage(friend.profilePicture),
                             ),
                           ),
-                          SizedBox(width: 16), // Añade espaciado horizontal entre la imagen y el nombre
+                          SizedBox(
+                              width:
+                                  16), // Añade espaciado horizontal entre la imagen y el nombre
                           Expanded(
                             child: Text(
                               friend.name,
@@ -125,9 +156,6 @@ class _FriendsAppState extends ConsumerState<FriendsApp> {
                         ],
                       ),
                     );
-
-
-
                   }
                 },
               );
