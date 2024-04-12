@@ -93,9 +93,9 @@ class _GroupsPageState extends ConsumerState<GroupsPage> {
                   final bgColor =
                       Color(int.parse(group.color.replaceAll('#', '0xff')));
                   Color colorMasOscuro = bgColor
-                      .withRed(max(0, bgColor.red - 30))
-                      .withGreen(max(0, bgColor.green - 30))
-                      .withBlue(max(0, bgColor.blue - 30));
+                      .withRed(max(0, bgColor.red - 50))
+                      .withGreen(max(0, bgColor.green - 50))
+                      .withBlue(max(0, bgColor.blue - 50));
 
                   return Container(
                     width: double.infinity,
@@ -150,7 +150,7 @@ class _GroupsPageState extends ConsumerState<GroupsPage> {
                           left: 10,
                           top: 12,
                           child: ProfileIconsRow(
-                              memberCount: group.members.length),
+                              memberCount: group.members.length, imagePaths:group.profilePictures),
                         ),
                       ],
                     ),
@@ -198,8 +198,9 @@ class _GroupsPageState extends ConsumerState<GroupsPage> {
 
 class ProfileIconsRow extends StatelessWidget {
   final int memberCount;
+  final List<String> imagePaths;
 
-  const ProfileIconsRow({required this.memberCount});
+  const ProfileIconsRow({required this.memberCount, required this.imagePaths});
 
   @override
   Widget build(BuildContext context) {
@@ -212,65 +213,33 @@ class ProfileIconsRow extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.green,
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.white,
-                  width: 1,
-                ),
-              ),
-              child: Image.asset(
-                  'assets/images/profile_pics/user_${Random().nextInt(11) + 1}.png'),
-            ),
-          ),
-          Positioned(
-            left: 20,
-            child: CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.red,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 1,
+          for (var i = 0; i < 3; i++)
+            Positioned(
+              left: i==2? 0: (2-i) * 20.0,
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.green,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 1,
+                    ),
                   ),
+                  child: Image.network(imagePaths[i]),
                 ),
-                child: Image.asset(
-                    'assets/images/profile_pics/user_${Random().nextInt(11) + 1}.png'),
               ),
             ),
-          ),
-          Positioned(
-            left: 0,
-            child: CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.blue,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 1,
-                  ),
-                ),
-                child: Image.asset(
-                    'assets/images/profile_pics/user_${Random().nextInt(11) + 1}.png'),
+          if (memberCount > 3)
+            Container(
+              padding: EdgeInsets.fromLTRB(6, 8, 16, 8),
+              alignment: Alignment.centerRight,
+              child: Text(
+                '+${memberCount - 3}',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
-          ),
-          Container(
-            padding: EdgeInsets.fromLTRB(6, 8, 16, 8),
-            alignment: Alignment.centerRight,
-            child: Text(
-              '+${memberCount - 3}',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ),
         ],
       ),
     );
