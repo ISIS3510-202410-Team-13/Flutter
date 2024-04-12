@@ -16,5 +16,9 @@ final friendsRepositoryProvider = Provider<FriendsRepository>((ref) {
 // Define el proveedor para obtener amigos
 final friendsProvider = FutureProvider.family<List<Friend>, String>((ref, userId) {
   final repository = ref.read(friendsRepositoryProvider);
-  return repository.getFriends(userId);
+  final searchQuery = ref.watch(searchQueryProvider);
+  return repository.getFriends(userId, searchQuery);
 });
+
+// Proveedor para controlar el estado de la consulta de búsqueda
+final searchQueryProvider = StateProvider<String>((ref) => "");

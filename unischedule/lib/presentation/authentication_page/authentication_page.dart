@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/providers/groups_page/groups_provider.dart';
 import '../../../providers/friends_page/friends_provider.dart'; // Asegúrate de que la ruta de importación sea correcta
+import '../../../providers/friends_page/friends_state_notifier.dart'; 
+import '../../../providers/groups_page/groups_state_notifier.dart'; 
 
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({Key? key}) : super(key: key);
@@ -37,13 +39,16 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         builder: (context, ref, child) {
           // Carga anticipada de los datos, asegurándose de que solo se realice una vez
           if (!_dataLoaded) {
-            Future.delayed(Duration.zero, () {
-              final userId =
-                  "0MebgXs8fBYREjDKMlwq"; // Usa el ID de usuario real aquí
-              ref.read(friendsProvider(userId).future);
-              ref.read(groupsProvider(userId).future);
-              _dataLoaded =
-                  true; // Marcar los datos como cargados para evitar recargas
+            Future.delayed(Duration.zero, () async {
+              final userId = "0MebgXs8fBYREjDKMlwq";  // Usa el ID de usuario real aquí
+              var friends = await ref.read(friendsProvider(userId).future);
+              ref.read(friendsStateNotifierProvider.notifier).allFriends = friends;
+              ref.read(friendsStateNotifierProvider.notifier).state = friends;
+
+              var groups = await ref.read(groupsProvider(userId).future);
+              ref.read(groupsStateNotifierProvider.notifier).allGroups = groups;
+              ref.read(groupsStateNotifierProvider.notifier).state = groups;
+              _dataLoaded = true;  // Marcar los datos como cargados para evitar recargas
             });
           }
 

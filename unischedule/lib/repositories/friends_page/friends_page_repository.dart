@@ -6,8 +6,15 @@ class FriendsRepository {
 
   FriendsRepository(this._apiService);
 
-  Future<List<Friend>> getFriends(String userId) async {
-    final data = await _apiService.fetchFriends(userId);
-    return data.map<Friend>((json) => Friend.fromJson(json)).toList();
+Future<List<Friend>> getFriends(String userId, [String? query]) async {
+  final data = await _apiService.fetchFriends(userId);
+  var friends = data.map<Friend>((json) => Friend.fromJson(json)).toList();
+  
+  // Filtra los amigos si se proporciona una consulta de búsqueda
+  if (query != null && query.isNotEmpty) {
+    friends = friends.where((friend) => friend.name.toLowerCase().contains(query.toLowerCase())).toList();
   }
+  
+  return friends;
+}
 }
