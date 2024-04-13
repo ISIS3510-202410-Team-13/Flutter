@@ -50,7 +50,9 @@ class _CalendarAppState extends State<CalendarApp> {
       leading: IconButton(
         icon: SvgPicture.asset('assets/icons/bars.svg',
             width: 21, height: 24, color: Colors.white),
-        onPressed: () {},
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
       ),
       title: Text(
         'February',

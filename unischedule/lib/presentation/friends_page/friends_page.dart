@@ -41,15 +41,12 @@ class _FriendsAppState extends ConsumerState<FriendsApp> {
       elevation: 0,
       leading: IconButton(
         icon: SvgPicture.asset('assets/icons/bars.svg', width: 21, height: 24, color: Colors.black),
-        onPressed: () {},
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
       ),
       title: const Text('Friends', style: TextStyle(fontFamily: 'Poppins', fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black)),
-      actions: <Widget>[
-        IconButton(
-          icon: SvgPicture.asset('assets/icons/bell.svg', width: 21, height: 24, color: Colors.black),
-          onPressed: () {},
-        ),
-      ],
+
     );
   }
 

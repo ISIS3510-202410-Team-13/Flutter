@@ -43,7 +43,9 @@ Widget build(BuildContext context) {
           height: 24,
           color: Colors.black,
         ),
-        onPressed: () => context.pop(),
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
       ),
       title: const Text('Groups',
           style: TextStyle(

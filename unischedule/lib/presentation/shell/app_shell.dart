@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unischedule/presentation/bottom_navbar/bottom_navbar.dart';
+import '../../../presentation/slide-out_page/slide-out_page.dart';
 
 class AppShell extends StatefulWidget {
   final Widget child;
@@ -14,6 +15,7 @@ class _AppShellState extends State<AppShell> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: widget.child,
+      drawer: SlideOutMenu(),
       bottomNavigationBar: const BottomNavigationWidget(),
     );
   }
