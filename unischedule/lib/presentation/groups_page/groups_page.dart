@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../providers/groups_page/groups_provider.dart';
 import '../../../models/groups_page/group_model.dart';
 import '../../../providers/groups_page/groups_state_notifier.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class GroupsPage extends ConsumerStatefulWidget {
   const GroupsPage({Key? key}) : super(key: key);
@@ -234,7 +235,26 @@ class ProfileIconsRow extends StatelessWidget {
                       width: 1,
                     ),
                   ),
-                  child: Image.network(imagePaths[i]),
+                  child: CachedNetworkImage(
+                    imageUrl: imagePaths[i],
+                    fadeInDuration: const Duration(milliseconds: 0),
+                    fadeOutDuration: const Duration(milliseconds: 0),
+                    filterQuality: FilterQuality.none,
+                    maxHeightDiskCache: 100,
+                    imageBuilder: (context, imageProvider) => CircleAvatar(
+                      radius: 20,
+                      backgroundImage: imageProvider,
+                    ),
+                    placeholder: (context, url) => const CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.white,
+                    ),
+                    errorWidget: (context, url, error) => const CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.white,
+                      child: Icon(Icons.error, color: Colors.red), // Error icon in white
+                    ),
+                  )
                 ),
               ),
             ),
