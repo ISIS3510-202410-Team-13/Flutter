@@ -16,6 +16,11 @@ class FriendsStateNotifier extends StateNotifier<List<Friend>> {
         friend.name.toLowerCase().contains(searchText.toLowerCase())).toList();
     }
   }
+
+  void setFriends(List<Friend> friends) {
+    allFriends = friends;
+    state = friends;
+  }
 }
 
 final friendsStateNotifierProvider = StateNotifierProvider<FriendsStateNotifier, List<Friend>>((ref) {

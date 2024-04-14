@@ -48,11 +48,15 @@ dependencies:
   sentry_flutter: ^7.18.0
   riverpod_generator: ^2.4.0
   flutter_rating_bar: ^4.0.1
+  hive: 
+  hive_flutter:
+  cached_network_image:
+
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -61,6 +65,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.4.8
   json_serializable: ^6.7.1
+  hive_generator:
 
 analyzer:
   errors:

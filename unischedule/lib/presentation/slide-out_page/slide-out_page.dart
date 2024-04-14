@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:ui';
-
-
 
 class SlideOutMenu extends StatelessWidget {
   @override
@@ -28,8 +27,8 @@ class SlideOutMenu extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     CircleAvatar(
-                      radius: 62, // El radio más el tamaño del borde
-                      backgroundColor: Colors.white, // Color del borde
+                      radius: 62,
+                      backgroundColor: Colors.white,
                       child: CircleAvatar(
                         radius: 60,
                         backgroundImage: AssetImage('assets/images/profile_pics/user_1.png'),
@@ -48,17 +47,17 @@ class SlideOutMenu extends StatelessWidget {
                     SizedBox(height: 30),
                     _buildDivider(),
                     SizedBox(height: 50),
-                    _buildMenuOption('user.svg', 'Profile', context),
+                    _buildMenuOption('user.svg', 'Profile', context, '/home'),
                     SizedBox(height: 50),
-                    _buildMenuOption('gear.svg', 'Settings', context),
+                    _buildMenuOption('gear.svg', 'Settings', context, '/home'),
                     SizedBox(height: 50),
                     _buildDivider(),
                     SizedBox(height: 50),
-                    _buildMenuOption('question.svg', 'Guide', context),
+                    _buildMenuOption('question.svg', 'Guide', context, '/home'),
                     SizedBox(height: 50),
-                    _buildMenuOption('handshake-angle.svg', 'Help', context),
+                    _buildMenuOption('handshake-angle.svg', 'Help', context, '/home'),
                     SizedBox(height: 50),
-                    _buildMenuOption('circle-info.svg', 'About', context),
+                    _buildMenuOption('circle-info.svg', 'About', context, '/temp-cache'),
                     SizedBox(height: 50),
                     _buildDivider(),
                     SizedBox(height: 30),
@@ -85,27 +84,30 @@ class SlideOutMenu extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuOption(String iconPath, String text, BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          width: 24, // Ancho fijo para todos los iconos
-          height: 24, // Alto fijo para todos los iconos
-          child: SvgPicture.asset('assets/icons/$iconPath', width: 24, height: 24, color: Colors.white),
-        ),
-        SizedBox(width: 16),
-        Text(
-          text,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 24,
-            fontWeight: FontWeight.w300,
-            color: Colors.white,
+  Widget _buildMenuOption(String iconPath, String text, BuildContext context, String route) {
+    return InkWell(
+      onTap: () => context.go(route),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 24,
+            height: 24,
+            child: SvgPicture.asset('assets/icons/$iconPath', width: 24, height: 24, color: Colors.white),
           ),
-        ),
-      ],
+          SizedBox(width: 16),
+          Text(
+            text,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 24,
+              fontWeight: FontWeight.w300,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -129,8 +131,3 @@ class SlideOutMenu extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
