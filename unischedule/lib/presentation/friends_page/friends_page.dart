@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unischedule/models/friends_page/friend_model.dart';
 import '../../../providers/friends_page/friends_state_notifier.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 void main() {
   runApp(ProviderScope(child: MaterialApp(home: const FriendsApp())));
@@ -110,12 +111,28 @@ Padding _buildSearchBar() {
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: CircleAvatar(
-              radius: 26.5,
-              backgroundImage: NetworkImage(friend.profilePicture),
-            ),
-          ),
+              padding: const EdgeInsets.all(2.0),
+              child: CachedNetworkImage(
+                imageUrl: friend.profilePicture,
+                fadeInDuration: const Duration(milliseconds: 0),
+                fadeOutDuration: const Duration(milliseconds: 0),
+                filterQuality: FilterQuality.none,
+                maxHeightDiskCache: 100,
+                imageBuilder: (context, imageProvider) => CircleAvatar(
+                  radius: 26.5,
+                  backgroundImage: imageProvider,
+                ),
+                placeholder: (context, url) => const CircleAvatar(
+                  radius: 26.5,
+                  backgroundColor: Colors.white,
+                ),
+                errorWidget: (context, url, error) => const CircleAvatar(
+                  radius: 26.5,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.error,
+                      color: Colors.red), // Error icon in white
+                ),
+              )),
           SizedBox(width: 16),
           Expanded(
             child: Text(
