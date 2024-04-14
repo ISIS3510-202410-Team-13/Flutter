@@ -1,5 +1,5 @@
 name: unischedule
-description: "A new Flutter project."
+description: "Efficient time management and meeting coordination."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -51,6 +51,7 @@ dependencies:
   hive: 
   hive_flutter:
   cached_network_image:
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +65,12 @@ dev_dependencies:
   build_runner: ^2.4.8
   json_serializable: ^6.7.1
   hive_generator:
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/app-icon.png"
+  remove_alpha_ios: true
 
 analyzer:
   errors:
