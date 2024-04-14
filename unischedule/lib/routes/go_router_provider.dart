@@ -8,6 +8,7 @@ import 'package:unischedule/presentation/home_page/home_page.dart';
 import 'package:unischedule/presentation/authentication_page/authentication_page.dart';
 import 'package:unischedule/presentation/friends_page/friends_page.dart';
 import 'package:unischedule/presentation/groups_page/groups_page.dart';
+import 'package:unischedule/presentation/temp-cache_page/temp-cache_page.dart';
 
 
 final GlobalKey<NavigatorState> rootNavigator = GlobalKey(debugLabel: 'root');
@@ -30,6 +31,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           name: 'create-class',
           builder: (context, state) {
             return CreateClassPage(key: state.pageKey);
+          }),
+      GoRoute(
+          path: '/temp-cache',
+          name: 'temp-cache',
+          builder: (context, state) {
+            return TempCachePage(key: state.pageKey);
           }),
       ShellRoute(
         navigatorKey: shellNavigator,

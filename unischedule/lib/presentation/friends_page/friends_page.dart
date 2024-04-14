@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../providers/friends_page/friends_provider.dart';
 import 'package:unischedule/models/friends_page/friend_model.dart';
 import '../../../providers/friends_page/friends_state_notifier.dart';
 import 'package:cached_network_image/cached_network_image.dart';

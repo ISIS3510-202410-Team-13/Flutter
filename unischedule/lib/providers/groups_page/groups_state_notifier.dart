@@ -16,6 +16,11 @@ class GroupsStateNotifier extends StateNotifier<List<Group>> {
         group.name.toLowerCase().contains(searchText.toLowerCase())).toList();
     }
   }
+
+  void setGroups(List<Group> groups) {
+    state = groups;
+    allGroups = groups;
+  }
 }
 
 final groupsStateNotifierProvider = StateNotifierProvider<GroupsStateNotifier, List<Group>>((ref) {

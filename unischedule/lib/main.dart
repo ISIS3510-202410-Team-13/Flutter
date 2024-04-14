@@ -6,7 +6,8 @@ import 'package:unischedule/services/notifications_service.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 
-void main() {
+void main() async {
+  
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();
   WidgetsFlutterBinding.ensureInitialized();
