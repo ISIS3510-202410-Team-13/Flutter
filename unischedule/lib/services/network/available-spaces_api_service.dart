@@ -17,7 +17,7 @@ class AvailableSpacesApiService {
     dio = Dio();
     dio.options = BaseOptions(
       connectTimeout: const Duration(milliseconds: 30000),
-      baseUrl: HTTPConstants.BACKEND_BASE_URL,
+      baseUrl: HTTPConstants.AVAILABLE_SPACES_BASE_URL,
     );
     // Add logging (debug)
     dio.interceptors.add(LogInterceptor(
@@ -55,7 +55,7 @@ class AvailableSpacesApiService {
 
   Future<dynamic> getRequest(String uri, Map<String, dynamic> body) async {
     try {
-      var response = await dio.get(uri, data: body);
+      var response = await dio.post(uri, data: body);
 
       return response.data;
     } on DioException catch (err) {
