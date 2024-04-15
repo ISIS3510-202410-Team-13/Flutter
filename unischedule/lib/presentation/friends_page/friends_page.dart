@@ -9,7 +9,6 @@ void main() {
   runApp(ProviderScope(child: MaterialApp(home: const FriendsApp())));
 }
 
-// Widget principal que maneja el estado de la aplicación
 class FriendsApp extends ConsumerStatefulWidget {
   const FriendsApp({Key? key}) : super(key: key);
 
@@ -19,21 +18,36 @@ class FriendsApp extends ConsumerStatefulWidget {
 
 class _FriendsAppState extends ConsumerState<FriendsApp> {
   final TextEditingController _searchController = TextEditingController();
+  List<Friend> filteredFriends = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Inicializar con la lista completa
+    filteredFriends = ref.read(friendsStateNotifierProvider);
+    _searchController.addListener(() {
+      updateSearch(_searchController.text);
+    });
+  }
+
+  void updateSearch(String searchText) {
+    filteredFriends = ref.read(friendsStateNotifierProvider.notifier).getFilteredFriends(searchText);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-  final friends = ref.watch(friendsStateNotifierProvider);
-  return Scaffold(
-    backgroundColor: const Color(0xFFF8F8F8),
-    appBar: _buildAppBar(),
-    body: Stack(
-      children: [
-        _buildFriendsList(friends),
-        _buildFloatingActionButton(),
-      ],
-    ),
-  );
-}
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8F8F8),
+      appBar: _buildAppBar(),
+      body: Stack(
+        children: [
+          _buildFriendsList(),
+          _buildFloatingActionButton(),
+        ],
+      ),
+    );
+  }
 
   AppBar _buildAppBar() {
     return AppBar(
@@ -46,49 +60,51 @@ class _FriendsAppState extends ConsumerState<FriendsApp> {
         },
       ),
       title: const Text('Friends', style: TextStyle(fontFamily: 'Poppins', fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black)),
-
     );
   }
 
-Widget _buildFriendsList(List<Friend> friends) {
-  return ListView.builder(
-    itemCount: friends.length + 1,
-    itemBuilder: (context, index) {
-      if (index == 0) {
-        return _buildSearchBar();
-      }
-      return _buildFriendItem(friends[index - 1]);
-    },
-  );
-}
-Padding _buildSearchBar() {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-    child: Container(
-      height: 45,
-      decoration: BoxDecoration(
-        color: Color(0xFFD9D9D9),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextField(
-        controller: _searchController,
-        onChanged: (value) { // Añadir esta línea
-          ref.read(friendsStateNotifierProvider.notifier).filterFriends(value);
-        },
-        style: const TextStyle(fontFamily: 'Poppins', fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF686868)),
-        decoration: InputDecoration(
-          hintText: 'Search',
-          hintStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF686868)),
-          prefixIcon: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: SvgPicture.asset('assets/icons/magnifying-glass.svg', width: 24, height: 24, color: Color(0xFF686868)),
+  Widget _buildFriendsList() {
+    return ListView.builder(
+      itemCount: filteredFriends.length + 1,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return _buildSearchBar();
+        }
+        return _buildFriendItem(filteredFriends[index - 1]);
+      },
+    );
+  }
+
+  Padding _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+      child: Container(
+        height: 45,
+        decoration: BoxDecoration(
+          color: Color(0xFFD9D9D9),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: TextField(
+          controller: _searchController,
+          style: const TextStyle(fontFamily: 'Poppins', fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF686868)),
+          decoration: InputDecoration(
+            hintText: 'Search',
+            hintStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF686868)),
+            prefixIcon: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: SvgPicture.asset(
+                'assets/icons/magnifying-glass.svg',
+                width: 24,
+                height: 24,
+                color: Color(0xFF686868),  // Asegúrate de que este parámetro exista o sea aplicable en tu versión de flutter_svg.
+              ),
+            ),
+            border: InputBorder.none,
           ),
-          border: InputBorder.none,
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildFriendItem(Friend friend) {
     return Container(
@@ -129,8 +145,7 @@ Padding _buildSearchBar() {
                 errorWidget: (context, url, error) => const CircleAvatar(
                   radius: 26.5,
                   backgroundColor: Colors.white,
-                  child: Icon(Icons.error,
-                      color: Colors.red), // Error icon in white
+                  child: Icon(Icons.error, color: Colors.red),
                 ),
               )),
           SizedBox(width: 16),

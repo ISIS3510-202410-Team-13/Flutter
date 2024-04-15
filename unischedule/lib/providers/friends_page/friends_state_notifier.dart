@@ -8,18 +8,18 @@ class FriendsStateNotifier extends StateNotifier<List<Friend>> {
     allFriends = initialFriends;
   }
 
-  void filterFriends(String searchText) {
-    if (searchText.isEmpty) {
-      state = allFriends;
-    } else {
-      state = allFriends.where((friend) =>
-        friend.name.toLowerCase().contains(searchText.toLowerCase())).toList();
-    }
-  }
-
   void setFriends(List<Friend> friends) {
     allFriends = friends;
     state = friends;
+  }
+
+  List<Friend> getFilteredFriends(String searchText) {
+    if (searchText.isEmpty) {
+      return allFriends;
+    } else {
+      return allFriends.where((friend) =>
+          friend.name.toLowerCase().contains(searchText.toLowerCase())).toList();
+    }
   }
 }
 
