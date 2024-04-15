@@ -12,6 +12,7 @@ import '../../../providers/friends_page/friends_state_notifier.dart';
 import '../../../providers/groups_page/groups_provider.dart';
 import '../../../providers/groups_page/groups_state_notifier.dart';
 import '../../../providers/events_page/events_provider.dart';
+import '../../../providers/events_page/events_state_notifier.dart';
 
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({Key? key}) : super(key: key);
@@ -147,6 +148,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       }
 
       var events = await ref.read(eventsProvider(userId).future);
+      ref.read(eventsStateNotifierProvider.notifier).setEvents(events);
       final boxEvents = await Hive.openBox<Event>('eventBox');
       boxEvents.clear();
       for (Event event in events) {
