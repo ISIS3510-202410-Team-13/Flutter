@@ -19,8 +19,8 @@ class CalendarEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final startTime = '${startDate.toLocal().hour.toString()}:${startDate.toLocal().minute.toString()}';
-    final endTime = '${endDate.toLocal().hour.toString()}:${endDate.toLocal().minute.toString()}';
+    final startTime = '${startDate.toLocal().hour.toString()}:${startDate.toLocal().minute.toString().padLeft(2, '0')}';
+    final endTime = '${endDate.toLocal().hour.toString()}:${endDate.toLocal().minute.toString().padLeft(2, '0')}';
     final duration = endDate.difference(startDate).inMinutes / 60;
     final minutesSinceMidnight = startDate.toLocal().hour * 60 + startDate.toLocal().minute;
     final dayOfWeek = startDate.toLocal().weekday;

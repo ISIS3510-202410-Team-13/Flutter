@@ -21,6 +21,11 @@ class EventsStateNotifier extends StateNotifier<List<Event>> {
     state = events;
     allEvents = events;
   }
+
+  void addEvent(Event event) {
+    state = [...state, event];
+    allEvents = [...allEvents, event];
+  }
 }
 
 final eventsStateNotifierProvider = StateNotifierProvider<EventsStateNotifier, List<Event>>((ref) {
