@@ -15,21 +15,35 @@ class GroupsPage extends ConsumerStatefulWidget {
 
 class _GroupsPageState extends ConsumerState<GroupsPage> {
   final TextEditingController _searchController = TextEditingController();
+  List<Group> filteredGroups = [];
 
-@override
-Widget build(BuildContext context) {
-  final groups = ref.watch(groupsStateNotifierProvider);
-  return Scaffold(
-    appBar: _buildAppBar(context),
-    body: Column(
-      children: [
-        _buildSearchBar(),
-        _buildGroupsList(groups),
-      ],
-    ),
-    floatingActionButton: _buildFloatingActionButton(),
-  );
-}
+  @override
+  void initState() {
+    super.initState();
+    filteredGroups = ref.read(groupsStateNotifierProvider);
+    _searchController.addListener(() {
+      updateSearch(_searchController.text);
+    });
+  }
+
+  void updateSearch(String searchText) {
+    filteredGroups = ref.read(groupsStateNotifierProvider.notifier).getFilteredGroups(searchText);
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: _buildAppBar(context),
+      body: Column(
+        children: [
+          _buildSearchBar(),
+          _buildGroupsList(),
+        ],
+      ),
+      floatingActionButton: _buildFloatingActionButton(),
+    );
+  }
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
@@ -46,12 +60,7 @@ Widget build(BuildContext context) {
           Scaffold.of(context).openDrawer();
         },
       ),
-      title: const Text('Groups',
-          style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.black)),
+      title: const Text('Groups', style: TextStyle(fontFamily: 'Poppins', fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black)),
     );
   }
 
@@ -66,9 +75,6 @@ Widget build(BuildContext context) {
         ),
         child: TextField(
           controller: _searchController,
-          onChanged: (value) {
-          ref.read(groupsStateNotifierProvider.notifier).filterGroups(value);
-        },
           style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 18,
@@ -77,12 +83,7 @@ Widget build(BuildContext context) {
           ),
           decoration: InputDecoration(
             hintText: 'Search',
-            hintStyle: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF686868),
-            ),
+            hintStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF686868)),
             prefixIcon: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: SvgPicture.asset(
@@ -99,14 +100,14 @@ Widget build(BuildContext context) {
     );
   }
 
-Widget _buildGroupsList(List<Group> groups) {
-  return Expanded(
-    child: ListView.builder(
-      itemCount: groups.length,
-      itemBuilder: (context, index) => _buildGroupItem(groups[index]),
-    ),
-  );
-}
+  Widget _buildGroupsList() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: filteredGroups.length,
+        itemBuilder: (context, index) => _buildGroupItem(filteredGroups[index]),
+      ),
+    );
+  }
 
   Widget _buildGroupItem(Group group) {
     final bgColor = Color(int.parse(group.color.replaceAll('#', '0xff')));
@@ -130,15 +131,8 @@ Widget _buildGroupsList(List<Group> groups) {
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Text(
-                group.name.length > 15
-                    ? '${group.name.substring(0, 15)}...'
-                    : group.name,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 30,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                ),
+                group.name.length > 15 ? '${group.name.substring(0, 15)}...' : group.name,
+                style: const TextStyle(fontFamily: 'Poppins', fontSize: 30, fontWeight: FontWeight.normal, color: Colors.white),
               ),
             ),
           ),
@@ -166,7 +160,8 @@ Widget _buildGroupsList(List<Group> groups) {
             top: 12,
             child: ProfileIconsRow(
                 memberCount: group.members.length,
-                imagePaths: group.profilePictures),
+                imagePaths: group.profilePictures
+            ),
           ),
         ],
       ),
@@ -226,33 +221,33 @@ class ProfileIconsRow extends StatelessWidget {
                 radius: 20,
                 backgroundColor: Colors.green,
                 child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 1,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 1,
+                      ),
                     ),
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: imagePaths[i],
-                    fadeInDuration: const Duration(milliseconds: 0),
-                    fadeOutDuration: const Duration(milliseconds: 0),
-                    filterQuality: FilterQuality.none,
-                    maxHeightDiskCache: 100,
-                    imageBuilder: (context, imageProvider) => CircleAvatar(
-                      radius: 20,
-                      backgroundImage: imageProvider,
-                    ),
-                    placeholder: (context, url) => const CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.white,
-                    ),
-                    errorWidget: (context, url, error) => const CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.white,
-                      child: Icon(Icons.error, color: Colors.red), // Error icon in white
-                    ),
-                  )
+                    child: CachedNetworkImage(
+                      imageUrl: imagePaths[i],
+                      fadeInDuration: const Duration(milliseconds: 0),
+                      fadeOutDuration: const Duration(milliseconds: 0),
+                      filterQuality: FilterQuality.none,
+                      maxHeightDiskCache: 100,
+                      imageBuilder: (context, imageProvider) => CircleAvatar(
+                        radius: 20,
+                        backgroundImage: imageProvider,
+                      ),
+                      placeholder: (context, url) => const CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Colors.white,
+                      ),
+                      errorWidget: (context, url, error) => const CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.error, color: Colors.red), // Error icon in white
+                      ),
+                    )
                 ),
               ),
             ),
@@ -282,14 +277,10 @@ class MyCustomPainter extends CustomPainter {
 
     var path = Path();
     path.moveTo(size.width * 0.25, 0);
-    path.quadraticBezierTo(size.width * 0.75, size.height * 0.25,
-        size.width * 0.5, size.height * 0.3);
-    path.quadraticBezierTo(size.width * 0.25, size.height * 0.35,
-        size.width * 0.4, size.height * 0.6);
-    path.quadraticBezierTo(size.width * 0.55, size.height * 0.8,
-        size.width * 0.7, size.height * 0.9);
-    path.quadraticBezierTo(
-        size.width * 0.85, size.height, size.width, size.height * 0.75);
+    path.quadraticBezierTo(size.width * 0.75, size.height * 0.25, size.width * 0.5, size.height * 0.3);
+    path.quadraticBezierTo(size.width * 0.25, size.height * 0.35, size.width * 0.4, size.height * 0.6);
+    path.quadraticBezierTo(size.width * 0.55, size.height * 0.8, size.width * 0.7, size.height * 0.9);
+    path.quadraticBezierTo(size.width * 0.85, size.height, size.width, size.height * 0.75);
     path.lineTo(size.width, 0);
     path.close();
 

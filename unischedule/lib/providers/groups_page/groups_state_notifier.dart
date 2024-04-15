@@ -8,18 +8,18 @@ class GroupsStateNotifier extends StateNotifier<List<Group>> {
     allGroups = initialGroups;
   }
 
-  void filterGroups(String searchText) {
-    if (searchText.isEmpty) {
-      state = allGroups;
-    } else {
-      state = allGroups.where((group) =>
-        group.name.toLowerCase().contains(searchText.toLowerCase())).toList();
-    }
+  void setGroups(List<Group> groups) {
+    allGroups = groups;
+    state = groups;
   }
 
-  void setGroups(List<Group> groups) {
-    state = groups;
-    allGroups = groups;
+  List<Group> getFilteredGroups(String searchText) {
+    if (searchText.isEmpty) {
+      return allGroups;
+    } else {
+      return allGroups.where((group) =>
+          group.name.toLowerCase().contains(searchText.toLowerCase())).toList();
+    }
   }
 }
 
