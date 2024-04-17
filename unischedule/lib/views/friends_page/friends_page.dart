@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unischedule/models/models.dart';
-import '../../../providers/friends/friends_state_notifier.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:unischedule/providers/providers.dart';
+import 'package:unischedule/utils/filter.dart';
 
 void main() {
   runApp(ProviderScope(child: MaterialApp(home: const FriendsApp())));
@@ -24,15 +25,17 @@ class _FriendsAppState extends ConsumerState<FriendsApp> {
   void initState() {
     super.initState();
     // Inicializar con la lista completa
-    filteredFriends = ref.read(friendsStateNotifierProvider);
+    filteredFriends = ref.read(fetchFriendsProvider).value ?? [];
     _searchController.addListener(() {
       updateSearch(_searchController.text);
     });
   }
 
   void updateSearch(String searchText) {
-    filteredFriends = ref.read(friendsStateNotifierProvider.notifier).getFilteredFriends(searchText);
-    setState(() {});
+    final allFriends = ref.read(fetchFriendsProvider).value ?? [];
+    setState(() {
+      filteredFriends = filterByQuery<FriendModel>(allFriends, searchText, (p0) => p0.name);
+    });
   }
 
   @override

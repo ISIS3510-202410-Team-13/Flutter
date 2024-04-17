@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:unischedule/providers/events/events_state_notifier.dart';
 import 'package:unischedule/services/notifications_service.dart';
 import 'package:unischedule/providers/providers.dart';
 import 'package:intl/intl.dart';
@@ -91,7 +90,7 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                     'Your event is about to start at ${DateFormat('HH:mm').format(_eventStartTime)}',
                 scheduledNotificationDateTime: notificationTime);
 
-            ref.read(eventsStateNotifierProvider.notifier).addEvent(
+/*            ref.read(eventsStateNotifierProvider.notifier).addEvent(
               // FIXME - This is a hardcoded event, will need to work on a form to create the event
               EventModel(
                 id: '1',
@@ -109,7 +108,9 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                 },
                 labels: ['Uniandes 📚'],
               ),
-            );
+            );*/
+
+            //TODO add logic to save the event in the database
 
             context.go('/calendar');
           },

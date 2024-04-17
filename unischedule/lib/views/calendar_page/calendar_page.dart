@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:unischedule/providers/events/events_provider.dart';
 import 'package:unischedule/views/calendar_page/widgets/calendar_event.dart';
-
-import 'package:unischedule/providers/events/events_state_notifier.dart';
 
 import 'widgets/calendar_background.dart';
 import 'widgets/calendar_time_lines.dart';
@@ -22,7 +21,7 @@ class _CalendarAppState extends ConsumerState<CalendarApp> {
   @override
   Widget build(BuildContext context) {
 
-    final personalEvents = ref.watch(eventsStateNotifierProvider);
+    final personalEvents = ref.watch(fetchEventsProvider);
 
     return Scaffold(
       body: Stack(
@@ -42,12 +41,12 @@ class _CalendarAppState extends ConsumerState<CalendarApp> {
                           child: Stack(
                             children: [
                               const CalendarTimeLines(),
-                              ...personalEvents.map((e) => CalendarEvent(
+                              ...personalEvents.valueOrNull?.map((e) => CalendarEvent(
                                 title: e.name,
                                 startDate: DateTime.fromMillisecondsSinceEpoch(e.startDate["_seconds"]! * 1000),
                                 endDate: DateTime.fromMillisecondsSinceEpoch(e.endDate["_seconds"]! * 1000),
                                 color: e.color,
-                              )).toList(),
+                              )).toList() ?? [], // TODO implement loading and error states
                             ],
                           ),
                         ),

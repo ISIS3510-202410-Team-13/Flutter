@@ -6,9 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:unischedule/models/models.dart';
 import 'package:unischedule/providers/providers.dart';
-import '../../../providers/friends/friends_state_notifier.dart';
-import '../../../providers/groups/groups_state_notifier.dart';
-import '../../../providers/events/events_state_notifier.dart';
 
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({Key? key}) : super(key: key);
@@ -128,7 +125,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       const userId = "0MebgXs8fBYREjDKMlwq"; // Usar ID de usuario real aquí
 
       var friends = await ref.read(fetchFriendsProvider.future);
-      ref.read(friendsStateNotifierProvider.notifier).setFriends(friends);
       final boxFriends = await Hive.openBox<FriendModel>('friendBox');
       boxFriends.clear();
       for (FriendModel friend in friends) {
@@ -136,7 +132,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       }
 
       var groups = await ref.read(fetchGroupsProvider.future);
-      ref.read(groupsStateNotifierProvider.notifier).setGroups(groups);
       final boxGroups = await Hive.openBox<GroupModel>('groupBox');
       boxGroups.clear();
       for (GroupModel group in groups) {
@@ -144,7 +139,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       }
 
       var events = await ref.read(fetchEventsProvider.future);
-      ref.read(eventsStateNotifierProvider.notifier).setEvents(events);
       final boxEvents = await Hive.openBox<EventModel>('eventBox');
       boxEvents.clear();
       for (EventModel event in events) {

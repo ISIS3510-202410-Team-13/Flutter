@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math';
 import 'package:unischedule/models/models.dart';
-import 'package:unischedule/providers/groups/groups_state_notifier.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:unischedule/providers/providers.dart';
+import 'package:unischedule/utils/filter.dart';
 
 class GroupsPage extends ConsumerStatefulWidget {
   const GroupsPage({Key? key}) : super(key: key);
@@ -13,22 +14,28 @@ class GroupsPage extends ConsumerStatefulWidget {
   _GroupsPageState createState() => _GroupsPageState();
 }
 
-class _GroupsPageState extends ConsumerState<GroupsPage> {
+class _GroupsPageState extends ConsumerState<GroupsPage> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;  // TODO understand how this works
+
   final TextEditingController _searchController = TextEditingController();
   List<GroupModel> filteredGroups = [];
 
   @override
   void initState() {
     super.initState();
-    filteredGroups = ref.read(groupsStateNotifierProvider);
+    filteredGroups = ref.read(fetchGroupsProvider).value ?? [];
     _searchController.addListener(() {
       updateSearch(_searchController.text);
     });
   }
 
   void updateSearch(String searchText) {
-    filteredGroups = ref.read(groupsStateNotifierProvider.notifier).getFilteredGroups(searchText);
-    setState(() {});
+    final allGroups = ref.read(fetchGroupsProvider).value ?? [];
+    setState(() {
+      filteredGroups = filterByQuery<GroupModel>(allGroups, searchText, (p0) => p0.name);
+    });
   }
 
   @override
