@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/providers/groups/groups_provider.dart';
-import 'package:unischedule/models/groups_page/group_model.dart';
+import 'package:unischedule/models/models.dart';
 import 'package:unischedule/views/home/widgets/event_card.dart';
 import 'package:unischedule/views/home/widgets/group_card.dart';
 import 'package:unischedule/widgets/background_widget.dart';
@@ -22,7 +22,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final groupsAsyncValue = ref.watch(fetchGroupsProvider);
+    final groups = ref.watch(fetchGroupsProvider);
 
     return Scaffold(
       body: Stack(
@@ -80,7 +80,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
                     ),
                   ),
                   Expanded(
-                    child: groupsAsyncValue.when(
+                    child: groups.when(
                       data: (groups) => ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: groups.length,

@@ -1,4 +1,4 @@
-import 'package:unischedule/models/events_page/event_model.dart';
+import 'package:unischedule/models/models.dart';
 import 'package:unischedule/services/network/events_api_service.dart';
 
 class EventsRepository {

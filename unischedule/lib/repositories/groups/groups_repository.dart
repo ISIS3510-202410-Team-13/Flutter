@@ -1,4 +1,4 @@
-import 'package:unischedule/models/groups_page/group_model.dart';
+import 'package:unischedule/models/models.dart';
 import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/services/network/dio_api_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +12,7 @@ abstract class GroupsRepository {
 }
 
 class GroupsRepositoryImpl extends GroupsRepository {
+
   final DioApiService client;
   final Ref ref;
 
@@ -23,6 +24,8 @@ class GroupsRepositoryImpl extends GroupsRepository {
       return response.map<GroupModel>((json) => GroupModel.fromJson(json)).toList();
     });
   }
+
+  // TODO add onDispose method to save the state of the groups
 }
 
 @riverpod

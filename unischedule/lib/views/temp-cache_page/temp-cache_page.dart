@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:unischedule/models/friends_page/friend_model.dart';
-import 'package:unischedule/models/groups_page/group_model.dart';
-import 'package:unischedule/models/events_page/event_model.dart';
+import 'package:unischedule/models/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';  // Asegúrate de importar go_router si lo estás usando
 

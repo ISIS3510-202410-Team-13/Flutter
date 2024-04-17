@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:unischedule/models/groups_page/group_model.dart';
+import 'package:unischedule/models/models.dart';
 import 'package:unischedule/utils/bezier_painter.dart';
 
 class GroupCard extends StatelessWidget {

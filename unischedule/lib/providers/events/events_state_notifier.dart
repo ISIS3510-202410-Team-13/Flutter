@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:unischedule/models/events_page/event_model.dart';
+import 'package:unischedule/models/models.dart';
 
 class EventsStateNotifier extends StateNotifier<List<Event>> {
   List<Event> allEvents = [];

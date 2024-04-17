@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:unischedule/models/groups_page/group_model.dart';
+import 'package:unischedule/models/models.dart';
 
 class GroupsStateNotifier extends StateNotifier<List<GroupModel>> {
   List<GroupModel> allGroups = [];

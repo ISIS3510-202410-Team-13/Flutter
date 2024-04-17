@@ -3,16 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:unischedule/models/friends_page/friend_model.dart';
-import 'package:unischedule/models/groups_page/group_model.dart';
-import 'package:unischedule/models/events_page/event_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../../providers/friends/friends_provider.dart';
+import 'package:unischedule/models/models.dart';
+import 'package:unischedule/providers/providers.dart';
 import '../../../providers/friends/friends_state_notifier.dart';
-import '../../../providers/groups/groups_provider.dart';
 import '../../../providers/groups/groups_state_notifier.dart';
-import '../../../providers/events_page/events_provider.dart';
-import '../../../providers/events_page/events_state_notifier.dart';
+import '../../../providers/events/events_state_notifier.dart';
 
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({Key? key}) : super(key: key);

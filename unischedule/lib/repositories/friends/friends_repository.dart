@@ -1,4 +1,4 @@
-import 'package:unischedule/models/friends_page/friend_model.dart';
+import 'package:unischedule/models/models.dart';
 import 'package:unischedule/services/network/friends_api_service.dart';
 
 class FriendsRepository {

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:unischedule/models/friends_page/friend_model.dart';
+import 'package:unischedule/models/models.dart';
 
 class FriendsStateNotifier extends StateNotifier<List<Friend>> {
   List<Friend> allFriends = [];
