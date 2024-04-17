@@ -5,7 +5,7 @@ import 'package:unischedule/views/calendar_page/calendar_page.dart';
 import 'package:unischedule/views/create-class_page/create-class_page.dart';
 import 'package:unischedule/views/shell/app_shell.dart';
 import 'package:unischedule/views/home/home_view.dart';
-import 'package:unischedule/views/authentication_page/authentication_page.dart';
+import 'package:unischedule/views/authentication/authentication_page.dart';
 import 'package:unischedule/views/friends_page/friends_page.dart';
 import 'package:unischedule/views/groups_page/groups_page.dart';
 import 'package:unischedule/views/temp-cache_page/temp-cache_page.dart';

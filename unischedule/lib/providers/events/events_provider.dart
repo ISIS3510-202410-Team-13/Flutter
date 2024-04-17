@@ -1,20 +1,14 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/models/models.dart';
-import 'package:unischedule/repositories/repositories.dart';
-import 'package:unischedule/services/network/events_api_service.dart';
+import 'package:unischedule/repositories/events/events_repository.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final eventsApiServiceProvider = Provider<EventsApiService>((ref) {
-  return EventsApiService();
-});
 
-final eventsRepositoryProvider = Provider<EventsRepository>((ref) {
-  return EventsRepository(ref.read(eventsApiServiceProvider));
-});
+part 'events_provider.g.dart';
 
-final eventsProvider = FutureProvider.family<List<Event>, String>((ref, userId) {
-  final repository = ref.read(eventsRepositoryProvider);
-  final searchQuery = ref.watch(eventsSearchQueryProvider);
-  return repository.getEvents(userId, searchQuery);
-});
+@riverpod
+Future<List<EventModel>> fetchEvents(FetchEventsRef ref) {
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  ref.keepAlive();
 
-final eventsSearchQueryProvider = StateProvider<String>((ref) => "");
+  return eventsRepository.fetchEvents();
+}

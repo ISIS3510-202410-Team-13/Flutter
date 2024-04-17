@@ -112,14 +112,14 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     
   void initHive() async {
     await Hive.initFlutter();
-    if (!Hive.isAdapterRegistered(FriendAdapter().typeId)) {
-      Hive.registerAdapter(FriendAdapter());
+    if (!Hive.isAdapterRegistered(FriendModelAdapter().typeId)) {
+      Hive.registerAdapter(FriendModelAdapter());
     }
     if (!Hive.isAdapterRegistered(GroupModelAdapter().typeId)) {
       Hive.registerAdapter(GroupModelAdapter());
     }
-    if (!Hive.isAdapterRegistered(EventAdapter().typeId)) {
-      Hive.registerAdapter(EventAdapter());
+    if (!Hive.isAdapterRegistered(EventModelAdapter().typeId)) {
+      Hive.registerAdapter(EventModelAdapter());
     }
   }
 
@@ -127,11 +127,11 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     Future.delayed(Duration.zero, () async {
       const userId = "0MebgXs8fBYREjDKMlwq"; // Usar ID de usuario real aquí
 
-      var friends = await ref.read(friendsProvider(userId).future);
+      var friends = await ref.read(fetchFriendsProvider.future);
       ref.read(friendsStateNotifierProvider.notifier).setFriends(friends);
-      final boxFriends = await Hive.openBox<Friend>('friendBox');
+      final boxFriends = await Hive.openBox<FriendModel>('friendBox');
       boxFriends.clear();
-      for (Friend friend in friends) {
+      for (FriendModel friend in friends) {
         await boxFriends.put(friend.id, friend);
       }
 
@@ -143,11 +143,11 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         await boxGroups.put(group.id, group);
       }
 
-      var events = await ref.read(eventsProvider(userId).future);
+      var events = await ref.read(fetchEventsProvider.future);
       ref.read(eventsStateNotifierProvider.notifier).setEvents(events);
-      final boxEvents = await Hive.openBox<Event>('eventBox');
+      final boxEvents = await Hive.openBox<EventModel>('eventBox');
       boxEvents.clear();
-      for (Event event in events) {
+      for (EventModel event in events) {
         await boxEvents.put(event.id, event);
       }
       _dataLoaded = true;

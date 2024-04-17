@@ -1,19 +1,34 @@
 import 'package:unischedule/models/models.dart';
-import 'package:unischedule/services/network/events_api_service.dart';
+import 'package:unischedule/constants/constants.dart';
+import 'package:unischedule/services/network/dio_api_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class EventsRepository {
-  final EventsApiService _apiService;
+part 'events_repository.g.dart';
 
-  EventsRepository(this._apiService);
+abstract class EventsRepository {
+  // TODO add here all use cases for events
+  Future<List<EventModel>> fetchEvents();
+}
 
-  Future<List<Event>> getEvents(String userId, [String? query]) async {
-    final data = await _apiService.fetchEvents(userId);
-    var events = data.map<Event>((json) => Event.fromJson(json)).toList();
+class EventsRepositoryImpl extends EventsRepository {
 
-    if (query != null && query.isNotEmpty) {
-      events = events.where((event) => event.name.toLowerCase().contains(query.toLowerCase())).toList();
-    }
+  final DioApiService client;
+  final Ref ref;
 
-    return events;
+  EventsRepositoryImpl({required this.ref, required this.client});
+
+  @override
+  Future<List<EventModel>> fetchEvents() {
+    return client.getRequest("user/0MebgXs8fBYREjDKMlwq/events").then((response) { // TODO change endpoint
+      return response.map<EventModel>((json) => EventModel.fromJson(json)).toList();
+    });
   }
+
+// TODO add onDispose method to save the state of the events
+}
+
+@riverpod
+EventsRepositoryImpl eventsRepository(EventsRepositoryRef ref) {
+  return EventsRepositoryImpl(ref: ref, client: DioApiServiceFactory.getService(HTTPConstants.EVENTS_BASE_URL));
 }

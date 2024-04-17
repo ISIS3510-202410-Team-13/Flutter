@@ -1,19 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/models/models.dart';
 
-class FriendsStateNotifier extends StateNotifier<List<Friend>> {
-  List<Friend> allFriends = [];
+class FriendsStateNotifier extends StateNotifier<List<FriendModel>> {
+  List<FriendModel> allFriends = [];
 
-  FriendsStateNotifier(List<Friend> initialFriends) : super(initialFriends) {
+  FriendsStateNotifier(List<FriendModel> initialFriends) : super(initialFriends) {
     allFriends = initialFriends;
   }
 
-  void setFriends(List<Friend> friends) {
+  void setFriends(List<FriendModel> friends) {
     allFriends = friends;
     state = friends;
   }
 
-  List<Friend> getFilteredFriends(String searchText) {
+  List<FriendModel> getFilteredFriends(String searchText) {
     if (searchText.isEmpty) {
       return allFriends;
     } else {
@@ -23,6 +23,6 @@ class FriendsStateNotifier extends StateNotifier<List<Friend>> {
   }
 }
 
-final friendsStateNotifierProvider = StateNotifierProvider<FriendsStateNotifier, List<Friend>>((ref) {
+final friendsStateNotifierProvider = StateNotifierProvider<FriendsStateNotifier, List<FriendModel>>((ref) {
   return FriendsStateNotifier([]);
 });

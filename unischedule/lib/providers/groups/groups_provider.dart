@@ -1,5 +1,5 @@
 import 'package:unischedule/models/models.dart';
-import 'package:unischedule/repositories/groups/groups_repository.dart';
+import 'package:unischedule/repositories/repositories.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 

@@ -6,17 +6,12 @@ part 'friend_model.g.dart';
 
 @freezed
 @HiveType(typeId: 1)
-class Friend with _$Friend {
-  const factory Friend({
-    @HiveField(0)
-    required String id,
+class FriendModel with _$FriendModel {
+  const factory FriendModel ({
+    @HiveField(0) required String id,
+    @HiveField(1) required String name,
+    @HiveField(2) required String profilePicture,
+  }) = _FriendModel;
 
-    @HiveField(1)
-    required String name,
-
-    @HiveField(2)
-    required String profilePicture,
-  }) = _Friend;
-
-  factory Friend.fromJson(Map<String, dynamic> json) => _$FriendFromJson(json);
+  factory FriendModel.fromJson(Map<String, dynamic> json) => _$FriendModelFromJson(json);
 }

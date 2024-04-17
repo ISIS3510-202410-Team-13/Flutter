@@ -18,7 +18,7 @@ class FriendsApp extends ConsumerStatefulWidget {
 
 class _FriendsAppState extends ConsumerState<FriendsApp> {
   final TextEditingController _searchController = TextEditingController();
-  List<Friend> filteredFriends = [];
+  List<FriendModel> filteredFriends = [];
 
   @override
   void initState() {
@@ -106,7 +106,7 @@ class _FriendsAppState extends ConsumerState<FriendsApp> {
     );
   }
 
-  Widget _buildFriendItem(Friend friend) {
+  Widget _buildFriendItem(FriendModel friend) {
     return Container(
       margin: const EdgeInsets.fromLTRB(30, 8, 30, 6),
       height: 55,

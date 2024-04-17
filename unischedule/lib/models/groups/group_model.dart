@@ -17,7 +17,7 @@ class GroupModel with _$GroupModel {
     @HiveField(6) required List<String> events,
     @HiveField(7) required List<String> profilePictures,
     @HiveField(8) required int memberCount,
-  }) = _Group;
+  }) = _GroupModel;
 
   factory GroupModel.fromJson(Map<String, dynamic> json) => _$GroupModelFromJson(json);
 }

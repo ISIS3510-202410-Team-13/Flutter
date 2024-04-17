@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/models/models.dart';
 
-class EventsStateNotifier extends StateNotifier<List<Event>> {
-  List<Event> allEvents = [];
+class EventsStateNotifier extends StateNotifier<List<EventModel>> {
+  List<EventModel> allEvents = [];
 
-  EventsStateNotifier(List<Event> initialEvents) : super(initialEvents) {
+  EventsStateNotifier(List<EventModel> initialEvents) : super(initialEvents) {
     allEvents = initialEvents;
   }
 
@@ -17,17 +17,17 @@ class EventsStateNotifier extends StateNotifier<List<Event>> {
     }
   }
 
-  void setEvents(List<Event> events) {
+  void setEvents(List<EventModel> events) {
     state = events;
     allEvents = events;
   }
 
-  void addEvent(Event event) {
+  void addEvent(EventModel event) {
     state = [...state, event];
     allEvents = [...allEvents, event];
   }
 }
 
-final eventsStateNotifierProvider = StateNotifierProvider<EventsStateNotifier, List<Event>>((ref) {
+final eventsStateNotifierProvider = StateNotifierProvider<EventsStateNotifier, List<EventModel>>((ref) {
   return EventsStateNotifier([]);
 });

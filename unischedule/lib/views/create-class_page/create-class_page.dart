@@ -93,7 +93,7 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
 
             ref.read(eventsStateNotifierProvider.notifier).addEvent(
               // FIXME - This is a hardcoded event, will need to work on a form to create the event
-              Event(
+              EventModel(
                 id: '1',
                 color: '#9DCC18',
                 reminder: _getReminderMinutes(_selectedReminder),
