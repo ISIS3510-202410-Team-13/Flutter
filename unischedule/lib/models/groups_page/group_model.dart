@@ -6,8 +6,8 @@ part 'group_model.g.dart';
 
 @freezed
 @HiveType(typeId: 3)
-class Group with _$Group {
-  const factory Group({
+class GroupModel with _$GroupModel {
+  const factory GroupModel({
     @HiveField(0)
     required String id,
 
@@ -36,5 +36,5 @@ class Group with _$Group {
     required int memberCount,
   }) = _Group;
 
-  factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
+  factory GroupModel.fromJson(Map<String, dynamic> json) => _$GroupModelFromJson(json);
 }

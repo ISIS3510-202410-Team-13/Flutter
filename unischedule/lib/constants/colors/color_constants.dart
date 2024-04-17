@@ -24,7 +24,7 @@ class ColorConstants {
 
   static Color getColorFromString(String? name) {
     if (name == null) {
-      return ColorConstants.limerick;
+      return ColorConstants.limerick; // TODO replace this with the default color you want to use
     }
 
     var color = int.parse(name.replaceAll('#', '0xff'));

@@ -139,4 +139,11 @@ class StringConstants {
   static const String didYouKnow = 'Did you know?';
   static const String meditoReliesOnYourDonationsToSurvive = 'Medito relies only on your donations to survive. We produce free content to help humanity.';
   static const String donateNow = 'Donate now';*/
+
+  // Network
+  static const String connectionTimeout = 'Error connection timeout';
+  static const String badRequest = 'Bad request';
+  static const String unauthorizedRequest = 'Unauthorized request';
+  static const String accessForbidden = 'Access forbidden';
+  static const String anErrorOccurred = "An error occurred. Sorry for the inconvenience. We're fixing this issue";
 }

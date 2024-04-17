@@ -15,7 +15,7 @@ class GroupsPage extends ConsumerStatefulWidget {
 
 class _GroupsPageState extends ConsumerState<GroupsPage> {
   final TextEditingController _searchController = TextEditingController();
-  List<Group> filteredGroups = [];
+  List<GroupModel> filteredGroups = [];
 
   @override
   void initState() {
@@ -109,7 +109,7 @@ class _GroupsPageState extends ConsumerState<GroupsPage> {
     );
   }
 
-  Widget _buildGroupItem(Group group) {
+  Widget _buildGroupItem(GroupModel group) {
     final bgColor = Color(int.parse(group.color.replaceAll('#', '0xff')));
     final colorMasOscuro = bgColor
         .withRed(max(0, bgColor.red - 50))

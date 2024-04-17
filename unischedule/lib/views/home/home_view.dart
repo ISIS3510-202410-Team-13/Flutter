@@ -22,7 +22,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final groupsAsyncValue = ref.watch(groupsProvider('0MebgXs8fBYREjDKMlwq'));
+    final groupsAsyncValue = ref.watch(fetchGroupsProvider);
 
     return Scaffold(
       body: Stack(
@@ -85,7 +85,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
                         scrollDirection: Axis.horizontal,
                         itemCount: groups.length,
                         itemBuilder: (context, index) {
-                          final Group group = groups[index];
+                          final GroupModel group = groups[index];
                           return GroupCard(group: group);
                         },
                       ),

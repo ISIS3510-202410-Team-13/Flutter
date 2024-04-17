@@ -9,7 +9,7 @@ class GroupCard extends StatelessWidget {
     required this.group
   });
 
-  final Group group;
+  final GroupModel group;
 
   @override
   Widget build(BuildContext context) {

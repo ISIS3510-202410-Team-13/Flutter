@@ -119,8 +119,8 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     if (!Hive.isAdapterRegistered(FriendAdapter().typeId)) {
       Hive.registerAdapter(FriendAdapter());
     }
-    if (!Hive.isAdapterRegistered(GroupAdapter().typeId)) {
-      Hive.registerAdapter(GroupAdapter());
+    if (!Hive.isAdapterRegistered(GroupModelAdapter().typeId)) {
+      Hive.registerAdapter(GroupModelAdapter());
     }
     if (!Hive.isAdapterRegistered(EventAdapter().typeId)) {
       Hive.registerAdapter(EventAdapter());
@@ -139,11 +139,11 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         await boxFriends.put(friend.id, friend);
       }
 
-      var groups = await ref.read(groupsProvider(userId).future);
+      var groups = await ref.read(fetchGroupsProvider.future);
       ref.read(groupsStateNotifierProvider.notifier).setGroups(groups);
-      final boxGroups = await Hive.openBox<Group>('groupBox');
+      final boxGroups = await Hive.openBox<GroupModel>('groupBox');
       boxGroups.clear();
-      for (Group group in groups) {
+      for (GroupModel group in groups) {
         await boxGroups.put(group.id, group);
       }
 

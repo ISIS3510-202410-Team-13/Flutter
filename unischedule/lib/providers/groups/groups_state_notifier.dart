@@ -1,19 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/models/groups_page/group_model.dart';
 
-class GroupsStateNotifier extends StateNotifier<List<Group>> {
-  List<Group> allGroups = [];
+class GroupsStateNotifier extends StateNotifier<List<GroupModel>> {
+  List<GroupModel> allGroups = [];
 
-  GroupsStateNotifier(List<Group> initialGroups) : super(initialGroups) {
+  GroupsStateNotifier(List<GroupModel> initialGroups) : super(initialGroups) {
     allGroups = initialGroups;
   }
 
-  void setGroups(List<Group> groups) {
+  void setGroups(List<GroupModel> groups) {
     allGroups = groups;
     state = groups;
   }
 
-  List<Group> getFilteredGroups(String searchText) {
+  List<GroupModel> getFilteredGroups(String searchText) {
     if (searchText.isEmpty) {
       return allGroups;
     } else {
@@ -23,6 +23,6 @@ class GroupsStateNotifier extends StateNotifier<List<Group>> {
   }
 }
 
-final groupsStateNotifierProvider = StateNotifierProvider<GroupsStateNotifier, List<Group>>((ref) {
+final groupsStateNotifierProvider = StateNotifierProvider<GroupsStateNotifier, List<GroupModel>>((ref) {
   return GroupsStateNotifier([]);
 });

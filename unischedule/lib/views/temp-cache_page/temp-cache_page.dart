@@ -29,7 +29,7 @@ class _TempCachePageState extends ConsumerState<TempCachePage> {
       body: Column(
         children: [
           Expanded(child: _buildList<Friend>('friendBox', 'Friends Local Storage')),
-          Expanded(child: _buildList<Group>('groupBox', 'Groups Local Storage')),
+          Expanded(child: _buildList<GroupModel>('groupBox', 'Groups Local Storage')),
           Expanded(child: _buildList<Event>('eventBox', 'Events Local Storage')),
         ],
       ),
