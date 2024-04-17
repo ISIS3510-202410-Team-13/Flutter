@@ -52,6 +52,9 @@ dependencies:
   hive_flutter:
   cached_network_image:
   flutter_launcher_icons: ^0.13.1
+  firebase_core: ^2.30.0
+  firebase_crashlytics: ^3.5.2
+  firebase_analytics: ^10.10.2
 
 dev_dependencies:
   flutter_test:

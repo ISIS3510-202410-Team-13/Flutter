@@ -5,9 +5,15 @@ import 'package:unischedule/constants/theme/app_theme.dart';
 import 'package:unischedule/routes/routes.dart';
 import 'package:unischedule/services/notifications_service.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 
 Future<void> main() async {
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
