@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:unischedule/presentation/calendar_page/widgets/calendar_event.dart';
+import 'package:unischedule/views/calendar_page/widgets/calendar_event.dart';
 
 import '../../../providers/events_page/events_state_notifier.dart';
 

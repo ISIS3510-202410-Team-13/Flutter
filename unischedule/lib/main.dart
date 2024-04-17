@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:unischedule/routes/go_router_provider.dart';
+import 'package:unischedule/constants/theme/app_theme.dart';
+import 'package:unischedule/routes/routes.dart';
 import 'package:unischedule/services/notifications_service.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 
-void main() async {
+Future<void> main() async {
   
-  WidgetsFlutterBinding.ensureInitialized();
-  NotificationService().initNotification();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -17,13 +16,19 @@ void main() async {
   ]);
   tz.initializeTimeZones();
 
+  NotificationService().initNotification();
+
   runApp(
-    const ProviderScope(child: UniScheduleApp())
+    const ProviderScope(
+        child: UniScheduleApp()
+    )
   );
 }
 
 class UniScheduleApp extends ConsumerStatefulWidget {
   const UniScheduleApp({super.key});
+
+  static const String _title = 'UniSchedule';
 
   @override
   ConsumerState<UniScheduleApp> createState() => _UniScheduleAppState();
@@ -38,10 +43,8 @@ class _UniScheduleAppState extends ConsumerState<UniScheduleApp> {
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,
       routerDelegate: router.routerDelegate,
-      title: 'UniSchedule',
-      theme: ThemeData(       
-        primarySwatch: Colors.blue,
-      ),
+      theme: appTheme(context),
+      title: UniScheduleApp._title,
     );
   }
 }

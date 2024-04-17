@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:unischedule/presentation/calendar_page/calendar_page.dart';
-import 'package:unischedule/presentation/create-class_page/create-class_page.dart';
-import 'package:unischedule/presentation/shell/app_shell.dart';
-import 'package:unischedule/presentation/home_page/home_page.dart';
-import 'package:unischedule/presentation/authentication_page/authentication_page.dart';
-import 'package:unischedule/presentation/friends_page/friends_page.dart';
-import 'package:unischedule/presentation/groups_page/groups_page.dart';
-import 'package:unischedule/presentation/temp-cache_page/temp-cache_page.dart';
+import 'package:unischedule/views/calendar_page/calendar_page.dart';
+import 'package:unischedule/views/create-class_page/create-class_page.dart';
+import 'package:unischedule/views/shell/app_shell.dart';
+import 'package:unischedule/views/home/home_view.dart';
+import 'package:unischedule/views/authentication_page/authentication_page.dart';
+import 'package:unischedule/views/friends_page/friends_page.dart';
+import 'package:unischedule/views/groups_page/groups_page.dart';
+import 'package:unischedule/views/temp-cache_page/temp-cache_page.dart';
 
 
 final GlobalKey<NavigatorState> rootNavigator = GlobalKey(debugLabel: 'root');
@@ -17,7 +17,7 @@ final GlobalKey<NavigatorState> shellNavigator = GlobalKey(debugLabel: 'shell');
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     navigatorKey: rootNavigator,
-    initialLocation: '/auth', // Cambio a la ruta de autenticación como inicial
+    initialLocation: '/auth',
     routes: [
       GoRoute(
         path: '/auth',
@@ -47,7 +47,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               path: '/home',
               name: 'home',
               pageBuilder: (context, state) {
-                return NoTransitionPage(child: HomePage(key: state.pageKey));
+                return NoTransitionPage(child: HomeView(key: state.pageKey));
               }),
           GoRoute(
               path: '/calendar',

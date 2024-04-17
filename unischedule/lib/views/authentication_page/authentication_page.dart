@@ -7,10 +7,10 @@ import 'package:unischedule/models/friends_page/friend_model.dart';
 import 'package:unischedule/models/groups_page/group_model.dart';
 import 'package:unischedule/models/events_page/event_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../../providers/friends_page/friends_provider.dart';
-import '../../../providers/friends_page/friends_state_notifier.dart';
-import '../../../providers/groups_page/groups_provider.dart';
-import '../../../providers/groups_page/groups_state_notifier.dart';
+import '../../../providers/friends/friends_provider.dart';
+import '../../../providers/friends/friends_state_notifier.dart';
+import '../../../providers/groups/groups_provider.dart';
+import '../../../providers/groups/groups_state_notifier.dart';
 import '../../../providers/events_page/events_provider.dart';
 import '../../../providers/events_page/events_state_notifier.dart';
 

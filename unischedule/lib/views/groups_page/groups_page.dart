@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math';
 import '../../../models/groups_page/group_model.dart';
-import '../../../providers/groups_page/groups_state_notifier.dart';
+import '../../../providers/groups/groups_state_notifier.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class GroupsPage extends ConsumerStatefulWidget {
