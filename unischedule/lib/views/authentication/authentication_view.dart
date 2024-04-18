@@ -7,14 +7,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:unischedule/models/models.dart';
 import 'package:unischedule/providers/providers.dart';
 
-class AuthenticationPage extends StatefulWidget {
-  const AuthenticationPage({Key? key}) : super(key: key);
+class AuthenticationView extends StatefulWidget {
+  const AuthenticationView({Key? key}) : super(key: key);
 
   @override
-  _AuthenticationPageState createState() => _AuthenticationPageState();
+  _AuthenticationViewState createState() => _AuthenticationViewState();
 }
 
-class _AuthenticationPageState extends State<AuthenticationPage> {
+class _AuthenticationViewState extends State<AuthenticationView> {
   late final LocalAuthentication auth;
   bool _supportState = false;
   bool _dataLoaded = false;

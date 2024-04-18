@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/models/models.dart';
 import 'package:unischedule/utils/bezier_painter.dart';
 
@@ -14,13 +15,11 @@ class GroupCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    String formattedName = group.name.length > 7 ? '${group.name.substring(0, 7)}...' : group.name;
-    final bgColor = Color(int.parse(group.color.replaceAll('#', '0xff')));
-    Color colorMasOscuro = bgColor
+    final bgColor = ColorConstants.getColorFromString(group.color);
+    Color shade = bgColor
         .withRed(max(0, bgColor.red - 30))
         .withGreen(max(0, bgColor.green - 30))
         .withBlue(max(0, bgColor.blue - 30));
-
 
     return Container(
       width: 150,
@@ -33,16 +32,14 @@ class GroupCard extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 20, bottom: 10),
+            padding: const EdgeInsets.only(left: 20, bottom: 10, right: 20),
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Text(
-                formattedName,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                group.name,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: ColorConstants.white,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),
@@ -52,7 +49,7 @@ class GroupCard extends StatelessWidget {
             top: 0,
             child: CustomPaint(
               size: const Size(100, 100),
-              painter: BezierPainter(colorMasOscuro),
+              painter: BezierPainter(shade),
             ),
           ),
           Positioned(
@@ -63,18 +60,18 @@ class GroupCard extends StatelessWidget {
                 Container(
                   width: 5,
                   height: 5,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: ColorConstants.white,
                   ),
                 ),
-                SizedBox(height: 3),
+                const SizedBox(height: 3),
                 Container(
                   width: 5,
                   height: 5,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: ColorConstants.white,
                   ),
                 ),
               ],
@@ -85,10 +82,7 @@ class GroupCard extends StatelessWidget {
             top: 8,
             child: Text(
               group.icon,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
         ],

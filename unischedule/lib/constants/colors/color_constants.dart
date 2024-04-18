@@ -2,33 +2,15 @@ import 'package:flutter/material.dart';
 
 class ColorConstants {
 
-
-  // TODO replace the color constants with the colors you want to use in your app
-/*  static const black = Colors.black;
-  static const greyIsTheNewBlack = Color(0xFF1C1C1E);
-  static const greyIsTheNewGrey = Color(0xFF2C2C2E);
-  static const transparent = Color(0x00ffffff);
-  static const walterWhite = Colors.white;
-  static const softGrey = Color(0xff424345);
-  static const quiteGrey = Color(0xffD5D3D1);
-  static const lightPurple = Color(0xff917DF0);
-  static const onyx = Color(0xff2A2A32);
-  static const ebony = Color(0xff171718);
-  static const graphite = Color(0xffAAAAAA);
-  static const charcoal = Color(0xff303031);
-  static const amsterdamSummer = Color(0xff211F26);
-  static const amsterdamSpring = Color(0xff2A2A32);
-  static const nearWhite = Color(0xffFEFEFE);*/
-
   static const limerick = Color(0xFF9DCC18);
+  static const gullGrey = Color(0xFF9FA5C0);
+  static const desertStorm = Color(0xFFF8F8F8);
+  static const white = Color(0xFFFFFFFF);
+  static const black = Color(0xFF000000);
+  static const transparent = Color(0x00000000);
 
-  static Color getColorFromString(String? name) {
-    if (name == null) {
-      return ColorConstants.limerick; // TODO replace this with the default color you want to use
-    }
-
-    var color = int.parse(name.replaceAll('#', '0xff'));
-
+  static Color getColorFromString(String name) {
+    var color = int.parse(name.replaceAll('#', '0xFF'));
     return Color(color);
   }
 }

@@ -3,7 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:ui';
 
-class SlideOutMenu extends StatelessWidget {
+class UniScheduleDrawer extends StatelessWidget {
+  const UniScheduleDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -26,7 +28,7 @@ class SlideOutMenu extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 62,
                       backgroundColor: Colors.white,
                       child: CircleAvatar(
@@ -34,8 +36,8 @@ class SlideOutMenu extends StatelessWidget {
                         backgroundImage: AssetImage('assets/images/profile_pics/user_1.png'),
                       ),
                     ),
-                    SizedBox(height: 30),
-                    Text(
+                    const SizedBox(height: 30),
+                    const Text(
                       "user0",
                       style: TextStyle(
                         fontFamily: 'Poppins',

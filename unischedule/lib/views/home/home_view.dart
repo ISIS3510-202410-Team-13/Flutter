@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:unischedule/providers/groups/groups_provider.dart';
+import 'package:unischedule/constants/constants.dart';
+import 'package:unischedule/providers/providers.dart';
 import 'package:unischedule/models/models.dart';
-import 'package:unischedule/views/home/widgets/event_card.dart';
-import 'package:unischedule/views/home/widgets/group_card.dart';
-import 'package:unischedule/widgets/background_widget.dart';
+import 'package:unischedule/widgets/widgets.dart';
+import 'widgets/group_card.dart';
+import 'widgets/event_card.dart';
 
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
@@ -14,126 +14,119 @@ class HomeView extends ConsumerStatefulWidget {
   ConsumerState<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClientMixin {
-
-  @override
-  bool get wantKeepAlive => true;
+class _HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    final groups = ref.watch(fetchGroupsProvider);
 
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          const BackgroundImage(),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: IconButton(
-                icon: SvgPicture.asset('assets/icons/bars.svg', width: 21, height: 24, color: Colors.white),
-                onPressed: () {
-                  // TODO implement logic for opening the drawer
-                  Scaffold.of(context).openDrawer(); // Abre el drawer
-                },
+    final groupsProvider = ref.watch(fetchGroupsProvider);
+    final eventsProvider = ref.watch(fetchEventsProvider);
+    final user = "User With Very Very Long Name"; // TODO get this from a provider
+
+    return Stack(
+      children: <Widget>[
+        const BackgroundImage(opacity: StyleConstants.backgroundOpacity),
+        Center(
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 120.0),
+              child: Text(
+                StringConstants.helloUser(user),
+                maxLines: 3,
+                style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-              actions: <Widget>[
-                IconButton(
-                  icon: SvgPicture.asset('assets/icons/bell.svg', width: 21, height: 24, color: Colors.white),
-                  onPressed: () {
-                    // TODO implement logic for notifications
-                  },
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            padding: const EdgeInsets.only(top: 20),
+            decoration: const BoxDecoration(
+              color: ColorConstants.desertStorm,
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(37)),
+            ),
+            height: 393,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      StringConstants.myGroups,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: groupsProvider.when(
+                    data: (groups) => ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: groups.length,
+                      itemBuilder: (context, index) {
+                        final GroupModel group = groups[index];
+                        return GroupCard(group: group);
+                      },
+                    ),
+                    loading: () => const Center(child: CircularProgressIndicator()),
+                    error: (error, stack) => Padding( //TODO Change this to a custom error widget (toast)
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                      child: Text(
+                          error.toString(),
+                          style: Theme.of(context).textTheme.bodySmall
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      StringConstants.myEvents,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: eventsProvider.when(
+                    data: (events) => ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: events.length,
+                      itemBuilder: (context, index) {
+                        final EventModel event = events[index];
+                        return EventCard(event: event);
+                      },
+                    ),
+                    loading: () => const Center(child: CircularProgressIndicator()),
+                    error: (error, stack) => Padding( //TODO Change this to a custom error widget (toast)
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                      child: Text(
+                          error.toString(),
+                          style: Theme.of(context).textTheme.bodySmall
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.only(top: 20),
-              decoration: const BoxDecoration(
-                color: Color(0xFFF8F8F8),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(37)),
-              ),
-              height: 393,
-              child: Column(
-                children: <Widget>[
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '   My Groups',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: groups.when(
-                      data: (groups) => ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: groups.length,
-                        itemBuilder: (context, index) {
-                          final GroupModel group = groups[index];
-                          return GroupCard(group: group);
-                        },
-                      ),
-                      loading: () => const Center(child: CircularProgressIndicator()),
-                      error: (error, stack) => Center(child: Text('Error: $error')),
-                    ),
-
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '   My Events',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount:
-                      10, // Define la cantidad de eventos estáticos que quieres mostrar
-                      itemBuilder: (context, index) {
-                        return const FriendCard();
-                      },
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
+        ),
+        Positioned(
+          right: 10,
+          bottom: 353,
+          child: Image.asset(
+            "assets/images/sticker.png", // TODO make this dynamic, create a provider
+            height: 197,
           ),
-          Positioned(
-            right: 10,
-            bottom: 353,
-            child: Image.asset(
-              "assets/images/sticker.png", // TODO make this dynamic
-              height: 197,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
