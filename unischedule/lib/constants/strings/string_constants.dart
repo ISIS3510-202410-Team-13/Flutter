@@ -13,8 +13,17 @@ class StringConstants {
   static const String friends = 'Friends';
   static const String groups = 'Groups';
 
+  // Search
+  static const String search = 'Search...';
+
   // Home
   static final Function(String) helloUser = (String name) => 'Hey, $name!';
   static const String myGroups = 'My Groups';
   static const String myEvents = 'My Events';
+
+  // Friends
+  static const String friendsTitle = 'Friends';
+
+  // Groups
+  static const String groupsTitle = 'Groups';
 }

@@ -63,7 +63,7 @@ class EventCard extends StatelessWidget {
                   height: 5,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: ColorConstants.white,
                   ),
                 ),
                 const SizedBox(height: 3),
@@ -72,7 +72,7 @@ class EventCard extends StatelessWidget {
                   height: 5,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: ColorConstants.white,
                   ),
                 ),
               ],
@@ -85,7 +85,7 @@ class EventCard extends StatelessWidget {
               'assets/icons/fire.svg',  //TODO Change this to a custom icon
               width: StyleConstants.iconWidth,
               height: StyleConstants.iconHeight,
-              color: Colors.white,
+              color: ColorConstants.white,
             ),
           ),
         ],

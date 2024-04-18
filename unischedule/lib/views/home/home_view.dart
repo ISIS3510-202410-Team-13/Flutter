@@ -21,7 +21,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
     final groupsProvider = ref.watch(fetchGroupsProvider);
     final eventsProvider = ref.watch(fetchEventsProvider);
-    final user = "User With Very Very Long Name"; // TODO get this from a provider
+    final user = "David"; // TODO get this from a provider
 
     return Stack(
       children: <Widget>[

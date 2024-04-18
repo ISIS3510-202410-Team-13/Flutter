@@ -16,7 +16,7 @@ class GroupCard extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final bgColor = ColorConstants.getColorFromString(group.color);
-    Color shade = bgColor
+    final shade = bgColor
         .withRed(max(0, bgColor.red - 30))
         .withGreen(max(0, bgColor.green - 30))
         .withBlue(max(0, bgColor.blue - 30));

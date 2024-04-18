@@ -3,6 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:ui';
 
+import 'package:unischedule/constants/colors/color_constants.dart';
+import 'package:unischedule/constants/constants.dart';
+
 class UniScheduleDrawer extends StatelessWidget {
   const UniScheduleDrawer({super.key});
 
@@ -17,12 +20,12 @@ class UniScheduleDrawer extends StatelessWidget {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                 child: Container(
-                  color: Color(0xFF9FA5C0),
+                  color: ColorConstants.gullGrey,
                 ),
               ),
             ),
             SingleChildScrollView(
-              padding: EdgeInsets.only(top: 115),
+              padding: EdgeInsets.only(top: Scaffold.of(context).appBarMaxHeight ?? 100),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -30,15 +33,15 @@ class UniScheduleDrawer extends StatelessWidget {
                   children: <Widget>[
                     const CircleAvatar(
                       radius: 62,
-                      backgroundColor: Colors.white,
+                      backgroundColor: ColorConstants.white,
                       child: CircleAvatar(
                         radius: 60,
-                        backgroundImage: AssetImage('assets/images/profile_pics/user_1.png'),
+                        backgroundImage: AssetImage('assets/images/profile_pics/user_1.png'), // TODO replace with user profile picture
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 10),
                     const Text(
-                      "user0",
+                      "@DavidOrtiz",  //TODO replace with user name provider
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 24,
@@ -46,9 +49,9 @@ class UniScheduleDrawer extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     _buildDivider(),
-                    SizedBox(height: 50),
+                    SizedBox(height: 30),
                     _buildMenuOption('user.svg', 'Profile', context, '/home'),
                     SizedBox(height: 50),
                     _buildMenuOption('gear.svg', 'Settings', context, '/home'),
@@ -80,7 +83,7 @@ class UniScheduleDrawer extends StatelessWidget {
       width: 220,
       height: 1,
       decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.7),
+          color: ColorConstants.white.withOpacity(0.7),
           borderRadius: BorderRadius.circular(0.5)
       ),
     );

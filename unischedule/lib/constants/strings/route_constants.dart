@@ -4,4 +4,6 @@ class RouteConstants {
   static const String calendar = '/calendar';
   static const String friends = '/friends';
   static const String groups = '/groups';
+  static const String notifications = '/notifications';
+  static const String chat = '/chat';
 }

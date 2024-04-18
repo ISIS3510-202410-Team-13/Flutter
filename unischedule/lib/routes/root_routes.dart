@@ -14,6 +14,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     initialLocation: RouteConstants.root,
     routes: [
       _getRootRoute(),
+      _getNotificationsRoute(),
+      _getChatRoute(),
       getShellRoute(),
     ],
   );
@@ -24,6 +26,24 @@ GoRoute _getRootRoute() {
     path: RouteConstants.root,
     builder: (context, state) {
       return AuthenticationView(key: state.pageKey);
+    },
+  );
+}
+
+GoRoute _getNotificationsRoute() {
+  return GoRoute(
+    path: RouteConstants.notifications,
+    builder: (context, state) {
+      return NotificationsView(key: state.pageKey);
+    },
+  );
+}
+
+GoRoute _getChatRoute() {
+  return GoRoute(
+    path: RouteConstants.chat,
+    builder: (context, state) {
+      return ChatView(key: state.pageKey);
     },
   );
 }

@@ -9,7 +9,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey(debugLabel: 'shel
 ShellRoute getShellRoute() {
   return ShellRoute(
     navigatorKey: _shellNavigatorKey,
-    builder: (context, state, child) => UniScheduleAppShell(key: state.pageKey, body: child),
+    builder: _getAppShell,
     routes: [
       _getHomeRoute(),
       _getCalendarRoute(),
@@ -19,35 +19,62 @@ ShellRoute getShellRoute() {
   );
 }
 
+Widget _getAppShell(BuildContext context, GoRouterState state, Widget child) {
+  String appBarTitle = '';
+  Color appBarColor = ColorConstants.white;
+  bool useFAB = false;
+  switch(state.topRoute?.path) {
+    case RouteConstants.calendar:
+      appBarTitle = 'April';  // TODO implement dynamic month
+      useFAB = true;
+    case RouteConstants.friends:
+      appBarTitle = StringConstants.friendsTitle;
+      appBarColor = ColorConstants.black;
+      useFAB = true;
+    case RouteConstants.groups:
+      appBarTitle = StringConstants.groupsTitle;
+      appBarColor = ColorConstants.black;
+      useFAB = true;
+  }
+
+  return UniScheduleAppShell(
+    key: state.pageKey,
+    body: child,
+    appBarTitle: appBarTitle,
+    appBarColor: appBarColor,
+    useFAB: useFAB,
+  );
+}
+
 GoRoute _getHomeRoute() {
   return GoRoute(
     path: RouteConstants.home,
-    builder: (context, state) {
-      return HomeView(key: state.pageKey);
+    pageBuilder: (context, state) {
+      return NoTransitionPage(child: HomeView(key: state.pageKey));
     });
 }
 
 GoRoute _getCalendarRoute() {
   return GoRoute(
     path: RouteConstants.calendar,
-    builder: (context, state) {
-      return CalendarApp(key: state.pageKey);
+    pageBuilder: (context, state) {
+      return NoTransitionPage(child: CalendarView(key: state.pageKey));
     });
 }
 
 GoRoute _getFriendsRoute() {
   return GoRoute(
     path: RouteConstants.friends,
-    builder: (context, state) {
-      return FriendsApp(key: state.pageKey);
+    pageBuilder: (context, state) {
+      return NoTransitionPage(child: FriendsView(key: state.pageKey));
     });
 }
 
 GoRoute _getGroupsRoute() {
   return GoRoute(
     path: RouteConstants.groups,
-    builder: (context, state) {
-      return GroupsPage(key: state.pageKey);
+    pageBuilder: (context, state) {
+      return NoTransitionPage(child: GroupsView(key: state.pageKey));
     }
   );
 }

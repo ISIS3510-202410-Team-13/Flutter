@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BackgroundImage extends ConsumerStatefulWidget {
+  final double opacity;
   const BackgroundImage({
     super.key,
     this.opacity = 1,
   });
-
-  final double opacity;
 
   @override
   ConsumerState<BackgroundImage> createState() => _BackgroundImage();

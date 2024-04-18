@@ -34,72 +34,30 @@ class _UniScheduleBottomNavBarState extends State<UniScheduleBottomNavBar> {
         selectedItemColor: ColorConstants.limerick,
         selectedFontSize: 12,
         items: [
-
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-                AssetConstants.icHouse,
-                width: StyleConstants.navbarIconSize,
-                height: StyleConstants.navbarIconSize,
-                color: ColorConstants.gullGrey,
-            ),
-            activeIcon: SvgPicture.asset(
-                AssetConstants.icHouse,
-                width: StyleConstants.navbarIconSize,
-                height: StyleConstants.navbarIconSize,
-                color: ColorConstants.limerick,
-            ),
-            label: StringConstants.home,
-          ),
-
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-                AssetConstants.icCalendar,
-                width: StyleConstants.navbarIconSize,
-                height: StyleConstants.navbarIconSize,
-                color: ColorConstants.gullGrey,
-            ),
-            activeIcon: SvgPicture.asset(
-                AssetConstants.icCalendar,
-                width: StyleConstants.navbarIconSize,
-                height: StyleConstants.navbarIconSize,
-                color: ColorConstants.limerick,
-            ),
-            label: StringConstants.calendar,
-          ),
-
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-                AssetConstants.icAddressBook,
-                width: StyleConstants.navbarIconSize,
-                height: StyleConstants.navbarIconSize,
-                color: ColorConstants.gullGrey,
-            ),
-            activeIcon: SvgPicture.asset(
-                AssetConstants.icAddressBook,
-                width: StyleConstants.navbarIconSize,
-                height:StyleConstants.navbarIconSize,
-                color: ColorConstants.limerick,
-            ),
-            label: StringConstants.friends,
-          ),
-
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-                AssetConstants.icUserGroup,
-                width: StyleConstants.navbarIconSize,
-                height: StyleConstants.navbarIconSize,
-                color: ColorConstants.gullGrey,
-            ),
-            activeIcon: SvgPicture.asset(
-                AssetConstants.icUserGroup,
-                width: StyleConstants.navbarIconSize,
-                height: StyleConstants.navbarIconSize,
-                color: ColorConstants.limerick,
-            ),
-            label: StringConstants.groups,
-          ),
+          _buildNavBarItem(AssetConstants.icHouse, StringConstants.home),
+          _buildNavBarItem(AssetConstants.icCalendar, StringConstants.calendar),
+          _buildNavBarItem(AssetConstants.icAddressBook, StringConstants.friends),
+          _buildNavBarItem(AssetConstants.icUserGroup, StringConstants.groups),
         ],
       );
+  }
+
+  BottomNavigationBarItem _buildNavBarItem(String iconPath, String label) {
+    return BottomNavigationBarItem(
+      icon: SvgPicture.asset(
+        iconPath,
+        width: StyleConstants.navbarIconSize,
+        height: StyleConstants.navbarIconSize,
+        color: ColorConstants.gullGrey,
+      ),
+      activeIcon: SvgPicture.asset(
+        iconPath,
+        width: StyleConstants.navbarIconSize,
+        height: StyleConstants.navbarIconSize,
+        color: ColorConstants.limerick,
+      ),
+      label: label,
+    );
   }
 
   void onTabTapped(int index) {

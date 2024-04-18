@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:unischedule/constants/constants.dart';
 
 class CalendarEvent extends StatelessWidget {
   const CalendarEvent({
@@ -35,7 +36,7 @@ class CalendarEvent extends StatelessWidget {
     final topOffset = fullHeight * minutesSinceMidnight / 1440 + 6; // 6 sized box
     final leftOffset = boxWidth * dayOffset + 30;  // 24 text + 6 sized box
 
-    final colorHex = int.parse("0xFF${color.substring(1)}");
+    final colorHex = ColorConstants.getColorFromString(color);
 
     return Positioned(
       top: topOffset,
@@ -47,7 +48,7 @@ class CalendarEvent extends StatelessWidget {
             height: boxHeight,
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
             decoration: BoxDecoration(
-              color: Color(colorHex).withOpacity(0.7),
+              color: colorHex.withOpacity(0.7),
               borderRadius: BorderRadius.circular(5),
             ),
             child: Center(

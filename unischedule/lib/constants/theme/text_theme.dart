@@ -21,6 +21,18 @@ TextTheme textTheme(BuildContext context) {
     titleMedium: const TextStyle(
       fontFamily: StyleConstants.fontFamily,
       fontSize: 24,
+      fontWeight: FontWeight.bold,
+    ),
+
+    headlineLarge: const TextStyle(
+      fontFamily: StyleConstants.fontFamily,
+      fontSize: 30,
+      fontWeight: FontWeight.normal,
+    ),
+
+    headlineMedium: const TextStyle(
+      fontFamily: StyleConstants.fontFamily,
+      fontSize: 18,
       fontWeight: FontWeight.w600,
     ),
 
@@ -57,17 +69,8 @@ TextTheme textTheme(BuildContext context) {
   TextStyle? labelLarge,
   TextStyle? labelMedium,
   TextStyle? labelSmall,
-  TextStyle? headline1,
-  TextStyle? headline2,
-  TextStyle? headline3,
-  TextStyle? headline4,
-  TextStyle? headline5,
-  TextStyle? headline6,
   TextStyle? subtitle1,
   TextStyle? subtitle2,
-  TextStyle? bodyText1,
-  TextStyle? bodyText2,
-  TextStyle? caption,
   TextStyle? button,
   TextStyle? overline,
  */
