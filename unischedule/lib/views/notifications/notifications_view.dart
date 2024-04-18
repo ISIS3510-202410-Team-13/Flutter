@@ -6,6 +6,9 @@ class NotificationsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO implement this view
-    return Center(child: const Text('Notifications works! Use back button :)'));
+    return TextButton(
+      onPressed: () => throw Exception(),
+      child: const Text('Throw Test Exception to Firebase'),
+    );
   }
 }

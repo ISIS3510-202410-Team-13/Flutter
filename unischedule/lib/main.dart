@@ -1,6 +1,12 @@
+import 'dart:ui';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:unischedule/constants/theme/app_theme.dart';
 import 'package:unischedule/routes/root_routes.dart';
 import 'package:unischedule/services/notifications_service.dart';
@@ -16,6 +22,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -24,6 +35,8 @@ Future<void> main() async {
   tz.initializeTimeZones();
 
   NotificationService().initNotification();
+
+  await Hive.initFlutter();
 
   runApp(
     const ProviderScope(
