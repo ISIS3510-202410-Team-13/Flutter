@@ -1,27 +1,22 @@
 import 'dart:ui';
-
+import 'package:timezone/data/latest.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:unischedule/constants/theme/app_theme.dart';
+import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/routes/root_routes.dart';
-import 'package:unischedule/services/notifications_service.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:firebase_core/firebase_core.dart';
+import 'package:unischedule/services/services.dart';
 import 'firebase_options.dart';
-
 
 Future<void> main() async {
 
+  // Flutter
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // Firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
@@ -32,11 +27,11 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  tz.initializeTimeZones();
+  initializeTimeZones();
 
+  // Services
+  await HiveBoxServiceFactory().initHive();
   NotificationService().initNotification();
-
-  await Hive.initFlutter();
 
   runApp(
     const ProviderScope(

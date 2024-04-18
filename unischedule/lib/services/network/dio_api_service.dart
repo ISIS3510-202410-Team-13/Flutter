@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:unischedule/constants/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -204,20 +202,17 @@ class CustomException implements Exception {
 }
 
 class FetchDataException extends CustomException {
-  FetchDataException([int? statusCode, String? message])
-      : super(statusCode, message);
+  FetchDataException([super.statusCode, super.message]);
 }
 
 class BadRequestException extends CustomException {
-  BadRequestException([int? statusCode, message]) : super(statusCode, message);
+  BadRequestException([super.statusCode, super.message]);
 }
 
 class UnauthorizedException extends CustomException {
-  UnauthorizedException([int? statusCode, message])
-      : super(statusCode, message);
+  UnauthorizedException([super.statusCode, super.message]);
 }
 
 class InvalidInputException extends CustomException {
-  InvalidInputException([int? statusCode, String? message])
-      : super(statusCode, message);
+  InvalidInputException([super.statusCode, super.message]);
 }

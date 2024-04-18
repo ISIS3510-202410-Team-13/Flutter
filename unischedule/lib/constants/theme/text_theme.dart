@@ -18,11 +18,9 @@ TextTheme textTheme(BuildContext context) {
       ]
     ),
 
-    titleMedium: const TextStyle(
-      fontFamily: StyleConstants.fontFamily,
-      fontSize: 24,
-      fontWeight: FontWeight.bold,
-    ),
+    displayMedium: null, // TODO: Add custom text styles here
+
+    displaySmall: null, // TODO: Add custom text styles here
 
     headlineLarge: const TextStyle(
       fontFamily: StyleConstants.fontFamily,
@@ -42,6 +40,18 @@ TextTheme textTheme(BuildContext context) {
       fontWeight: FontWeight.w600,
     ),
 
+    titleLarge: null, // TODO: Add custom text styles here
+
+    titleMedium: const TextStyle(
+      fontFamily: StyleConstants.fontFamily,
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+    ),
+
+    titleSmall: null, // TODO: Add custom text styles here
+
+    bodyLarge: null, // TODO: Add custom text styles here
+
     bodyMedium: const TextStyle(
       fontFamily: StyleConstants.fontFamily,
       fontSize: 20,
@@ -52,27 +62,11 @@ TextTheme textTheme(BuildContext context) {
       fontSize: 16,
     ),
 
-  /*
-  // TODO - Add your custom text styles here
-  TextStyle? displayLarge,
-  TextStyle? displayMedium,
-  TextStyle? displaySmall,
-  TextStyle? headlineLarge,
-  TextStyle? headlineMedium,
-  TextStyle? headlineSmall,
-  TextStyle? titleLarge,
-  TextStyle? titleMedium,
-  TextStyle? titleSmall,
-  TextStyle? bodyLarge,
-  TextStyle? bodyMedium,
-  TextStyle? bodySmall,
-  TextStyle? labelLarge,
-  TextStyle? labelMedium,
-  TextStyle? labelSmall,
-  TextStyle? subtitle1,
-  TextStyle? subtitle2,
-  TextStyle? button,
-  TextStyle? overline,
- */
+    labelLarge: null, // TODO: Add custom text styles here
+
+    labelMedium: null, // TODO: Add custom text styles here
+
+    labelSmall: null, // TODO: Add custom text styles here
+
   );
 }

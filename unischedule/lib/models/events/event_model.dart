@@ -1,11 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:unischedule/constants/constants.dart';
 
 part 'event_model.freezed.dart';
 part 'event_model.g.dart';
 
 @freezed
-@HiveType(typeId: 2)
+@HiveType(typeId: LocalStorageConstants.eventModelTypeId)
 class EventModel with _$EventModel {
   const factory EventModel({
     @HiveField(0) required String id,

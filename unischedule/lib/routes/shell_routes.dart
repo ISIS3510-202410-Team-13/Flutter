@@ -11,10 +11,10 @@ ShellRoute getShellRoute() {
     navigatorKey: _shellNavigatorKey,
     builder: _getAppShell,
     routes: [
-      _getHomeRoute(),
-      _getCalendarRoute(),
-      _getFriendsRoute(),
-      _getGroupsRoute(),
+      _createRoute(RouteConstants.home, (state) => HomeView(key: state.pageKey)),
+      _createRoute(RouteConstants.calendar, (state) => CalendarView(key: state.pageKey)),
+      _createRoute(RouteConstants.friends, (state) => FriendsView(key: state.pageKey)),
+      _createRoute(RouteConstants.groups, (state) => GroupsView(key: state.pageKey)),
     ],
   );
 }
@@ -46,35 +46,10 @@ Widget _getAppShell(BuildContext context, GoRouterState state, Widget child) {
   );
 }
 
-GoRoute _getHomeRoute() {
+GoRoute _createRoute(String path, Widget Function(GoRouterState state) builder) {
   return GoRoute(
-    path: RouteConstants.home,
+    path: path,
     pageBuilder: (context, state) {
-      return NoTransitionPage(child: HomeView(key: state.pageKey));
+      return NoTransitionPage(child: builder(state));
     });
-}
-
-GoRoute _getCalendarRoute() {
-  return GoRoute(
-    path: RouteConstants.calendar,
-    pageBuilder: (context, state) {
-      return NoTransitionPage(child: CalendarView(key: state.pageKey));
-    });
-}
-
-GoRoute _getFriendsRoute() {
-  return GoRoute(
-    path: RouteConstants.friends,
-    pageBuilder: (context, state) {
-      return NoTransitionPage(child: FriendsView(key: state.pageKey));
-    });
-}
-
-GoRoute _getGroupsRoute() {
-  return GoRoute(
-    path: RouteConstants.groups,
-    pageBuilder: (context, state) {
-      return NoTransitionPage(child: GroupsView(key: state.pageKey));
-    }
-  );
 }

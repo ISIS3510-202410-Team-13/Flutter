@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:unischedule/services/notifications_service.dart';
+import 'package:unischedule/services/notifications/notifications_service.dart';
 import 'package:unischedule/providers/providers.dart';
 import 'package:intl/intl.dart';
 import 'package:unischedule/models/models.dart';

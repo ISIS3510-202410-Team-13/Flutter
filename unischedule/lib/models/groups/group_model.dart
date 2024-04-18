@@ -1,11 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:unischedule/constants/constants.dart';
 
 part 'group_model.freezed.dart';
 part 'group_model.g.dart';
 
 @freezed
-@HiveType(typeId: 3)
+@HiveType(typeId: LocalStorageConstants.groupModelTypeId)
 class GroupModel with _$GroupModel {
   const factory GroupModel({
     @HiveField(0) required String id,
