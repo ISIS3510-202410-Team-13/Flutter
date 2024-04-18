@@ -1,35 +1,29 @@
 import 'dart:async';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:unischedule/constants/constants.dart';
+import 'package:unischedule/models/models.dart';
 
 class HiveBoxServiceFactory {
 
-  static final HiveBoxServiceFactory _instance = HiveBoxServiceFactory();
-  static final Map<String, HiveBoxService> _boxes = {};
-  static final List<String> _boxNames = [
-    LocalStorageConstants.friendBox,
-    LocalStorageConstants.eventBox,
-    LocalStorageConstants.groupBox,
-  ];
+  static late final HiveBoxService<FriendModel> friendModelBox;
+  static late final HiveBoxService<EventModel> eventModelBox;
+  static late final HiveBoxService<GroupModel> groupModelBox;
 
-  HiveBoxServiceFactory();
+  static Future<void> initHive() async {
 
-  Future<void> initHive() async {
     await Hive.initFlutter();
-    for (String boxName in HiveBoxServiceFactory._boxNames) {
-      if (!Hive.isBoxOpen(boxName)) {
-        await Hive.openBox(boxName);
-        _boxes[boxName] = HiveBoxService(boxName);
-      }
-    }
-  }
 
-  static HiveBoxService getService(String boxName) {
-    if (!_boxes.containsKey(boxName)) {
-      throw Exception('Box $boxName not found');
-    } else {
-      return _boxes[boxName]!;
-    }
+    Hive.registerAdapter(FriendModelAdapter());
+    Hive.registerAdapter(EventModelAdapter());
+    Hive.registerAdapter(GroupModelAdapter());
+
+    await Hive.openBox<FriendModel>(LocalStorageConstants.friendBox);
+    await Hive.openBox<EventModel>(LocalStorageConstants.eventBox);
+    await Hive.openBox<GroupModel>(LocalStorageConstants.groupBox);
+
+    friendModelBox = HiveBoxService(LocalStorageConstants.friendBox);
+    eventModelBox = HiveBoxService(LocalStorageConstants.eventBox);
+    groupModelBox = HiveBoxService(LocalStorageConstants.groupBox);
   }
 }
 

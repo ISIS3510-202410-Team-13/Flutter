@@ -7,7 +7,7 @@ import 'package:unischedule/services/services.dart';
 part 'friends_repository.g.dart';
 
 abstract class FriendsRepository {
-  // TODO add here all use cases for friends
+  // TODO add here all CRUD operations
   Future<List<FriendModel>> fetchFriends();
 }
 
@@ -30,7 +30,6 @@ class FriendsRepositoryImpl extends FriendsRepository {
       .catchError((error) => boxService.getAll());
     return friends;
   }
-  // TODO add onDispose method to save the state of the friends
 }
 
 @riverpod
@@ -38,6 +37,6 @@ FriendsRepositoryImpl friendsRepository(FriendsRepositoryRef ref) {
   return FriendsRepositoryImpl(
     ref: ref,
     client: DioApiServiceFactory.getService(HTTPConstants.FRIENDS_BASE_URL),
-    boxService: HiveBoxServiceFactory.getService(LocalStorageConstants.friendBox) as HiveBoxService<FriendModel>,
+    boxService: HiveBoxServiceFactory.friendModelBox,
   );
 }

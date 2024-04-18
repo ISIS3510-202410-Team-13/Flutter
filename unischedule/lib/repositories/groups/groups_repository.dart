@@ -7,7 +7,7 @@ import 'package:unischedule/services/services.dart';
 part 'groups_repository.g.dart';
 
 abstract class GroupsRepository {
-  // TODO add here all use cases for groups
+  // TODO add here all CRUD operations
   Future<List<GroupModel>> fetchGroups();
 }
 
@@ -30,7 +30,6 @@ class GroupsRepositoryImpl extends GroupsRepository {
       .catchError((error) => boxService.getAll());
     return groups;
   }
-  // TODO add onDispose method to save the state of the groups
 }
 
 @riverpod
@@ -38,6 +37,6 @@ GroupsRepositoryImpl groupsRepository(GroupsRepositoryRef ref) {
   return GroupsRepositoryImpl(
     ref: ref,
     client: DioApiServiceFactory.getService(HTTPConstants.GROUPS_BASE_URL),
-    boxService: HiveBoxServiceFactory.getService(LocalStorageConstants.groupBox) as HiveBoxService<GroupModel>,
+    boxService: HiveBoxServiceFactory.groupModelBox,
   );
 }

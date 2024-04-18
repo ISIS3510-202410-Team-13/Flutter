@@ -30,7 +30,7 @@ Future<void> main() async {
   initializeTimeZones();
 
   // Services
-  await HiveBoxServiceFactory().initHive();
+  await HiveBoxServiceFactory.initHive();
   NotificationService().initNotification();
 
   runApp(

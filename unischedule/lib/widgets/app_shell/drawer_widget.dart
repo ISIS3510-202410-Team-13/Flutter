@@ -1,9 +1,7 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'dart:ui';
-
-import 'package:unischedule/constants/colors/color_constants.dart';
 import 'package:unischedule/constants/constants.dart';
 
 class UniScheduleDrawer extends StatelessWidget {

@@ -7,7 +7,7 @@ import 'package:unischedule/services/services.dart';
 part 'events_repository.g.dart';
 
 abstract class EventsRepository {
-  // TODO add here all use cases for events
+  // TODO add here all CRUD operations
   Future<List<EventModel>> fetchEvents();
 }
 
@@ -30,7 +30,6 @@ class EventsRepositoryImpl extends EventsRepository {
       .catchError((error) => boxService.getAll());
     return events;
   }
-  // TODO add onDispose method to save the state of the events
 }
 
 @riverpod
@@ -38,6 +37,6 @@ EventsRepositoryImpl eventsRepository(EventsRepositoryRef ref) {
   return EventsRepositoryImpl(
     ref: ref,
     client: DioApiServiceFactory.getService(HTTPConstants.EVENTS_BASE_URL),
-    boxService: HiveBoxServiceFactory.getService(LocalStorageConstants.eventBox) as HiveBoxService<EventModel>,
+    boxService: HiveBoxServiceFactory.eventModelBox,
   );
 }

@@ -5,6 +5,7 @@ import 'package:unischedule/repositories/repositories.dart';
 
 part 'available_spaces_provider.g.dart';
 
+// TODO add here all use cases as functions
 @riverpod
 Future<List<AvailableSpacesModel>> fetchAvailableSpaces(FetchAvailableSpacesRef ref) async {
   final availableSpacesRepository = ref.watch(availableSpacesRepositoryProvider);

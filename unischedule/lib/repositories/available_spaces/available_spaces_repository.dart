@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'available_spaces_repository.g.dart';
 
 abstract class AvailableSpacesRepository {
-  // TODO add here all use cases for available spaces
+  // TODO add here all CRUD operations
   Future<List<AvailableSpacesModel>> fetchAvailableSpaces(String dayOfWeek, String startTime, String endTime);
 }
 

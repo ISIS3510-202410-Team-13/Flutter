@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:unischedule/constants/constants.dart';
 
 class UniScheduleBottomNavBar extends StatefulWidget {
-  const UniScheduleBottomNavBar({Key? key}) : super(key: key);
+  const UniScheduleBottomNavBar({super.key});
 
   static const List<String> routes = [
     RouteConstants.home,
