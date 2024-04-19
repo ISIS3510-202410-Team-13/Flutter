@@ -20,13 +20,26 @@ The UniSchedule app follows a layered architecture pattern to ensure a clean sep
 
 The `lib` directory of this repository is organized into several subdirectories, each serving a specific purpose:
 
-- `constants`: Contains constant values used throughout the application.
-- `models`: Defines Dart classes representing data models used within the application.
-- `views`: Houses UI-related files, including widgets, screens, and components responsible for rendering the user interface.
-- `providers`: Contains files defining providers for state management using the Riverpod or Provider package.
-- `repositories`: Includes classes responsible for abstracting data access and manipulation operations.
-- `routes`: Defines the routing configuration of the application for navigation between different screens.
-- `services`: Contains utility classes or service classes responsible for performing specific tasks or providing functionalities used across multiple parts of the application.
+- `constants/`: Contains constant values used throughout the application.
+  - `colors/`: Defines color constants used for theming and styling.
+  - `http/`: Contains constants related to HTTP requests and responses.
+  - `strings/`: Defines string constants used for routing, assets, storage and text display.
+  - `styles/`: Contains sizes, padding, font, and other styling constants.
+  - `themes/`: Contains theme constants used for styling the application.
+  - `types/`: Defines type constants used for data validation and conversion.
+- `models/`: Defines Dart classes representing data models used within the application.
+- `providers/`: Contains files defining providers for state management using the Riverpod package.
+- `repositories/`: Includes classes responsible for abstracting data access and manipulation operations.
+- `routes/`: Defines the routing configuration of the application for navigation between different screens.
+- `services/`: Contains utility classes or service classes responsible for performing specific tasks or providing functionalities used across multiple parts of the application.
+  - `local_authentication/`: Contains classes related to local authentication using biometrics or PIN.
+  - `local_storage/`: Contains classes related to local storage and data persistence.
+  - `network/`: Contains classes related to network requests and API communication.
+  - `notifications/`: Contains classes related to notifications and reminders.
+- `utils/`: Contains utility functions and helper classes used throughout the application.
+- `views/`: Houses UI-related files, including widgets, screens, and components responsible for rendering the user interface.
+- `widgets/`: Contains reusable widgets that can be used across multiple screens or components.
+- `main.dart`: The entry point of the application, where the Flutter app is initialized and run.
 
 ## Troubleshooting
 
