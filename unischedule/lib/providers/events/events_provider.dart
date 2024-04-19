@@ -13,3 +13,16 @@ Future<List<EventModel>> fetchEvents(FetchEventsRef ref) {
 
   return eventsRepository.fetchEvents();
 }
+
+@riverpod
+Future<void> addEvent(
+    AddEventRef ref, {
+      required EventModel event,
+    }
+){
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  ref.keepAlive();
+
+  return eventsRepository.addEvent(event)
+      .then((_) => ref.refresh(fetchEventsProvider));
+}

@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unischedule/models/models.dart';
 import 'package:unischedule/providers/providers.dart';
 import 'package:unischedule/utils/filter.dart';
-import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/widgets/widgets.dart';
 import 'widgets/friend_card.dart';
 
 class FriendsView extends ConsumerStatefulWidget {
-  const FriendsView({Key? key}) : super(key: key);
+  const FriendsView({super.key});
 
   @override
   _FriendsViewState createState() => _FriendsViewState();

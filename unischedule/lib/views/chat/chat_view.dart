@@ -6,6 +6,6 @@ class ChatView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO implement this view
-    return Center(child: const Text('Chat works! Use back button :)'));
+    return const Center(child: Text('Chat works! Use back button :)'));
   }
 }

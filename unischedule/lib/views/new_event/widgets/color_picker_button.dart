@@ -3,7 +3,7 @@ import 'package:unischedule/constants/constants.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class ColorPickerButton extends StatefulWidget {
-  const ColorPickerButton({Key? key}) : super(key: key);
+  const ColorPickerButton({super.key});
 
   @override
   _ColorPickerButtonState createState() => _ColorPickerButtonState();

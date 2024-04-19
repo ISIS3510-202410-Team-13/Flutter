@@ -9,6 +9,7 @@ part 'events_repository.g.dart';
 abstract class EventsRepository {
   // TODO add here all CRUD operations
   Future<List<EventModel>> fetchEvents();
+  Future<void> addEvent(EventModel event);
 }
 
 class EventsRepositoryImpl extends EventsRepository {
@@ -25,10 +26,17 @@ class EventsRepositoryImpl extends EventsRepository {
 
   @override
   Future<List<EventModel>> fetchEvents() async {
-    List<EventModel> events = await client.getRequest("user/0MebgXs8fBYREjDKMlwq/events") // TODO change endpoint
+    List<EventModel> events = await client.getRequest('user/0MebgXs8fBYREjDKMlwq/events') // TODO change endpoint
       .then((response) => response.map<EventModel>((json) => EventModel.fromJson(json)).toList())
       .catchError((error) => boxService.getAll());
     return events;
+  }
+
+  @override
+  Future<void> addEvent(EventModel event) async {
+    boxService.put(event.id, event);
+    // TODO save event in the database
+    //await client.postRequest("user/0MebgXs8fBYREjDKMlwq/events", event.toJson()); // TODO change endpoint
   }
 }
 

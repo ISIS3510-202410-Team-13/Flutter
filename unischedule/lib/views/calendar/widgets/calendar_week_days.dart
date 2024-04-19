@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CalendarWeekDays extends StatelessWidget {
-  const CalendarWeekDays({Key? key}) : super(key: key);
+  const CalendarWeekDays({super.key});
 
   @override
   Widget build(BuildContext context) {

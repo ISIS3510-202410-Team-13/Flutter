@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/constants/constants.dart';
+import 'package:unischedule/providers/providers.dart';
 import 'package:unischedule/routes/root_routes.dart';
 import 'package:unischedule/services/services.dart';
 import 'firebase_options.dart';
@@ -53,10 +54,25 @@ class _UniScheduleAppState extends ConsumerState<UniScheduleApp> {
   @override
   Widget build(BuildContext context) {
     final goRouter = ref.watch(goRouterProvider);
-    return MaterialApp.router(
-      routerConfig: goRouter,
-      theme: appTheme(context),
-      title: UniScheduleApp._title,
+    return _EagerInitialization(
+      child: MaterialApp.router(
+        routerConfig: goRouter,
+        theme: appTheme(context),
+        title: UniScheduleApp._title,
+      ),
     );
+  }
+}
+
+class _EagerInitialization extends ConsumerWidget {
+  const _EagerInitialization({required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(fetchEventsProvider);
+    ref.watch(fetchFriendsProvider);
+    ref.watch(fetchGroupsProvider);
+    return child;
   }
 }

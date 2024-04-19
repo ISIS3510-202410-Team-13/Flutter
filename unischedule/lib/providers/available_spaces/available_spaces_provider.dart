@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:unischedule/models/models.dart';
 import 'package:unischedule/repositories/repositories.dart';
+import 'package:unischedule/utils/time.dart';
 
 part 'available_spaces_provider.g.dart';
 
@@ -19,17 +21,19 @@ Future<List<AvailableSpacesModel>> fetchAvailableSpaces(FetchAvailableSpacesRef 
 }
 
 final availableSpacesParamsProvider = StateProvider<AvailableSpacesParamsModel>(
-  (ref) => AvailableSpacesParamsModel(),
+  (ref) => AvailableSpacesParamsModel(start: DateTime.now(), duration: const Duration(hours: 1)),
 );
 
 class AvailableSpacesParamsModel {
-  final String dayOfWeek;
-  final String startTime;
-  final String endTime;
+  late final DateTime start;
+  late final Duration duration;
 
   AvailableSpacesParamsModel({
-    this.dayOfWeek = '',
-    this.startTime = '',
-    this.endTime = ''
+    required this.start,
+    required this.duration,
   });
+
+  String get dayOfWeek => dayOfWeekId[start.weekday]!;
+  String get startTime => DateFormat('hh:mm').format(start);
+  String get endTime => DateFormat('hh:mm').format(addMinutesUntilMidnight(start, duration));
 }

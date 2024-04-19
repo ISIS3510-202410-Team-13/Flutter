@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:unischedule/constants/constants.dart';
 
 class UniScheduleDrawer extends StatelessWidget {
@@ -39,33 +38,33 @@ class UniScheduleDrawer extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     const Text(
-                      "@DavidOrtiz",  //TODO replace with user name provider
-                      style: TextStyle(
+                      '@DavidOrtiz',  //TODO replace with user name provider
+                      style: TextStyle( // TODO use text theme
                         fontFamily: 'Poppins',
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: ColorConstants.white,
                       ),
                     ),
                     const SizedBox(height: 30),
                     _buildDivider(),
-                    SizedBox(height: 30),
-                    _buildMenuOption('user.svg', 'Profile', context, '/home'),
-                    SizedBox(height: 50),
-                    _buildMenuOption('gear.svg', 'Settings', context, '/home'),
-                    SizedBox(height: 50),
+                    const SizedBox(height: 30),
+                    _buildMenuOption('user.svg', 'Profile'), // TODO replace with Asset Constant and String Constant
+                    const SizedBox(height: 50),
+                    _buildMenuOption('gear.svg', 'Settings'), // TODO replace with Asset Constant and String Constant
+                    const SizedBox(height: 50),
                     _buildDivider(),
-                    SizedBox(height: 50),
-                    _buildMenuOption('question.svg', 'Guide', context, '/home'),
-                    SizedBox(height: 50),
-                    _buildMenuOption('handshake-angle.svg', 'Help', context, '/home'),
-                    SizedBox(height: 50),
-                    _buildMenuOption('circle-info.svg', 'About', context, '/temp-cache'),
-                    SizedBox(height: 50),
+                    const SizedBox(height: 50),
+                    _buildMenuOption('question.svg', 'Guide'), // TODO replace with Asset Constant and String Constant
+                    const SizedBox(height: 50),
+                    _buildMenuOption('handshake-angle.svg', 'Help'), // TODO replace with Asset Constant and String Constant
+                    const SizedBox(height: 50),
+                    _buildMenuOption('circle-info.svg', 'About'), // TODO replace with Asset Constant and String Constant
+                    const SizedBox(height: 50),
                     _buildDivider(),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     _buildVersionInfo(),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -87,26 +86,30 @@ class UniScheduleDrawer extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuOption(String iconPath, String text, BuildContext context, String route) {
+  Widget _buildMenuOption(String iconPath, String text) {
     return InkWell(
-      onTap: () => context.go(route),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: 24,
-            height: 24,
-            child: SvgPicture.asset('assets/icons/$iconPath', width: 24, height: 24, color: Colors.white),
+          SizedBox(
+            width: 24, // TODO use style constant
+            height: 24, // TODO use style constant
+            child: SvgPicture.asset(
+                'assets/icons/$iconPath',  // TODO replace with Asset Constant
+                width: 24,  // TODO use style constant
+                height: 24, // TODO use style constant
+                color: ColorConstants.white
+            ),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Text(
             text,
-            style: TextStyle(
+            style: const TextStyle( // TODO use text theme
               fontFamily: 'Poppins',
               fontSize: 24,
               fontWeight: FontWeight.w300,
-              color: Colors.white,
+              color: ColorConstants.white,
             ),
           ),
         ],
@@ -119,15 +122,20 @@ class UniScheduleDrawer extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SvgPicture.asset('assets/icons/code-compare.svg', width: 12, height: 12, color: Colors.white),
-        SizedBox(width: 8),
-        Text(
-          "Version 0.41 build #101",
-          style: TextStyle(
+        SvgPicture.asset(
+            'assets/icons/code-compare.svg', // TODO replace with Asset Constant
+            width: 12, // TODO use style constant
+            height: 12, // TODO use style constant
+            color: ColorConstants.white
+        ),
+        const SizedBox(width: 8),
+        const Text(
+          'Version 0.41 build #101', // TODO replace with String Constant
+          style: TextStyle( // TODO use text theme
             fontFamily: 'Poppins',
             fontSize: 11,
             fontWeight: FontWeight.w300,
-            color: Colors.white,
+            color: ColorConstants.white,
           ),
         ),
       ],

@@ -6,4 +6,5 @@ class RouteConstants {
   static const String groups = '/groups';
   static const String notifications = '/notifications';
   static const String chat = '/chat';
+  static const String newEvent = '/new-event';
 }

@@ -1,27 +1,18 @@
-import 'package:flutter/material.dart';
 import 'package:unischedule/constants/constants.dart';
 
-Map<String, String> dayOfWeekMap = {
-  'Monday': TypeConstants.monday,
-  'Tuesday': TypeConstants.tuesday,
-  'Wednesday': TypeConstants.wednesday,
-  'Thursday': TypeConstants.thursday,
-  'Friday': TypeConstants.friday,
-  'Saturday': TypeConstants.saturday,
-  'Sunday': TypeConstants.sunday,
+Map<int, String> dayOfWeekId = {
+  1: TypeConstants.monday,
+  2: TypeConstants.tuesday,
+  3: TypeConstants.wednesday,
+  4: TypeConstants.thursday,
+  5: TypeConstants.friday,
+  6: TypeConstants.saturday,
+  7: TypeConstants.sunday,
 };
 
-TimeOfDay addMinutes(TimeOfDay time, int minutes) {
-  int newMinutes = time.minute + minutes;
-  int newHour = time.hour + newMinutes ~/ 60;
-  newMinutes = newMinutes % 60;
-  if (newHour >= 24) {
-    return const TimeOfDay(hour: 23, minute: 59);
-  } else {
-    return TimeOfDay(hour: newHour, minute: newMinutes);
+DateTime addMinutesUntilMidnight(DateTime time, Duration duration) {
+  if (time.add(duration).day != time.day) {
+    return DateTime(time.year, time.month, time.day, 23, 59);
   }
-}
-
-String timeOfDayToString(TimeOfDay time) {
-  return '${time.hour.toString().padLeft(2, '0')}${time.minute.toString().padLeft(2, '0')}';
+  return time.add(duration);
 }

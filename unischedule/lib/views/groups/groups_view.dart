@@ -7,7 +7,7 @@ import 'package:unischedule/widgets/widgets.dart';
 import 'widgets/group_card.dart';
 
 class GroupsView extends ConsumerStatefulWidget {
-  const GroupsView({Key? key}) : super(key: key);
+  const GroupsView({super.key});
 
   @override
   _GroupsViewState createState() => _GroupsViewState();

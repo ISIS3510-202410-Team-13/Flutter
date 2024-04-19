@@ -21,7 +21,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
     final groupsProvider = ref.watch(fetchGroupsProvider);
     final eventsProvider = ref.watch(fetchEventsProvider);
-    final user = "David"; // TODO get this from a provider
+    const user = 'David'; // TODO get this from a provider
 
     return Stack(
       children: <Widget>[
@@ -122,7 +122,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
           right: 10,
           bottom: 353,
           child: Image.asset(
-            "assets/images/sticker.png", // TODO make this dynamic, create a provider
+            'assets/images/sticker.png', // TODO make this dynamic, create a provider
             height: 197,
           ),
         ),

@@ -8,7 +8,7 @@ import 'widgets/calendar_time_lines.dart';
 import 'widgets/calendar_week_days.dart';
 
 class CalendarView extends ConsumerStatefulWidget {
-  const CalendarView({Key? key}) : super(key: key);
+  const CalendarView({super.key});
 
   @override
   _CalendarViewState createState() => _CalendarViewState();
@@ -38,12 +38,16 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                         child: Stack(
                           children: [
                             const CalendarTimeLines(),
-                            ...personalEvents.valueOrNull?.map((e) => CalendarEvent(
-                              title: e.name,
-                              startDate: DateTime.fromMillisecondsSinceEpoch(e.startDate["_seconds"]! * 1000),
-                              endDate: DateTime.fromMillisecondsSinceEpoch(e.endDate["_seconds"]! * 1000),
-                              color: e.color,
-                            )).toList() ?? [], // TODO implement loading and error states
+                            ...personalEvents.when(
+                              data: (events) => events.map((event) => CalendarEvent(
+                                title: event.name,
+                                startDate: DateTime.fromMillisecondsSinceEpoch(event.startDate['_seconds']! * 1000),
+                                endDate: DateTime.fromMillisecondsSinceEpoch(event.endDate['_seconds']! * 1000),
+                                color: event.color,
+                              )).toList(),
+                              error: (error, _) => <Widget>[],
+                              loading: () => const [Center(child: CircularProgressIndicator())],
+                            )
                           ],
                         ),
                       ),

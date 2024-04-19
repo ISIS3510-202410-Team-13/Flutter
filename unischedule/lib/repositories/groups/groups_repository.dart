@@ -25,7 +25,7 @@ class GroupsRepositoryImpl extends GroupsRepository {
 
   @override
   Future<List<GroupModel>> fetchGroups() async {
-    List<GroupModel> groups = await client.getRequest("user/0MebgXs8fBYREjDKMlwq/groups") // TODO change endpoint
+    List<GroupModel> groups = await client.getRequest('user/0MebgXs8fBYREjDKMlwq/groups') // TODO change endpoint
       .then((response) => response.map<GroupModel>((json) => GroupModel.fromJson(json)).toList())
       .catchError((error) => boxService.getAll());
     return groups;

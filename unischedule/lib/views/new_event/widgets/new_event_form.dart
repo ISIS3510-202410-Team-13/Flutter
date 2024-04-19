@@ -1,28 +1,29 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:unischedule/services/notifications/notifications_service.dart';
-import 'package:unischedule/providers/providers.dart';
 import 'package:intl/intl.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:unischedule/models/models.dart';
-import 'widgets/place_recommendation_dialog.dart';
-import 'widgets/color_picker_button.dart';
+import 'package:unischedule/providers/providers.dart';
+import 'package:unischedule/constants/constants.dart';
+import 'package:unischedule/services/services.dart';
+import 'place_recommendation_dialog.dart';
+import 'color_picker_button.dart';
 
-class CreateClassPage extends ConsumerStatefulWidget {
-  const CreateClassPage({Key? key}) : super(key: key);
+class NewEventForm extends ConsumerStatefulWidget {
+  const NewEventForm({super.key});
 
   @override
-  _CreateClassPageState createState() => _CreateClassPageState();
+  ConsumerState<NewEventForm> createState() => _NewEventFormState();
 }
 
-class _CreateClassPageState extends ConsumerState<CreateClassPage> {
+class _NewEventFormState extends ConsumerState<NewEventForm> {
+
   DateTime _eventStartTime = DateTime.now();
-  String _selectedDuration = '1 Hour'; // Valor inicial
+  String _selectedDuration = '1 Hour';
   String? _selectedReminder;
 
   int _getReminderMinutes(String? reminder) {
@@ -42,93 +43,15 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(children: <Widget>[
-        _buildAppBar(),
-        Expanded(
-          child: _buildCreateClassForm(),
-        ),
-      ]),
-      backgroundColor: const Color(0xFFF8F8F8),
-    );
-  }
 
-  Widget _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      centerTitle: true,
-      leading: IconButton(
-        icon: SvgPicture.asset('assets/icons/arrow-left.svg',
-            width: 21, height: 24, color: Colors.black),
-        onPressed: () {
-          context.go(
-              '/calendar'); // FIXME - Pop last route, will need to work on navigation stack
-        },
-      ),
-      title: const Text(
-        'Create Class',
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      ),
-      actions: <Widget>[
-        IconButton(
-          icon: SvgPicture.asset('assets/icons/plus.svg',
-              width: 24, height: 24, color: Colors.black),
-          onPressed: () {
-            DateTime notificationTime = _eventStartTime.subtract(
-                Duration(minutes: _getReminderMinutes(_selectedReminder)));
-            print(
-                'Hora notificacion: ${notificationTime} , minutos antes para el recordatorio:  ${Duration(minutes: _getReminderMinutes(_selectedReminder))} ');
-            NotificationService().scheduleNotification(
-                title: 'Scheduled Event Reminder',
-                body:
-                    'Your event is about to start at ${DateFormat('HH:mm').format(_eventStartTime)}',
-                scheduledNotificationDateTime: notificationTime);
-
-/*            ref.read(eventsStateNotifierProvider.notifier).addEvent(
-              // FIXME - This is a hardcoded event, will need to work on a form to create the event
-              EventModel(
-                id: '1',
-                color: '#9DCC18',
-                reminder: _getReminderMinutes(_selectedReminder),
-                endDate: {
-                  "_seconds": _eventStartTime.add(Duration(hours: 1)).millisecondsSinceEpoch ~/ 1000,
-                  "_nanoseconds": _eventStartTime.add(Duration(hours: 1)).microsecondsSinceEpoch * 1000,
-                },
-                name: 'Event Name',
-                description: 'Event Description',
-                startDate: {
-                  "_seconds": _eventStartTime.millisecondsSinceEpoch ~/ 1000,
-                  "_nanoseconds": _eventStartTime.microsecondsSinceEpoch * 1000,
-                },
-                labels: ['Uniandes 📚'],
-              ),
-            );*/
-
-            //TODO add logic to save the event in the database
-
-            context.go('/calendar');
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCreateClassForm() {
     const assistants = <String>[
       'Laura',
       'Gotty',
       'Sebastian',
       'Juan',
-      'Lucciano'
     ];
     final MultiSelectController assistantsMultiSelectController =
-        MultiSelectController();
+    MultiSelectController();
 
     const reminders = <String>[
       'No reminder',
@@ -147,40 +70,41 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
       'Friends 👯‍',
     ];
     final MultiSelectController labelsMultiSelectController =
-        MultiSelectController();
+    MultiSelectController();
 
     var availableSpacesParams = ref.watch(availableSpacesParamsProvider);
     _eventStartTime = DateTime(
-        _eventStartTime.year,
-        _eventStartTime.month,
-        _eventStartTime.day,
-        //FIXME availableSpacesParams.startTime.hour,
-        //FIXME availableSpacesParams.startTime.minute
-        );
-    //FIXME _selectedDuration = '${availableSpacesParams.duration ~/ 60} Hour${availableSpacesParams.duration ~/ 60 > 1 ? 's' : ''}';
+      _eventStartTime.year,
+      _eventStartTime.month,
+      _eventStartTime.day,
+      availableSpacesParams.start.hour,
+      availableSpacesParams.start.minute,
+    );
+    _selectedDuration = '${availableSpacesParams.duration.inHours} Hour${availableSpacesParams.duration.inHours > 1 ? 's' : ''}';
 
+
+    // TODO Split into components an move form elements to widgets to make them reusable
     return SingleChildScrollView(
-      // Añade SingleChildScrollView
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
-          children: <Widget>[
+          children: [
             Row(
               // TODO add a toggle to switch between one-time and recurrent events
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFFFFF),
+                    color: ColorConstants.white,
                     borderRadius: BorderRadius.circular(16),
                     border:
-                        Border.all(color: const Color(0xFFD0D5DD), width: 1),
+                    Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
                   ),
                   child: const Text(
-                    'One-Time',
-                    style: TextStyle(
+                    'One-Time', // TODO replace with String Constant
+                    style: TextStyle( // TODO replace with text theme Constant
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: Color(0xFF475569),
@@ -190,19 +114,18 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                 const SizedBox(width: 12),
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF9DCC18),
+                    color: ColorConstants.limerick,
                     borderRadius: BorderRadius.circular(16),
-                    border:
-                        Border.all(color: const Color(0xFF9DCC18), width: 1),
+                    border: Border.all(color: ColorConstants.limerick, width: 1),
                   ),
                   child: const Text(
-                    'Recurrent',
+                    'Recurrent', // TODO replace with String Constant
                     style: TextStyle(
-                      fontFamily: 'Poppins',
+                      fontFamily: 'Poppins', // TODO replace with text theme Constant
                       fontSize: 14,
-                      color: Color(0xFFFFFFFF),
+                      color: ColorConstants.white,
                     ),
                   ),
                 ),
@@ -212,40 +135,41 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFFFFF),
+                color: ColorConstants.white,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
+                border: Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
               ),
               child: Column(
-                children: <Widget>[
-                  Container(
-                    height: 56,
+                children: [
+                  SizedBox(
+                    height: 56, // TODO replace with Style Constant
                     child: Row(
-                      children: <Widget>[
+                      children: [
                         const Expanded(
                           child: TextField(
-                            style: TextStyle(
+                            style: TextStyle( // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569),
+                              color: Color(0xFF475569), // TODO replace with Color Constant
                             ),
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText: 'Event Name',
-                              hintStyle: TextStyle(
+                              hintText: 'Event Name', // TODO replace with String Constant
+                              hintStyle: TextStyle( // TODO replace with text theme Constant
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
-                                color: Color(0xFF475569),
+                                color: Color(0xFF475569), // TODO replace with Color Constant
                               ),
                             ),
                           ),
                         ),
                         SizedBox(
                           width: 30,
-                          child: SvgPicture.asset('assets/icons/signature.svg',
-                              width: 24,
-                              height: 24,
-                              color: const Color(0xFF475569)),
+                          child: SvgPicture.asset(
+                            'assets/icons/signature.svg', // TODO replace with Asset Constant
+                            width: 24, // TODO replace with Style Constant
+                            height: 24, // TODO replace with Style Constant
+                            color: const Color(0xFF475569)), // TODO replace with Color Constant
                         )
                       ],
                     ),
@@ -253,37 +177,38 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: const Color(0xFFD0D5DD),
+                        color: const Color(0xFFD0D5DD), // TODO replace with Color Constant
                         width: 1,
                       ),
                     ),
                     height: 1,
                   ),
-                  Container(
+                  SizedBox(
                     height: 56,
                     child: Row(
-                      children: <Widget>[
+                      children: [
                         Expanded(
                           child: MultiSelectDropDown(
                             controller: assistantsMultiSelectController,
-                            onOptionSelected:
-                                (List<ValueItem> selectedOptions) {},
+                            onOptionSelected: (List<ValueItem> selectedOptions) {
+                              // TODO Implement logic to handle selected assistants
+                            },
                             options: assistants
                                 .map((key) => ValueItem(label: key, value: key))
                                 .toList(),
                             selectionType: SelectionType.multi,
                             chipConfig: const ChipConfig(
                               wrapType: WrapType.scroll,
-                              labelStyle: TextStyle(
+                              labelStyle: TextStyle( // TODO replace with text theme Constant
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
-                                color: Color(0xFFFFFFFF),
+                                color: Color(0xFFFFFFFF), // TODO replace with Color Constant
                               ),
                             ),
-                            optionTextStyle: const TextStyle(
+                            optionTextStyle: const TextStyle( // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569),
+                              color: Color(0xFF475569), // TODO replace with Color Constant
                             ),
                             borderColor: Colors.transparent,
                             focusedBorderColor: Colors.transparent,
@@ -291,11 +216,11 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                             focusedBorderWidth: 0,
                             clearIcon: const Icon(Icons.clear),
                             padding: const EdgeInsets.all(0),
-                            hint: 'Assistants',
-                            hintStyle: const TextStyle(
+                            hint: 'Assistants', // TODO replace with String Constant
+                            hintStyle: const TextStyle( // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569),
+                              color: Color(0xFF475569), // TODO replace with Color Constant
                             ),
                             hintPadding: const EdgeInsets.all(0),
                           ),
@@ -303,10 +228,10 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                         SizedBox(
                           width: 30,
                           child: SvgPicture.asset(
-                              'assets/icons/person-chalkboard.svg',
-                              width: 24,
-                              height: 24,
-                              color: const Color(0xFF475569)),
+                            'assets/icons/person-chalkboard.svg', // TODO replace with Asset Constant
+                            width: 24, // TODO replace with Style Constant
+                            height: 24, // TODO replace with Style Constant
+                            color: const Color(0xFF475569)), // TODO replace with Color Constant
                         )
                       ],
                     ),
@@ -314,25 +239,25 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: const Color(0xFFD0D5DD),
+                        color: const Color(0xFFD0D5DD), // TODO replace with Color Constant
                         width: 1,
                       ),
                     ),
                     height: 1,
                   ),
-                  Container(
+                  SizedBox(
                     height: 56,
                     child: Row(
-                      children: <Widget>[
+                      children: [
                         Expanded(
                           child: DropdownButtonFormField<String>(
                             decoration: const InputDecoration(
                               border: InputBorder.none,
-                              hintText: 'Reminder',
-                              hintStyle: TextStyle(
+                              hintText: 'Reminder',  // TODO replace with String Constant
+                              hintStyle: TextStyle(  // TODO replace with text theme Constant
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
-                                color: Color(0xFF475569),
+                                color: Color(0xFF475569), // TODO replace with Color Constant
                               ),
                             ),
                             items: reminders.map((String value) {
@@ -340,10 +265,10 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                                 value: value,
                                 child: Text(
                                   value,
-                                  style: const TextStyle(
+                                  style: const TextStyle( // TODO replace with text theme Constant
                                     fontFamily: 'Poppins',
                                     fontSize: 16,
-                                    color: Color(0xFF475569),
+                                    color: Color(0xFF475569), // TODO replace with Color Constant
                                   ),
                                 ),
                               );
@@ -358,10 +283,10 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                         ),
                         SizedBox(
                           width: 30,
-                          child: SvgPicture.asset('assets/icons/stopwatch.svg',
-                              width: 24,
-                              height: 24,
-                              color: const Color(0xFF475569)),
+                          child: SvgPicture.asset('assets/icons/stopwatch.svg',  // TODO replace with Asset Constant
+                            width: 24,  // TODO replace with Style Constant
+                            height: 24,  // TODO replace with Style Constant
+                            color: const Color(0xFF475569)), // TODO replace with Color Constant
                         ),
                       ],
                     ),
@@ -369,37 +294,38 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: const Color(0xFFD0D5DD),
+                        color: const Color(0xFFD0D5DD), // TODO replace with Color Constant
                         width: 1,
                       ),
                     ),
                     height: 1,
                   ),
-                  Container(
+                  SizedBox(
                     height: 56,
                     child: Row(
-                      children: <Widget>[
+                      children: [
                         Expanded(
                           child: MultiSelectDropDown(
                             controller: labelsMultiSelectController,
-                            onOptionSelected:
-                                (List<ValueItem> selectedOptions) {},
+                            onOptionSelected: (List<ValueItem> selectedOptions) {
+                              // TODO Implement logic to handle selected labels
+                            },
                             options: labels
                                 .map((key) => ValueItem(label: key, value: key))
                                 .toList(),
                             selectionType: SelectionType.multi,
                             chipConfig: const ChipConfig(
                               wrapType: WrapType.scroll,
-                              labelStyle: TextStyle(
+                              labelStyle: TextStyle( // TODO replace with text theme Constant
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
-                                color: Color(0xFFFFFFFF),
+                                color: Color(0xFFFFFFFF), // TODO replace with Color Constant
                               ),
                             ),
-                            optionTextStyle: const TextStyle(
+                            optionTextStyle: const TextStyle( // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569),
+                              color: Color(0xFF475569), // TODO replace with Color Constant
                             ),
                             borderColor: Colors.transparent,
                             focusedBorderColor: Colors.transparent,
@@ -407,21 +333,21 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                             focusedBorderWidth: 0,
                             clearIcon: const Icon(Icons.clear),
                             padding: const EdgeInsets.all(0),
-                            hint: 'Labels',
-                            hintStyle: const TextStyle(
+                            hint: 'Labels', // TODO replace with String Constant
+                            hintStyle: const TextStyle( // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569),
+                              color: Color(0xFF475569), // TODO replace with Color Constant
                             ),
                             hintPadding: const EdgeInsets.all(0),
                           ),
                         ),
                         SizedBox(
                           width: 30,
-                          child: SvgPicture.asset('assets/icons/tag.svg',
-                              width: 24,
-                              height: 24,
-                              color: const Color(0xFF475569)),
+                          child: SvgPicture.asset('assets/icons/tag.svg', // TODO replace with Asset Constant
+                              width: 24, // TODO replace with Style Constant
+                              height: 24, // TODO replace with Style Constant
+                              color: const Color(0xFF475569)), // TODO replace with Color Constant
                         )
                       ],
                     ),
@@ -433,20 +359,20 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFFFFF),
+                color: const Color(0xFFFFFFFF), // TODO replace with Color Constant
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
+                border: Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
               ),
               width: double.infinity,
               child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     Expanded(
-                      child: Text("Event Color",
-                          style: TextStyle(
+                      child: Text('Event Color', // TODO replace with String Constant
+                          style: TextStyle( // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569))),
+                              color: Color(0xFF475569))), // TODO replace with Color Constant
                     ),
                     ColorPickerButton(),
                   ]),
@@ -463,9 +389,8 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                       _eventStartTime = date;
                       ref.read(availableSpacesParamsProvider.notifier).state =
                           AvailableSpacesParamsModel(
-                            //FIXME DateFormat('EEEE').format(date),
-                            //FIXME  TimeOfDay(hour: date.hour, minute: date.minute),
-                            //FIXME availableSpacesParams.duration
+                            duration: availableSpacesParams.duration,
+                            start: date,
                           );
                     });
                   },
@@ -474,28 +399,31 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 24), // Ajustado para aumentar la altura
+                  horizontal: 16,
+                  vertical: 24
+                ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFFFFF),
+                  color: const Color(0xFFFFFFFF), // TODO replace with Color Constant
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
+                  border: Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
                 ),
                 width: double.infinity,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    // Aumentado para mover el icono a la derecha
-                    SvgPicture.asset('assets/icons/hourglass-start.svg',
-                        width: 24, height: 24, color: const Color(0xFF475569)),
-                    const SizedBox(
-                        width: 12), // Espacio entre el icono y el texto
+                    SvgPicture.asset(
+                      'assets/icons/hourglass-start.svg', // TODO replace with Asset Constant
+                      width: 24,  // TODO replace with Style Constant
+                      height: 24,  // TODO replace with Style Constant
+                      color: const Color(0xFF475569) // TODO replace with Color Constant
+                    ),
+                    const SizedBox(width: 12),
                     Text(
                       DateFormat('MMMM dd - HH:mm').format(_eventStartTime),
-                      style: const TextStyle(
+                      style: const TextStyle( // TODO replace with text theme Constant
                           fontFamily: 'Poppins',
                           fontSize: 16,
-                          color: Color(0xFF475569)),
+                          color: Color(0xFF475569)), // TODO replace with Color Constant
                     ),
                   ],
                 ),
@@ -511,27 +439,26 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                         horizontal: 16,
                         vertical: 24), // Ajustado para aumentar la altura
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFFFFF),
+                      color: const Color(0xFFFFFFFF), // TODO replace with Color Constant
                       borderRadius: BorderRadius.circular(16),
                       border:
-                          Border.all(color: const Color(0xFFD0D5DD), width: 1),
+                      Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        SvgPicture.asset('assets/icons/calendar-day.svg',
-                            width: 24,
-                            height: 24,
-                            color: const Color(0xFF475569)),
+                        SvgPicture.asset('assets/icons/calendar-day.svg', // TODO replace with Asset Constant
+                            width: 24, // TODO replace with Style Constant
+                            height: 24, // TODO replace with Style Constant
+                            color: const Color(0xFF475569)), // TODO replace with Color Constant
                         const SizedBox(
-                            width: 12), // Espaciado entre el icono y el texto
+                            width: 12),
                         Text(
-                          DateFormat('EEEE').format(
-                              _eventStartTime), // Muestra el día de la semana
-                          style: const TextStyle(
+                          DateFormat('EEEE').format(_eventStartTime),
+                          style: const TextStyle( // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569)),
+                              color: Color(0xFF475569)), // TODO replace with Color Constant
                         ),
                       ],
                     ),
@@ -542,27 +469,27 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                   flex: 1,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12), // Ajustado para aumentar la altura
+                      horizontal: 16,
+                      vertical: 12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFFFFF),
+                      color: const Color(0xFFFFFFFF), // TODO replace with Color Constant
                       borderRadius: BorderRadius.circular(16),
                       border:
-                          Border.all(color: const Color(0xFFD0D5DD), width: 1),
+                      Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        SvgPicture.asset('assets/icons/clock.svg',
-                            width: 24,
-                            height: 24,
-                            color: const Color(0xFF475569)),
+                        SvgPicture.asset('assets/icons/clock.svg', // TODO replace with Asset Constant
+                            width: 24, // TODO replace with Style Constant
+                            height: 24, // TODO replace with Style Constant
+                            color: const Color(0xFF475569)), // TODO replace with Color Constant
                         const SizedBox(width: 12),
                         Expanded(
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
                               value:
-                                  _selectedDuration, // Usa la variable de estado para el valor actual
+                              _selectedDuration,
                               items: <String>[
                                 '1 Hour',
                                 '2 Hours',
@@ -576,23 +503,17 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                               }).toList(),
                               onChanged: (newValue) {
                                 setState(() {
-                                  _selectedDuration =
-                                      newValue!; // Actualiza la variable de estado con la nueva selección
-                                  ref
-                                          .read(availableSpacesParamsProvider
-                                              .notifier)
-                                          .state =
-                                      AvailableSpacesParamsModel(
-                                          //FIXME availableSpacesParams.dayOfWeek,
-                                          //FIXME availableSpacesParams.startTime,
-                                        //FIXME int.parse(newValue.substring(0, 1)) * 60 // FIXME - This is highly coupled with the format of the string
-                                      );
+                                  _selectedDuration = newValue!;
+                                  ref.read(availableSpacesParamsProvider.notifier).state = AvailableSpacesParamsModel(
+                                    duration: Duration(hours: int.parse(newValue.split(' ')[0])),
+                                    start: availableSpacesParams.start,
+                                  );
                                 });
                               },
-                              style: const TextStyle(
+                              style: const TextStyle( // TODO replace with text theme Constant
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
-                                color: Color(0xFF475569),
+                                color: Color(0xFF475569), // TODO replace with Color Constant
                               ),
                             ),
                           ),
@@ -618,7 +539,7 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
                     return Center(
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                        child: PlaceRecommendationsDialog(),
+                        child: const PlaceRecommendationsDialog(),
                       ),
                     );
                   },
@@ -626,28 +547,77 @@ class _CreateClassPageState extends ConsumerState<CreateClassPage> {
               },
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF9DCC18).withOpacity(0.15),
+                  color: const Color(0xFF9DCC18).withOpacity(0.15), // TODO replace with Color Constant
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFD0D5DD), width: 1),
+                  border: Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
                 ),
                 width: double.infinity,
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const Text("Find a Place on Campus",
-                          style: TextStyle(
+                    children: [
+                      const Text('Find a Place on Campus', // TODO replace with String Constant
+                          style: TextStyle( // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569),
+                              color: Color(0xFF475569), // TODO replace with Color Constant
                               fontWeight: FontWeight.bold)),
                       const SizedBox(width: 12),
-                      SvgPicture.asset('assets/icons/location-dot.svg',
-                          width: 24,
-                          height: 24,
-                          color: const Color(0xFF475569)),
+                      SvgPicture.asset('assets/icons/location-dot.svg', // TODO replace with Asset Constant
+                          width: 24, // TODO replace with Style Constant
+                          height: 24, // TODO replace with Style Constant
+                          color: const Color(0xFF475569)), // TODO replace with Color Constant
                     ]),
+              ),
+            ),
+
+            // TODO this is a temporal button to create the event
+            const SizedBox(height: 20),
+            InkWell(
+              onTap: () {
+                // TODO make this dynamic
+                DateTime notificationTime = _eventStartTime.subtract(Duration(minutes: _getReminderMinutes(_selectedReminder)));
+
+                EventModel event = EventModel(
+                  id: '', // TODO handle id generation or fecth from the database
+                  color: '#9DCC18',
+                  reminder: _getReminderMinutes(_selectedReminder),
+                  endDate: {
+                    '_seconds': _eventStartTime.add(const Duration(hours: 1)).millisecondsSinceEpoch ~/ 1000,
+                    '_nanoseconds': _eventStartTime.add(const Duration(hours: 1)).microsecondsSinceEpoch * 1000,
+                  },
+                  name: 'Event Name',
+                  description: 'Event Description',
+                  startDate: {
+                    '_seconds': _eventStartTime.millisecondsSinceEpoch ~/ 1000,
+                    '_nanoseconds': _eventStartTime.microsecondsSinceEpoch * 1000,
+                  },
+                  labels: ['Uniandes 📚'],
+                );
+                ref.read(addEventProvider(event: event).future);
+                NotificationService().scheduleNotification(
+                    title: 'Scheduled Event Reminder',
+                    body: 'Your event is about to start at ${DateFormat('HH:mm').format(_eventStartTime)}',
+                    scheduledNotificationDateTime: notificationTime
+                );
+                context.pop();
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF9DCC18), // TODO replace with Color Constant
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFF9DCC18), width: 1), // TODO replace with Color Constant
+                ),
+                width: double.infinity,
+                child: const Text('Create Event', // TODO replace with String Constant
+                    textAlign: TextAlign.center,
+                    style: TextStyle( // TODO replace with text theme Constant
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                        color: Color(0xFFFFFFFF))), // TODO replace with Color Constant
+
               ),
             ),
           ],

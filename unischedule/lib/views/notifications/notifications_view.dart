@@ -8,7 +8,7 @@ class NotificationsView extends StatelessWidget {
     // TODO implement this view
     return TextButton(
       onPressed: () => throw Exception(),
-      child: const Text('Throw Test Exception to Firebase'),
+      child: const Text('Tap to throw Test Exception to Firebase'),
     );
   }
 }

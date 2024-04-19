@@ -21,13 +21,17 @@ class AvailableSpacesRepositoryImpl extends AvailableSpacesRepository {
   @override
   Future<List<AvailableSpacesModel>> fetchAvailableSpaces(String dayOfWeek, String startTime, String endTime) async {
     final data = {'dayOfWeek': dayOfWeek, 'startTime': startTime, 'endTime': endTime};
-    return client.postRequest(HTTPConstants.AVAILABLE_SPACES_ENDPOINT, data: data).then((response) {
-      return response.map<AvailableSpacesModel>((json) => AvailableSpacesModel.fromJson(json)).toList();
-    });
+    List<AvailableSpacesModel> availableSpaces = await client.postRequest(HTTPConstants.AVAILABLE_SPACES_ENDPOINT, data: data)
+        .then((response) => response.map<AvailableSpacesModel>((json) => AvailableSpacesModel.fromJson(json)).toList())
+        .catchError((error) => <AvailableSpacesModel>[]);
+    return availableSpaces;
   }
 }
 
 @riverpod
 AvailableSpacesRepositoryImpl availableSpacesRepository(AvailableSpacesRepositoryRef ref) {
-  return AvailableSpacesRepositoryImpl(ref: ref, client: DioApiServiceFactory.getService(HTTPConstants.AVAILABLE_SPACES_BASE_URL));
+  return AvailableSpacesRepositoryImpl(
+    ref: ref,
+    client: DioApiServiceFactory.getService(HTTPConstants.AVAILABLE_SPACES_BASE_URL),
+  );
 }

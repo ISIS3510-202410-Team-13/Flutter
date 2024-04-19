@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:unischedule/constants/constants.dart';
 
 class UniScheduleFloatingActionButton extends StatelessWidget {
@@ -9,7 +10,8 @@ class UniScheduleFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        // TODO implement
+        // TODO use a provider to automatically navigate depending on current route
+        context.push(RouteConstants.newEvent);
       },
       backgroundColor: ColorConstants.white,
       shape: RoundedRectangleBorder(
