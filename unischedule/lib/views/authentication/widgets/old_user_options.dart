@@ -12,7 +12,7 @@ class OldUserOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 250,
       child: ElevatedButton(
         onPressed: () => {

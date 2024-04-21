@@ -32,6 +32,10 @@ class StringConstants {
   static const String email = 'Email';
   static const String password = 'Password';
   static const String name = 'Name';
+  static const String weakPassword = 'Password is too weak';
+  static const String emailAlreadyInUse = 'Email is already in use';
+  static const String wrongPassword = 'Wrong password';
+  static const String userNotFound = 'User not found';
 
 
   // Home

@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/constants/constants.dart';
-import 'package:unischedule/widgets/background_image/background_image_widget.dart';
+import 'package:unischedule/providers/providers.dart';
+import 'package:unischedule/widgets/widgets.dart';
 import 'widgets/new_user_options.dart';
 import 'widgets/old_user_options.dart';
 
-class AuthenticationView extends StatelessWidget {
+class AuthenticationView extends ConsumerStatefulWidget {
   const AuthenticationView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  ConsumerState<AuthenticationView> createState() => _AuthenticationViewState();
+}
 
-    final user = 'David'; // TODO use provider for user
-    final isUserAuthenticated = false;
+class _AuthenticationViewState extends ConsumerState<AuthenticationView> {
+  @override
+  Widget build(BuildContext context) {
+    final user = ref.watch(authenticationStatusProvider);
 
     return Scaffold(
       body: Stack(
@@ -21,29 +26,29 @@ class AuthenticationView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 80.0),
               child: Column(
-                  children: [
-                    Text(
-                      StringConstants.appName,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: ColorConstants.white,
-                        fontWeight: FontWeight.normal,
-                      ),
+                children: [
+                  Text(
+                    StringConstants.appName,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: ColorConstants.white,
+                      fontWeight: FontWeight.normal,
                     ),
-                    const SizedBox(height: 20.0),
-                    Text(
-                      StringConstants.welcomeUser(user),
-                      style: Theme.of(context).textTheme.displayMedium,
+                  ),
+                  const SizedBox(height: 20.0),
+                  Text(
+                    StringConstants.welcomeUser(user?.displayName ?? ''),
+                    style: Theme.of(context).textTheme.displayMedium,
+                  ),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      child: user != null
+                        ? OldUserOptions(userName: user.displayName ?? '')
+                        : const NewUserOptions(),
                     ),
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.bottomCenter,
-                        child: isUserAuthenticated
-                          ? OldUserOptions(userName: user)
-                          : const NewUserOptions(),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

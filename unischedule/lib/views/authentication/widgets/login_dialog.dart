@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:unischedule/constants/constants.dart';
+import 'package:unischedule/providers/providers.dart';
 
-class LoginDialog extends StatelessWidget {
+class LoginDialog extends ConsumerWidget {
   const LoginDialog({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
     return Dialog(
       alignment: Alignment.center,
       backgroundColor: ColorConstants.white,
@@ -27,6 +34,7 @@ class LoginDialog extends StatelessWidget {
             ),
             const SizedBox(height: 25.0),
             TextField(
+              controller: emailController,
               maxLength: 50,
               cursorColor: ColorConstants.blue,
               buildCounter: (BuildContext context, {required int currentLength, required int? maxLength, required bool isFocused}) => null,
@@ -49,6 +57,7 @@ class LoginDialog extends StatelessWidget {
             ),
             const SizedBox(height: 15.0),
             TextField(
+              controller: passwordController,
               obscureText: true,
               maxLength: 50,
               cursorColor: ColorConstants.blue,
@@ -78,8 +87,36 @@ class LoginDialog extends StatelessWidget {
                 fixedSize: const Size(200, double.infinity),
                 padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
-              onPressed: () => {
-
+              onPressed: () {
+                ref.read(authenticationStatusProvider.notifier).logIn(
+                  emailAddress: emailController.text,
+                  password: passwordController.text,
+                ).then((status) {
+                  if (status == LogInStatus.success) {
+                    context.go(RouteConstants.home);
+                  } else if (status == LogInStatus.wrongPassword) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(StringConstants.wrongPassword),
+                        backgroundColor: ColorConstants.red,
+                      ),
+                    );
+                  } else if (status == LogInStatus.userNotFound) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(StringConstants.userNotFound),
+                        backgroundColor: ColorConstants.red,
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(StringConstants.anErrorOccurred),
+                        backgroundColor: ColorConstants.red,
+                      ),
+                    );
+                  }
+                });
               },
               child: const Text(StringConstants.login),
             ),

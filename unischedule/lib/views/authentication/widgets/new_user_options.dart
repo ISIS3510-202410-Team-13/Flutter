@@ -15,8 +15,19 @@ class NewUserOptions extends StatelessWidget {
           onPressed: () => {
             showDialog(
               context: context,
-              builder: (context) => const LoginDialog(),
-            )
+              builder: (context) => ScaffoldMessenger(
+                child: Scaffold(
+                  backgroundColor: ColorConstants.transparent,
+                  body: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => Navigator.of(context).pop(),
+                    child: GestureDetector(
+                      child: const LoginDialog(),
+                    )
+                  ),
+                ),
+              ),
+            ),
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: ColorConstants.blue,
@@ -31,8 +42,19 @@ class NewUserOptions extends StatelessWidget {
           onPressed: () => {
             showDialog(
               context: context,
-              builder: (context) => const SignupDialog(),
-            )
+              builder: (context) => ScaffoldMessenger(
+                child: Scaffold(
+                  backgroundColor: ColorConstants.transparent,
+                  body: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => Navigator.of(context).pop(),
+                    child: GestureDetector(
+                      child: const SignupDialog(),
+                    )
+                  ),
+                ),
+              ),
+            ),
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: ColorConstants.white,
