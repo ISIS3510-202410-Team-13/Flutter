@@ -15,14 +15,16 @@ class FriendsView extends ConsumerStatefulWidget {
 
 class _FriendsViewState extends ConsumerState<FriendsView> {
   final TextEditingController _searchController = TextEditingController();
-  List<FriendModel> filteredFriends = [];
 
   @override
   void initState() {
     super.initState();
-    filteredFriends = ref.read(fetchFriendsProvider).value ?? [];
-    _searchController.addListener(() {
-      updateSearch(_searchController.text);
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      // Forzar reconstrucción para aplicar filtro.
     });
   }
 
@@ -32,15 +34,14 @@ class _FriendsViewState extends ConsumerState<FriendsView> {
     super.dispose();
   }
 
-  void updateSearch(String searchText) {
-    final allFriends = ref.read(fetchFriendsProvider).value ?? [];
-    setState(() {
-      filteredFriends = filterByQuery<FriendModel>(allFriends, searchText, (p0) => p0.name);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final allFriends = ref.watch(fetchFriendsProvider).asData?.value ?? [];
+    final bool allFriendsEmpty = allFriends.isEmpty;
+    final filteredFriends = filterByQuery<FriendModel>(
+        allFriends, _searchController.text, (p0) => p0.name);
+    final connectivityStatus = ref.watch(connectivityStatusProvider);
+
     return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30, top: 10),
       child: Column(
@@ -49,8 +50,45 @@ class _FriendsViewState extends ConsumerState<FriendsView> {
           UniScheduleSearchBar(searchController: _searchController),
           const SizedBox(height: 8),
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            child: connectivityStatus == ConnectivityStatus.isDisconnected && allFriendsEmpty
+                ? Center(
+              child: Text(
+                "No friends to display at the moment. Please check your internet connection to view your friends.",
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 19,
+                    color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+            )
+                : allFriendsEmpty
+                ? Center(
+              child: Text(
+                "You currently have no friends to display. Add one to see them here.",
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 19,
+                    color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+            )
+                : filteredFriends.isEmpty
+                ? Center(
+              child: Text(
+                "No matching friends found.",
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 19,
+                    color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+            )
+                : ListView.builder(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 0, vertical: 0),
               itemCount: filteredFriends.length,
               itemBuilder: (context, index) {
                 return FriendCard(friend: filteredFriends[index]);
