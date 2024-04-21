@@ -26,6 +26,7 @@ class GroupsRepositoryImpl extends GroupsRepository {
 
   @override
   Future<List<GroupModel>> fetchGroups() async {
+    ref.watch(connectivityStatusProvider);
     final userId = ref.watch(authenticationStatusProvider)?.uid;
     if (userId == null) {
       throw Exception(StringConstants.unauthorizedRequest);

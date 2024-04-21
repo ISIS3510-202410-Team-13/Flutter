@@ -12,6 +12,7 @@ import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/services/services.dart';
 import 'place_recommendation_dialog.dart';
 import 'color_picker_button.dart';
+import 'package:uuid/uuid.dart';
 
 class NewEventForm extends ConsumerStatefulWidget {
   const NewEventForm({super.key});
@@ -21,10 +22,14 @@ class NewEventForm extends ConsumerStatefulWidget {
 }
 
 class _NewEventFormState extends ConsumerState<NewEventForm> {
-
   DateTime _eventStartTime = DateTime.now();
   String _selectedDuration = '1 Hour';
   String? _selectedReminder;
+  String _eventName = ''; // Almacenar el nombre del evento
+  String _eventDescription = ''; // Almacenar la descripción del evento
+  final Uuid _uuid = Uuid();
+  String _eventColor = '#9DCC18'; // Color por defecto en formato HEX
+  List<String> _selectedLabels = [];
 
   int _getReminderMinutes(String? reminder) {
     switch (reminder) {
@@ -43,7 +48,6 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
 
   @override
   Widget build(BuildContext context) {
-
     const assistants = <String>[
       'Laura',
       'Gotty',
@@ -51,7 +55,7 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
       'Juan',
     ];
     final MultiSelectController assistantsMultiSelectController =
-    MultiSelectController();
+        MultiSelectController();
 
     const reminders = <String>[
       'No reminder',
@@ -70,7 +74,7 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
       'Friends 👯‍',
     ];
     final MultiSelectController labelsMultiSelectController =
-    MultiSelectController();
+        MultiSelectController();
 
     var availableSpacesParams = ref.watch(availableSpacesParamsProvider);
     _eventStartTime = DateTime(
@@ -80,8 +84,8 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
       availableSpacesParams.start.hour,
       availableSpacesParams.start.minute,
     );
-    _selectedDuration = '${availableSpacesParams.duration.inHours} Hour${availableSpacesParams.duration.inHours > 1 ? 's' : ''}';
-
+    _selectedDuration =
+        '${availableSpacesParams.duration.inHours} Hour${availableSpacesParams.duration.inHours > 1 ? 's' : ''}';
 
     // TODO Split into components an move form elements to widgets to make them reusable
     return SingleChildScrollView(
@@ -95,16 +99,18 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
               children: <Widget>[
                 Container(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: ColorConstants.white,
                     borderRadius: BorderRadius.circular(16),
-                    border:
-                    Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
+                    border: Border.all(
+                        color: const Color(0xFFD0D5DD),
+                        width: 1), // TODO replace with Color Constant
                   ),
                   child: const Text(
                     'One-Time', // TODO replace with String Constant
-                    style: TextStyle( // TODO replace with text theme Constant
+                    style: TextStyle(
+                      // TODO replace with text theme Constant
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: Color(0xFF475569),
@@ -114,16 +120,18 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                 const SizedBox(width: 12),
                 Container(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: ColorConstants.limerick,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: ColorConstants.limerick, width: 1),
+                    border:
+                        Border.all(color: ColorConstants.limerick, width: 1),
                   ),
                   child: const Text(
                     'Recurrent', // TODO replace with String Constant
                     style: TextStyle(
-                      fontFamily: 'Poppins', // TODO replace with text theme Constant
+                      fontFamily:
+                          'Poppins', // TODO replace with text theme Constant
                       fontSize: 14,
                       color: ColorConstants.white,
                     ),
@@ -137,7 +145,9 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
               decoration: BoxDecoration(
                 color: ColorConstants.white,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
+                border: Border.all(
+                    color: const Color(0xFFD0D5DD),
+                    width: 1), // TODO replace with Color Constant
               ),
               child: Column(
                 children: [
@@ -145,20 +155,22 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                     height: 56, // TODO replace with Style Constant
                     child: Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: TextField(
-                            style: TextStyle( // TODO replace with text theme Constant
+                            onChanged: (value) =>
+                                setState(() => _eventName = value),
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569), // TODO replace with Color Constant
+                              color: Color(0xFF475569),
                             ),
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
-                              hintText: 'Event Name', // TODO replace with String Constant
-                              hintStyle: TextStyle( // TODO replace with text theme Constant
+                              hintText: 'Event Name',
+                              hintStyle: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
-                                color: Color(0xFF475569), // TODO replace with Color Constant
+                                color: Color(0xFF475569),
                               ),
                             ),
                           ),
@@ -166,10 +178,11 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                         SizedBox(
                           width: 30,
                           child: SvgPicture.asset(
-                            'assets/icons/signature.svg', // TODO replace with Asset Constant
-                            width: 24, // TODO replace with Style Constant
-                            height: 24, // TODO replace with Style Constant
-                            color: const Color(0xFF475569)), // TODO replace with Color Constant
+                              'assets/icons/signature.svg', // TODO replace with Asset Constant
+                              width: 24, // TODO replace with Style Constant
+                              height: 24, // TODO replace with Style Constant
+                              color: const Color(
+                                  0xFF475569)), // TODO replace with Color Constant
                         )
                       ],
                     ),
@@ -177,7 +190,8 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: const Color(0xFFD0D5DD), // TODO replace with Color Constant
+                        color: const Color(
+                            0xFFD0D5DD), // TODO replace with Color Constant
                         width: 1,
                       ),
                     ),
@@ -190,7 +204,8 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                         Expanded(
                           child: MultiSelectDropDown(
                             controller: assistantsMultiSelectController,
-                            onOptionSelected: (List<ValueItem> selectedOptions) {
+                            onOptionSelected:
+                                (List<ValueItem> selectedOptions) {
                               // TODO Implement logic to handle selected assistants
                             },
                             options: assistants
@@ -199,16 +214,20 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                             selectionType: SelectionType.multi,
                             chipConfig: const ChipConfig(
                               wrapType: WrapType.scroll,
-                              labelStyle: TextStyle( // TODO replace with text theme Constant
+                              labelStyle: TextStyle(
+                                // TODO replace with text theme Constant
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
-                                color: Color(0xFFFFFFFF), // TODO replace with Color Constant
+                                color: Color(
+                                    0xFFFFFFFF), // TODO replace with Color Constant
                               ),
                             ),
-                            optionTextStyle: const TextStyle( // TODO replace with text theme Constant
+                            optionTextStyle: const TextStyle(
+                              // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569), // TODO replace with Color Constant
+                              color: Color(
+                                  0xFF475569), // TODO replace with Color Constant
                             ),
                             borderColor: Colors.transparent,
                             focusedBorderColor: Colors.transparent,
@@ -216,11 +235,14 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                             focusedBorderWidth: 0,
                             clearIcon: const Icon(Icons.clear),
                             padding: const EdgeInsets.all(0),
-                            hint: 'Assistants', // TODO replace with String Constant
-                            hintStyle: const TextStyle( // TODO replace with text theme Constant
+                            hint:
+                                'Assistants', // TODO replace with String Constant
+                            hintStyle: const TextStyle(
+                              // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569), // TODO replace with Color Constant
+                              color: Color(
+                                  0xFF475569), // TODO replace with Color Constant
                             ),
                             hintPadding: const EdgeInsets.all(0),
                           ),
@@ -228,10 +250,11 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                         SizedBox(
                           width: 30,
                           child: SvgPicture.asset(
-                            'assets/icons/person-chalkboard.svg', // TODO replace with Asset Constant
-                            width: 24, // TODO replace with Style Constant
-                            height: 24, // TODO replace with Style Constant
-                            color: const Color(0xFF475569)), // TODO replace with Color Constant
+                              'assets/icons/person-chalkboard.svg', // TODO replace with Asset Constant
+                              width: 24, // TODO replace with Style Constant
+                              height: 24, // TODO replace with Style Constant
+                              color: const Color(
+                                  0xFF475569)), // TODO replace with Color Constant
                         )
                       ],
                     ),
@@ -239,7 +262,8 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: const Color(0xFFD0D5DD), // TODO replace with Color Constant
+                        color: const Color(
+                            0xFFD0D5DD), // TODO replace with Color Constant
                         width: 1,
                       ),
                     ),
@@ -253,11 +277,14 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                           child: DropdownButtonFormField<String>(
                             decoration: const InputDecoration(
                               border: InputBorder.none,
-                              hintText: 'Reminder',  // TODO replace with String Constant
-                              hintStyle: TextStyle(  // TODO replace with text theme Constant
+                              hintText:
+                                  'Reminder', // TODO replace with String Constant
+                              hintStyle: TextStyle(
+                                // TODO replace with text theme Constant
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
-                                color: Color(0xFF475569), // TODO replace with Color Constant
+                                color: Color(
+                                    0xFF475569), // TODO replace with Color Constant
                               ),
                             ),
                             items: reminders.map((String value) {
@@ -265,10 +292,12 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                                 value: value,
                                 child: Text(
                                   value,
-                                  style: const TextStyle( // TODO replace with text theme Constant
+                                  style: const TextStyle(
+                                    // TODO replace with text theme Constant
                                     fontFamily: 'Poppins',
                                     fontSize: 16,
-                                    color: Color(0xFF475569), // TODO replace with Color Constant
+                                    color: Color(
+                                        0xFF475569), // TODO replace with Color Constant
                                   ),
                                 ),
                               );
@@ -283,10 +312,12 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                         ),
                         SizedBox(
                           width: 30,
-                          child: SvgPicture.asset('assets/icons/stopwatch.svg',  // TODO replace with Asset Constant
-                            width: 24,  // TODO replace with Style Constant
-                            height: 24,  // TODO replace with Style Constant
-                            color: const Color(0xFF475569)), // TODO replace with Color Constant
+                          child: SvgPicture.asset(
+                              'assets/icons/stopwatch.svg', // TODO replace with Asset Constant
+                              width: 24, // TODO replace with Style Constant
+                              height: 24, // TODO replace with Style Constant
+                              color: const Color(
+                                  0xFF475569)), // TODO replace with Color Constant
                         ),
                       ],
                     ),
@@ -294,7 +325,8 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: const Color(0xFFD0D5DD), // TODO replace with Color Constant
+                        color: const Color(
+                            0xFFD0D5DD), // TODO replace with Color Constant
                         width: 1,
                       ),
                     ),
@@ -307,25 +339,35 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                         Expanded(
                           child: MultiSelectDropDown(
                             controller: labelsMultiSelectController,
-                            onOptionSelected: (List<ValueItem> selectedOptions) {
-                              // TODO Implement logic to handle selected labels
+                            onOptionSelected:
+                                (List<ValueItem> selectedOptions) {
+                              setState(() {
+                                _selectedLabels = selectedOptions
+                                    .map((item) => item.value as String)
+                                    .toList();
+                              });
                             },
                             options: labels
                                 .map((key) => ValueItem(label: key, value: key))
                                 .toList(),
                             selectionType: SelectionType.multi,
+
                             chipConfig: const ChipConfig(
                               wrapType: WrapType.scroll,
-                              labelStyle: TextStyle( // TODO replace with text theme Constant
+                              labelStyle: TextStyle(
+                                // TODO replace with text theme Constant
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
-                                color: Color(0xFFFFFFFF), // TODO replace with Color Constant
+                                color: Color(
+                                    0xFFFFFFFF), // TODO replace with Color Constant
                               ),
                             ),
-                            optionTextStyle: const TextStyle( // TODO replace with text theme Constant
+                            optionTextStyle: const TextStyle(
+                              // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569), // TODO replace with Color Constant
+                              color: Color(
+                                  0xFF475569), // TODO replace with Color Constant
                             ),
                             borderColor: Colors.transparent,
                             focusedBorderColor: Colors.transparent,
@@ -334,20 +376,24 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                             clearIcon: const Icon(Icons.clear),
                             padding: const EdgeInsets.all(0),
                             hint: 'Labels', // TODO replace with String Constant
-                            hintStyle: const TextStyle( // TODO replace with text theme Constant
+                            hintStyle: const TextStyle(
+                              // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569), // TODO replace with Color Constant
+                              color: Color(
+                                  0xFF475569), // TODO replace with Color Constant
                             ),
                             hintPadding: const EdgeInsets.all(0),
                           ),
                         ),
                         SizedBox(
                           width: 30,
-                          child: SvgPicture.asset('assets/icons/tag.svg', // TODO replace with Asset Constant
+                          child: SvgPicture.asset(
+                              'assets/icons/tag.svg', // TODO replace with Asset Constant
                               width: 24, // TODO replace with Style Constant
                               height: 24, // TODO replace with Style Constant
-                              color: const Color(0xFF475569)), // TODO replace with Color Constant
+                              color: const Color(
+                                  0xFF475569)), // TODO replace with Color Constant
                         )
                       ],
                     ),
@@ -359,23 +405,34 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFFFFF), // TODO replace with Color Constant
+                color:
+                    const Color(0xFFFFFFFF), // TODO replace with Color Constant
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
+                border: Border.all(
+                    color: const Color(0xFFD0D5DD),
+                    width: 1), // TODO replace with Color Constant
               ),
               width: double.infinity,
-              child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text('Event Color', // TODO replace with String Constant
-                          style: TextStyle( // TODO replace with text theme Constant
-                              fontFamily: 'Poppins',
-                              fontSize: 16,
-                              color: Color(0xFF475569))), // TODO replace with Color Constant
-                    ),
-                    ColorPickerButton(),
-                  ]),
+              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Expanded(
+                  child: Text(
+                      'Event Color', // TODO replace with String Constant
+                      style: TextStyle(
+                          // TODO replace with text theme Constant
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          color: Color(
+                              0xFF475569))), // TODO replace with Color Constant
+                ),
+                ColorPickerButton(
+                  onColorSelected: (colorHex) {
+                    setState(() {
+                      _eventColor =
+                          colorHex; // Actualiza el color del evento con el seleccionado
+                    });
+                  },
+                ),
+              ]),
             ),
             const SizedBox(height: 20),
             InkWell(
@@ -389,41 +446,45 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                       _eventStartTime = date;
                       ref.read(availableSpacesParamsProvider.notifier).state =
                           AvailableSpacesParamsModel(
-                            duration: availableSpacesParams.duration,
-                            start: date,
-                          );
+                        duration: availableSpacesParams.duration,
+                        start: date,
+                      );
                     });
                   },
                   currentTime: _eventStartTime,
                 );
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 24
-                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFFFFF), // TODO replace with Color Constant
+                  color: const Color(
+                      0xFFFFFFFF), // TODO replace with Color Constant
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
+                  border: Border.all(
+                      color: const Color(0xFFD0D5DD),
+                      width: 1), // TODO replace with Color Constant
                 ),
                 width: double.infinity,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     SvgPicture.asset(
-                      'assets/icons/hourglass-start.svg', // TODO replace with Asset Constant
-                      width: 24,  // TODO replace with Style Constant
-                      height: 24,  // TODO replace with Style Constant
-                      color: const Color(0xFF475569) // TODO replace with Color Constant
-                    ),
+                        'assets/icons/hourglass-start.svg', // TODO replace with Asset Constant
+                        width: 24, // TODO replace with Style Constant
+                        height: 24, // TODO replace with Style Constant
+                        color: const Color(
+                            0xFF475569) // TODO replace with Color Constant
+                        ),
                     const SizedBox(width: 12),
                     Text(
                       DateFormat('MMMM dd - HH:mm').format(_eventStartTime),
-                      style: const TextStyle( // TODO replace with text theme Constant
+                      style: const TextStyle(
+                          // TODO replace with text theme Constant
                           fontFamily: 'Poppins',
                           fontSize: 16,
-                          color: Color(0xFF475569)), // TODO replace with Color Constant
+                          color: Color(
+                              0xFF475569)), // TODO replace with Color Constant
                     ),
                   ],
                 ),
@@ -439,26 +500,31 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                         horizontal: 16,
                         vertical: 24), // Ajustado para aumentar la altura
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFFFFF), // TODO replace with Color Constant
+                      color: const Color(
+                          0xFFFFFFFF), // TODO replace with Color Constant
                       borderRadius: BorderRadius.circular(16),
-                      border:
-                      Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
+                      border: Border.all(
+                          color: const Color(0xFFD0D5DD),
+                          width: 1), // TODO replace with Color Constant
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        SvgPicture.asset('assets/icons/calendar-day.svg', // TODO replace with Asset Constant
+                        SvgPicture.asset(
+                            'assets/icons/calendar-day.svg', // TODO replace with Asset Constant
                             width: 24, // TODO replace with Style Constant
                             height: 24, // TODO replace with Style Constant
-                            color: const Color(0xFF475569)), // TODO replace with Color Constant
-                        const SizedBox(
-                            width: 12),
+                            color: const Color(
+                                0xFF475569)), // TODO replace with Color Constant
+                        const SizedBox(width: 12),
                         Text(
                           DateFormat('EEEE').format(_eventStartTime),
-                          style: const TextStyle( // TODO replace with text theme Constant
+                          style: const TextStyle(
+                              // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF475569)), // TODO replace with Color Constant
+                              color: Color(
+                                  0xFF475569)), // TODO replace with Color Constant
                         ),
                       ],
                     ),
@@ -469,27 +535,29 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                   flex: 1,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12),
+                        horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFFFFF), // TODO replace with Color Constant
+                      color: const Color(
+                          0xFFFFFFFF), // TODO replace with Color Constant
                       borderRadius: BorderRadius.circular(16),
-                      border:
-                      Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
+                      border: Border.all(
+                          color: const Color(0xFFD0D5DD),
+                          width: 1), // TODO replace with Color Constant
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        SvgPicture.asset('assets/icons/clock.svg', // TODO replace with Asset Constant
+                        SvgPicture.asset(
+                            'assets/icons/clock.svg', // TODO replace with Asset Constant
                             width: 24, // TODO replace with Style Constant
                             height: 24, // TODO replace with Style Constant
-                            color: const Color(0xFF475569)), // TODO replace with Color Constant
+                            color: const Color(
+                                0xFF475569)), // TODO replace with Color Constant
                         const SizedBox(width: 12),
                         Expanded(
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
-                              value:
-                              _selectedDuration,
+                              value: _selectedDuration,
                               items: <String>[
                                 '1 Hour',
                                 '2 Hours',
@@ -504,16 +572,23 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                               onChanged: (newValue) {
                                 setState(() {
                                   _selectedDuration = newValue!;
-                                  ref.read(availableSpacesParamsProvider.notifier).state = AvailableSpacesParamsModel(
-                                    duration: Duration(hours: int.parse(newValue.split(' ')[0])),
+                                  ref
+                                      .read(availableSpacesParamsProvider
+                                          .notifier)
+                                      .state = AvailableSpacesParamsModel(
+                                    duration: Duration(
+                                        hours:
+                                            int.parse(newValue.split(' ')[0])),
                                     start: availableSpacesParams.start,
                                   );
                                 });
                               },
-                              style: const TextStyle( // TODO replace with text theme Constant
+                              style: const TextStyle(
+                                // TODO replace with text theme Constant
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
-                                color: Color(0xFF475569), // TODO replace with Color Constant
+                                color: Color(
+                                    0xFF475569), // TODO replace with Color Constant
                               ),
                             ),
                           ),
@@ -547,28 +622,35 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
               },
               child: Container(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF9DCC18).withOpacity(0.15), // TODO replace with Color Constant
+                  color: const Color(0xFF9DCC18)
+                      .withOpacity(0.15), // TODO replace with Color Constant
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFD0D5DD), width: 1), // TODO replace with Color Constant
+                  border: Border.all(
+                      color: const Color(0xFFD0D5DD),
+                      width: 1), // TODO replace with Color Constant
                 ),
                 width: double.infinity,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('Find a Place on Campus', // TODO replace with String Constant
-                          style: TextStyle( // TODO replace with text theme Constant
-                              fontFamily: 'Poppins',
-                              fontSize: 16,
-                              color: Color(0xFF475569), // TODO replace with Color Constant
-                              fontWeight: FontWeight.bold)),
-                      const SizedBox(width: 12),
-                      SvgPicture.asset('assets/icons/location-dot.svg', // TODO replace with Asset Constant
-                          width: 24, // TODO replace with Style Constant
-                          height: 24, // TODO replace with Style Constant
-                          color: const Color(0xFF475569)), // TODO replace with Color Constant
-                    ]),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  const Text(
+                      'Find a Place on Campus', // TODO replace with String Constant
+                      style: TextStyle(
+                          // TODO replace with text theme Constant
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          color: Color(
+                              0xFF475569), // TODO replace with Color Constant
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(width: 12),
+                  SvgPicture.asset(
+                      'assets/icons/location-dot.svg', // TODO replace with Asset Constant
+                      width: 24, // TODO replace with Style Constant
+                      height: 24, // TODO replace with Style Constant
+                      color: const Color(
+                          0xFF475569)), // TODO replace with Color Constant
+                ]),
               ),
             ),
 
@@ -576,48 +658,61 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
             const SizedBox(height: 20),
             InkWell(
               onTap: () {
-                // TODO make this dynamic
-                DateTime notificationTime = _eventStartTime.subtract(Duration(minutes: _getReminderMinutes(_selectedReminder)));
+                DateTime notificationTime = _eventStartTime.subtract(
+                    Duration(minutes: _getReminderMinutes(_selectedReminder)));
+                String eventId = _uuid.v4();
 
                 EventModel event = EventModel(
-                  id: '', // TODO handle id generation or fecth from the database
-                  color: '#9DCC18',
+                  id: eventId,
+                  color: _eventColor,
                   reminder: _getReminderMinutes(_selectedReminder),
                   endDate: {
-                    '_seconds': _eventStartTime.add(const Duration(hours: 1)).millisecondsSinceEpoch ~/ 1000,
-                    '_nanoseconds': _eventStartTime.add(const Duration(hours: 1)).microsecondsSinceEpoch * 1000,
+                    '_seconds': _eventStartTime
+                            .add(Duration(
+                                hours:
+                                    int.parse(_selectedDuration.split(' ')[0])))
+                            .millisecondsSinceEpoch ~/
+                        1000,
+                    '_nanoseconds': _eventStartTime
+                            .add(Duration(
+                                hours:
+                                    int.parse(_selectedDuration.split(' ')[0])))
+                            .microsecondsSinceEpoch *
+                        1000,
                   },
-                  name: 'Event Name',
-                  description: 'Event Description',
+                  name: _eventName,
+                  description: _eventDescription,
                   startDate: {
                     '_seconds': _eventStartTime.millisecondsSinceEpoch ~/ 1000,
-                    '_nanoseconds': _eventStartTime.microsecondsSinceEpoch * 1000,
+                    '_nanoseconds':
+                        _eventStartTime.microsecondsSinceEpoch * 1000,
                   },
-                  labels: ['Uniandes 📚'],
+                  labels:
+                      _selectedLabels, // Utiliza las etiquetas seleccionadas
                 );
                 ref.read(addEventProvider(event: event).future);
                 NotificationService().scheduleNotification(
                     title: 'Scheduled Event Reminder',
-                    body: 'Your event is about to start at ${DateFormat('HH:mm').format(_eventStartTime)}',
-                    scheduledNotificationDateTime: notificationTime
-                );
-                context.pop();
+                    body:
+                        'Your event $_eventName is about to start at ${DateFormat('HH:mm').format(_eventStartTime)}',
+                    scheduledNotificationDateTime: notificationTime);
+                Navigator.pop(context);
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF9DCC18), // TODO replace with Color Constant
+                  color: const Color(0xFF9DCC18),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFF9DCC18), width: 1), // TODO replace with Color Constant
+                  border: Border.all(color: const Color(0xFF9DCC18), width: 1),
                 ),
                 width: double.infinity,
-                child: const Text('Create Event', // TODO replace with String Constant
+                child: const Text('Create Event',
                     textAlign: TextAlign.center,
-                    style: TextStyle( // TODO replace with text theme Constant
+                    style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
-                        color: Color(0xFFFFFFFF))), // TODO replace with Color Constant
-
+                        color: Color(0xFFFFFFFF))),
               ),
             ),
           ],
