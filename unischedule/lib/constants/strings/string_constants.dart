@@ -20,6 +20,20 @@ class StringConstants {
   // Search
   static const String search = 'Search...';
 
+  // Authentication
+  static const String appName = 'UniSchedule';
+  static final Function(String) welcomeUser = (String name) => name.isEmpty ? 'Welcome!' : 'Welcome $name!';
+  static final Function(String) localAuthMessage = (String name) => 'Is it you? $name';
+  static const String loginWithFingerprint = 'Login with Fingerprint';
+  static const String login = 'Login';
+  static const String loginTitle = 'Login to UniSchedule';
+  static const String signup = 'Signup';
+  static const String signupTitle = 'Signup to UniSchedule';
+  static const String email = 'Email';
+  static const String password = 'Password';
+  static const String name = 'Name';
+
+
   // Home
   static final Function(String) helloUser = (String name) => 'Hey, $name!';
   static const String myGroups = 'My Groups';

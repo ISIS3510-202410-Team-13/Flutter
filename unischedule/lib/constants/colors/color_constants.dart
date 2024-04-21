@@ -8,6 +8,7 @@ class ColorConstants {
   static const cloudyGrey = Color(0xFF686868);
   static const desertStorm = Color(0xFFF8F8F8);
   static const red = Color(0xFFE57373);
+  static const blue = Color(0xFF2196F3);
   static const white = Color(0xFFFFFFFF);
   static const black = Color(0xFF000000);
   static const transparent = Color(0x00000000);
