@@ -15,27 +15,16 @@ class FriendsView extends ConsumerStatefulWidget {
 
 class _FriendsViewState extends ConsumerState<FriendsView> {
   final TextEditingController _searchController = TextEditingController();
-  List<FriendModel> allFriends = [];
-  List<FriendModel> filteredFriends = [];
-  bool allFriendsEmpty =
-      false; // Añadido para controlar si allFriends está vacío
 
   @override
   void initState() {
     super.initState();
-    allFriends = ref.read(fetchFriendsProvider).value ?? [];
-    allFriendsEmpty =
-        allFriends.isEmpty; // Inicializar basado en la lista cargada
-    filteredFriends = allFriends;
-    _searchController.addListener(() {
-      updateSearch(_searchController.text);
-    });
+    _searchController.addListener(_onSearchChanged);
   }
 
-  void updateSearch(String searchText) {
+  void _onSearchChanged() {
     setState(() {
-      filteredFriends =
-          filterByQuery<FriendModel>(allFriends, searchText, (p0) => p0.name);
+      // Forzar reconstrucción para aplicar filtro.
     });
   }
 
@@ -47,6 +36,10 @@ class _FriendsViewState extends ConsumerState<FriendsView> {
 
   @override
   Widget build(BuildContext context) {
+    final allFriends = ref.watch(fetchFriendsProvider).asData?.value ?? [];
+    final bool allFriendsEmpty = allFriends.isEmpty;
+    final filteredFriends = filterByQuery<FriendModel>(
+        allFriends, _searchController.text, (p0) => p0.name);
     final connectivityStatus = ref.watch(connectivityStatusProvider);
 
     return Padding(
@@ -57,7 +50,7 @@ class _FriendsViewState extends ConsumerState<FriendsView> {
           UniScheduleSearchBar(searchController: _searchController),
           const SizedBox(height: 8),
           Expanded(
-            child: connectivityStatus == ConnectivityStatus.isDisconnected
+            child: connectivityStatus == ConnectivityStatus.isDisconnected && allFriendsEmpty
                 ? Center(
               child: Text(
                 "No friends to display at the moment. Please check your internet connection to view your friends.",
@@ -65,45 +58,42 @@ class _FriendsViewState extends ConsumerState<FriendsView> {
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                     fontSize: 19,
-                    color: Colors.grey
-                ),
+                    color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
             )
                 : allFriendsEmpty
-                    ? Center(
+                ? Center(
               child: Text(
                 "You currently have no friends to display. Add one to see them here.",
                 style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                     fontSize: 19,
-                    color: Colors.grey
-                ),
+                    color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
             )
-                    : filteredFriends.isEmpty
-                        ? Center(
+                : filteredFriends.isEmpty
+                ? Center(
               child: Text(
                 "No matching friends found.",
                 style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                     fontSize: 19,
-                    color: Colors.grey
-                ),
+                    color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
             )
-                        : ListView.builder(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            itemCount: filteredFriends.length,
-                            itemBuilder: (context, index) {
-                              return FriendCard(friend: filteredFriends[index]);
-                            },
-                          ),
+                : ListView.builder(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 0, vertical: 0),
+              itemCount: filteredFriends.length,
+              itemBuilder: (context, index) {
+                return FriendCard(friend: filteredFriends[index]);
+              },
+            ),
           ),
         ],
       ),
