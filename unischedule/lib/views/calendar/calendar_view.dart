@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/constants/constants.dart';
+import 'package:unischedule/models/events/event_model.dart';
 import 'package:unischedule/providers/providers.dart';
 import 'package:unischedule/widgets/widgets.dart';
 import 'widgets/calendar_event.dart';
@@ -21,27 +24,28 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
 
     final personalEvents = ref.watch(fetchEventsProvider);
 
-    int? earliestStart;
-    int? latestEnd;
+    late int earliestStart;
+    late int latestEnd;
 
     personalEvents.when(
       data: (events) {
-        for (var event in events) {
-          if (earliestStart == null || DateTime.fromMillisecondsSinceEpoch(event.startDate['_seconds']! * 1000).hour < earliestStart!) {
-            earliestStart =  DateTime.fromMillisecondsSinceEpoch(event.startDate['_seconds']! * 1000).hour;
-          }
-          if (latestEnd == null || DateTime.fromMillisecondsSinceEpoch(event.endDate['_seconds']! * 1000).hour > latestEnd!) {
-            latestEnd = DateTime.fromMillisecondsSinceEpoch(event.endDate['_seconds']! * 1000).hour;
-          }
+
+        if (events.isEmpty) {
+          earliestStart = 8;
+          latestEnd = 17;
+        } else {
+          final startTimes = events.map((event) => DateTime.fromMillisecondsSinceEpoch(event.startDate['_seconds']! * 1000).hour).toList();
+          final endTimes = events.map((event) => DateTime.fromMillisecondsSinceEpoch(event.endDate['_seconds']! * 1000).hour).toList();
+          earliestStart = startTimes.reduce(min);
+          latestEnd = endTimes.reduce(max);
         }
-        if (latestEnd! < 23) {
-          latestEnd = latestEnd! + 1;
+        if (latestEnd < 23) {
+          latestEnd = latestEnd + 1;
         }
-        print([earliestStart, latestEnd]);
-        // Ahora puedes usar earliestStart y latestEnd aquí dentro para calcular y mostrar lo que necesitas
+        print([events.isEmpty, earliestStart, latestEnd]);
       },
-      error: (error, stack) => {},
-      loading: () => {} /* manejar loading */
+      error: (error, stack) => {}, /* TODO manejar error */
+      loading: () => {} /* TODO manejar loading */
     );
 
     return Stack(
