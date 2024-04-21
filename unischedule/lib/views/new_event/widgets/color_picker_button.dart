@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:unischedule/constants/constants.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:unischedule/constants/constants.dart';
 
 class ColorPickerButton extends StatefulWidget {
-  const ColorPickerButton({super.key});
+  final void Function(String) onColorSelected;  // Callback para devolver el color en formato HEX
+
+  const ColorPickerButton({Key? key, required this.onColorSelected}) : super(key: key);
 
   @override
   _ColorPickerButtonState createState() => _ColorPickerButtonState();
 }
 
 class _ColorPickerButtonState extends State<ColorPickerButton> {
+  Color currentColor = ColorConstants.limerick; // Usa el color por defecto de tus constantes
 
-  Color currentColor = ColorConstants.limerick;
   void changeColor(Color color) {
     setState(() => currentColor = color);
+    widget.onColorSelected('#${color.value.toRadixString(16).padLeft(8, '0').substring(2)}'); // Convierte a HEX y envía a través del callback
   }
 
   @override
