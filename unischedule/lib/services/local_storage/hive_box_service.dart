@@ -27,6 +27,12 @@ class HiveBoxServiceFactory {
     eventSyncModelBox = HiveBoxService(LocalStorageConstants.eventSyncBox);
     groupModelBox = HiveBoxService(LocalStorageConstants.groupBox);
   }
+
+  static Future<void> resetHive() async {
+    await friendModelBox.clear();
+    await eventModelBox.clear();
+    await groupModelBox.clear();
+  }
 }
 
 class HiveBoxService<T> {

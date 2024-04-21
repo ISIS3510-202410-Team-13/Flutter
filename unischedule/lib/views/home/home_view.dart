@@ -21,7 +21,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
     final groupsProvider = ref.watch(fetchGroupsProvider);
     final eventsProvider = ref.watch(fetchEventsProvider);
-    const user = 'David'; // TODO get this from a provider
+    final user = ref.watch(authenticationStatusProvider);
 
     return Stack(
       children: <Widget>[
@@ -32,7 +32,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 120.0),
               child: Text(
-                StringConstants.helloUser(user),
+                StringConstants.helloUser(user?.displayName ?? ''),
                 maxLines: 3,
                 style: Theme.of(context).textTheme.displayLarge?.copyWith(
                   overflow: TextOverflow.ellipsis,

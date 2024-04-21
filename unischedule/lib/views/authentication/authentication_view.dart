@@ -1,79 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/constants/constants.dart';
-import 'package:unischedule/services/services.dart';
-import 'package:unischedule/widgets/background_image/background_image_widget.dart';
+import 'package:unischedule/providers/providers.dart';
+import 'package:unischedule/widgets/widgets.dart';
+import 'widgets/new_user_options.dart';
+import 'widgets/old_user_options.dart';
 
-class AuthenticationView extends StatelessWidget {
+class AuthenticationView extends ConsumerStatefulWidget {
   const AuthenticationView({super.key});
 
   @override
+  ConsumerState<AuthenticationView> createState() => _AuthenticationViewState();
+}
+
+class _AuthenticationViewState extends ConsumerState<AuthenticationView> {
+  @override
   Widget build(BuildContext context) {
+    final user = ref.watch(authenticationStatusProvider);
+
     return Scaffold(
-      body: Center(
-        child: Stack(
-          children: [
-            const BackgroundImage(opacity: 1),
-            Positioned(
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0,
+      body: Stack(
+        children: [
+          const BackgroundImage(opacity: 1),
+          Positioned.fill(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 80.0),
               child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 80.0),
-                      child: Text(
-                        'UniSchedule', // TODO use String Constants
-                        style: TextStyle( // TODO use TextTheme
-                            fontSize: 24,
-                            fontWeight: FontWeight.normal,
-                            color: ColorConstants.white),
-                      ),
+                children: [
+                  Text(
+                    StringConstants.appName,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: ColorConstants.white,
+                      fontWeight: FontWeight.normal,
                     ),
-                    const SizedBox(height: 20.0),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Text(
-                        'Welcome David!', // TODO use String Constants
-                        style: TextStyle( // TODO use TextTheme
-                          fontFamily: 'Poppins',
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: ColorConstants.white,
-                          shadows: [
-                            Shadow(
-                              offset: const Offset(5, 4),
-                              blurRadius: 4,
-                              color: ColorConstants.black.withOpacity(0.5),
-                            ),
-                          ],
-                        ),
-                      ),
+                  ),
+                  const SizedBox(height: 20.0),
+                  Text(
+                    StringConstants.welcomeUser(user?.displayName ?? ''),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.displayMedium,
+                  ),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      child: user != null
+                        ? OldUserOptions(userName: user.displayName ?? '')
+                        : const NewUserOptions(),
                     ),
-                    const SizedBox(height: 530.0),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: ElevatedButton(
-                        onPressed: () => {
-                          LocalAuthenticationService()
-                              .authenticate('Is it you David?') // TODO use String Constants
-                              .then((value) => context.go(RouteConstants.home))
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,  // TODO use ColorConstants
-                          foregroundColor: Colors.white, // TODO use ColorConstants
-                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                        ),
-                        child: const Text('Login with Fingerprint'), // TODO use String Constants
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

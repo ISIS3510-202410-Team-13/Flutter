@@ -10,7 +10,7 @@ class GroupsView extends ConsumerStatefulWidget {
   const GroupsView({super.key});
 
   @override
-  _GroupsViewState createState() => _GroupsViewState();
+  ConsumerState<GroupsView> createState() => _GroupsViewState();
 }
 
 class _GroupsViewState extends ConsumerState<GroupsView> {

@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:unischedule/models/models.dart';
 import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/services/services.dart';
+import 'package:unischedule/providers/providers.dart';
 
 part 'events_repository.g.dart';
 
@@ -27,10 +28,14 @@ class EventsRepositoryImpl extends EventsRepository {
 
   @override
   Future<List<EventModel>> fetchEvents() async {
+    final userId = ref.watch(authenticationStatusProvider)?.uid;
+    if (userId == null) {
+      throw Exception(StringConstants.unauthorizedRequest);
+    }
     List<EventModel> events = boxService.getAll();
     if (events.isEmpty) {
       try {
-        final response = await client.getRequest('user/0MebgXs8fBYREjDKMlwq/events');
+        final response = await client.getRequest('user/$userId/events');
         events = response.map<EventModel>((json) => EventModel.fromJson(json)).toList();
         Map<String, EventModel> eventMap = {
           for (var event in events) event.id: event
@@ -45,10 +50,14 @@ class EventsRepositoryImpl extends EventsRepository {
   }
 
   Future<void> syncLocalEvents() async{
+    final userId = ref.watch(authenticationStatusProvider)?.uid;
+    if (userId == null) {
+      throw Exception(StringConstants.unauthorizedRequest);
+    }
     var unsyncedEvents = eventSyncModelBox.getAll();
     for (var event in unsyncedEvents) {
           try {
-            final response = await client.postRequest('user/0MebgXs8fBYREjDKMlwq/events', data: event.toJson());
+            final response = await client.postRequest('user/$userId/events', data: event.toJson());
             boxService.put(response['eventId'], event);
             boxService.delete(event.id);
             eventSyncModelBox.delete(event.id);
@@ -59,21 +68,15 @@ class EventsRepositoryImpl extends EventsRepository {
         }
   }
 
-  
-
-  //Future<List<EventModel>> fetchEvents() async {
-  //  List<EventModel> events = await client.getRequest('user/0MebgXs8fBYREjDKMlwq/events') // TODO change endpoint
-  //    .then((response) => response.map<EventModel>((json) => EventModel.fromJson(json)).toList())
-  //    .catchError((error) => boxService.getAll());
-  //  return events;
-  //}
-
 @override
 Future<void> addEvent(EventModel event) async {
-
+  final userId = ref.watch(authenticationStatusProvider)?.uid;
+  if (userId == null) {
+    throw Exception(StringConstants.unauthorizedRequest);
+  }
   boxService.put(event.id, event);
    try {
-    final response = await client.postRequest('user/0MebgXs8fBYREjDKMlwq/events', data: event.toJson());
+    final response = await client.postRequest('user/$userId/events', data: event.toJson());
     boxService.put(response['eventId'], event);
     boxService.delete(event.id);
   } catch (error) {

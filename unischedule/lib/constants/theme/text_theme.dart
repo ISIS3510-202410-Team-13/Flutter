@@ -18,7 +18,19 @@ TextTheme textTheme(BuildContext context) {
       ]
     ),
 
-    displayMedium: null, // TODO: Add custom text styles here
+    displayMedium: TextStyle(
+        fontFamily: StyleConstants.fontFamily,
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+        color: ColorConstants.white,
+        shadows: [
+          Shadow(
+            offset: const Offset(5, 4),
+            blurRadius: 4,
+            color: ColorConstants.black.withOpacity(0.5),
+          ),
+        ]
+    ),
 
     displaySmall: null, // TODO: Add custom text styles here
 
