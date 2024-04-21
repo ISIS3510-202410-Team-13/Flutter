@@ -134,6 +134,13 @@ class SignupDialog extends ConsumerWidget {
                         backgroundColor: ColorConstants.red,
                       ),
                     );
+                  } else if (status == SignUpStatus.nameIsNotSet) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(StringConstants.nameIsNotSet),
+                        backgroundColor: ColorConstants.red,
+                      ),
+                    );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(

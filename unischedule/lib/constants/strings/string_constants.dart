@@ -34,6 +34,7 @@ class StringConstants {
   static const String name = 'Name';
   static const String weakPassword = 'Password is too weak';
   static const String emailAlreadyInUse = 'Email is already in use';
+  static const String nameIsNotSet = 'Name is not set';
   static const String wrongPassword = 'Wrong password';
   static const String userNotFound = 'User not found';
 

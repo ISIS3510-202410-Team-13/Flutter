@@ -7,12 +7,12 @@ final authenticationStatusProvider = StateNotifierProvider<AuthenticationStatusN
   },
 );
 
-enum SignUpStatus { notDetermined, success, weakPassword, emailAlreadyInUse }
+enum SignUpStatus { notDetermined, success, weakPassword, emailAlreadyInUse, nameIsNotSet }
 enum LogInStatus { notDetermined, success, userNotFound, wrongPassword }
 
 class AuthenticationStatusNotifier extends StateNotifier<User?> {
   AuthenticationStatusNotifier() : super(null) {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    FirebaseAuth.instance.userChanges().listen((User? user) {
       _setAuthenticationStatus(user);
     });
   }
@@ -20,6 +20,7 @@ class AuthenticationStatusNotifier extends StateNotifier<User?> {
   void _setAuthenticationStatus(User? user) {
     // TODO add logic to update things based on user authentication, such as local storage
     state = user;
+
   }
 
   Future<SignUpStatus> signUp({
@@ -28,6 +29,9 @@ class AuthenticationStatusNotifier extends StateNotifier<User?> {
     required String password,
   }) async {
     try {
+      if (name.isEmpty) {
+        return SignUpStatus.nameIsNotSet;
+      }
       final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
@@ -35,6 +39,7 @@ class AuthenticationStatusNotifier extends StateNotifier<User?> {
       await credential.user!.updateDisplayName(name);
       return SignUpStatus.success;
     } on FirebaseAuthException catch (e) {
+      // TODO add errors for missing @, no internet connection, etc.
       if (e.code == 'weak-password') {
         return SignUpStatus.weakPassword;
       } else if (e.code == 'email-already-in-use') {

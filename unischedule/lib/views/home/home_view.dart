@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/constants/constants.dart';
-import 'package:unischedule/providers/authentication/authentication_provider.dart';
 import 'package:unischedule/providers/providers.dart';
 import 'package:unischedule/models/models.dart';
 import 'package:unischedule/widgets/widgets.dart';
