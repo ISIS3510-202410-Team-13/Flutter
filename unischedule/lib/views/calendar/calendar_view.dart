@@ -21,6 +21,29 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
 
     final personalEvents = ref.watch(fetchEventsProvider);
 
+    int? earliestStart;
+    int? latestEnd;
+
+    personalEvents.when(
+      data: (events) {
+        for (var event in events) {
+          if (earliestStart == null || DateTime.fromMillisecondsSinceEpoch(event.startDate['_seconds']! * 1000).hour < earliestStart!) {
+            earliestStart =  DateTime.fromMillisecondsSinceEpoch(event.startDate['_seconds']! * 1000).hour;
+          }
+          if (latestEnd == null || DateTime.fromMillisecondsSinceEpoch(event.endDate['_seconds']! * 1000).hour > latestEnd!) {
+            latestEnd = DateTime.fromMillisecondsSinceEpoch(event.endDate['_seconds']! * 1000).hour;
+          }
+        }
+        if (latestEnd! < 23) {
+          latestEnd = latestEnd! + 1;
+        }
+        print([earliestStart, latestEnd]);
+        // Ahora puedes usar earliestStart y latestEnd aquí dentro para calcular y mostrar lo que necesitas
+      },
+      error: (error, stack) => {},
+      loading: () => {} /* manejar loading */
+    );
+
     return Stack(
       children: <Widget>[
         const BackgroundImage(opacity: StyleConstants.backgroundOpacity),
@@ -37,13 +60,15 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                       child: SingleChildScrollView(
                         child: Stack(
                           children: [
-                            const CalendarTimeLines(),
+                            CalendarTimeLines(earliestStart: earliestStart, latestEnd: latestEnd),
                             ...personalEvents.when(
                               data: (events) => events.map((event) => CalendarEvent(
                                 title: event.name,
                                 startDate: DateTime.fromMillisecondsSinceEpoch(event.startDate['_seconds']! * 1000),
                                 endDate: DateTime.fromMillisecondsSinceEpoch(event.endDate['_seconds']! * 1000),
                                 color: event.color,
+                                earliestStart: earliestStart!,
+                                latestEnd: latestEnd!,
                               )).toList(),
                               error: (error, _) => <Widget>[],
                               loading: () => const [Center(child: CircularProgressIndicator())],
