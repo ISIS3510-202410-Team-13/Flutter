@@ -26,8 +26,13 @@ class GroupsRepositoryImpl extends GroupsRepository {
   @override
   Future<List<GroupModel>> fetchGroups() async {
     List<GroupModel> groups = await client.getRequest('user/0MebgXs8fBYREjDKMlwq/groups') // TODO change endpoint
-      .then((response) => response.map<GroupModel>((json) => GroupModel.fromJson(json)).toList())
-      .catchError((error) => boxService.getAll());
+        .then((response) => response.map<GroupModel>((json) => GroupModel.fromJson(json)).toList())
+        .then((groups) async {
+      await boxService.clear();
+      await boxService.putAll({ for (var group in groups) group.id : group });
+      return groups;
+    })
+        .catchError((error) => boxService.getAll());
     return groups;
   }
 }

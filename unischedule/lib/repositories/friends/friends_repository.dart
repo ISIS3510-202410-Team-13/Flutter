@@ -26,8 +26,13 @@ class FriendsRepositoryImpl extends FriendsRepository {
   @override
   Future<List<FriendModel>> fetchFriends() async {
     List<FriendModel> friends = await client.getRequest('user/0MebgXs8fBYREjDKMlwq/friends') // TODO change endpoint
-      .then((response) => response.map<FriendModel>((json) => FriendModel.fromJson(json)).toList())
-      .catchError((error) => boxService.getAll());
+        .then((response) => response.map<FriendModel>((json) => FriendModel.fromJson(json)).toList())
+        .then((friends) async {
+      await boxService.clear();
+      await boxService.putAll({ for (var friend in friends) friend.id : friend });
+      return friends;
+    })
+        .catchError((error) => boxService.getAll());
     return friends;
   }
 }
