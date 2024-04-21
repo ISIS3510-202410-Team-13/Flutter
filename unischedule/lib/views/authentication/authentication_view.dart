@@ -37,6 +37,7 @@ class _AuthenticationViewState extends ConsumerState<AuthenticationView> {
                   const SizedBox(height: 20.0),
                   Text(
                     StringConstants.welcomeUser(user?.displayName ?? ''),
+                    textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.displayMedium,
                   ),
                   Expanded(

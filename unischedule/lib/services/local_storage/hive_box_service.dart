@@ -25,6 +25,12 @@ class HiveBoxServiceFactory {
     eventModelBox = HiveBoxService(LocalStorageConstants.eventBox);
     groupModelBox = HiveBoxService(LocalStorageConstants.groupBox);
   }
+
+  static Future<void> resetHive() async {
+    await friendModelBox.clear();
+    await eventModelBox.clear();
+    await groupModelBox.clear();
+  }
 }
 
 class HiveBoxService<T> {
@@ -44,8 +50,16 @@ class HiveBoxService<T> {
     return box.values.toList();
   }
 
+  Future<void> clear() async {
+    await box.clear();
+  }
+
   Future<void> put(String key, T value) async {
     await box.put(key, value);
+  }
+
+  Future<void> putAll(Map<String, T> values) async {
+    await box.putAll(values);
   }
 
   Future<void> delete(String key) async {

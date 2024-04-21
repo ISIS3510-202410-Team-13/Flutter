@@ -36,6 +36,7 @@ class LoginDialog extends ConsumerWidget {
             TextField(
               controller: emailController,
               maxLength: 50,
+              keyboardType: TextInputType.emailAddress,
               cursorColor: ColorConstants.blue,
               buildCounter: (BuildContext context, {required int currentLength, required int? maxLength, required bool isFocused}) => null,
               decoration: const InputDecoration(

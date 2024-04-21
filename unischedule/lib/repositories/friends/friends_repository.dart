@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:unischedule/models/models.dart';
 import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/services/services.dart';
+import 'package:unischedule/providers/providers.dart';
 
 part 'friends_repository.g.dart';
 
@@ -25,8 +26,17 @@ class FriendsRepositoryImpl extends FriendsRepository {
 
   @override
   Future<List<FriendModel>> fetchFriends() async {
-    List<FriendModel> friends = await client.getRequest('user/0MebgXs8fBYREjDKMlwq/friends') // TODO change endpoint
+    final userId = ref.watch(authenticationStatusProvider)?.uid;
+    if (userId == null) {
+      throw Exception(StringConstants.unauthorizedRequest);
+    }
+    List<FriendModel> friends = await client.getRequest('user/$userId/friends')
       .then((response) => response.map<FriendModel>((json) => FriendModel.fromJson(json)).toList())
+      .then((friends) async {
+        await boxService.clear();
+        await boxService.putAll({ for (var friend in friends) friend.id : friend });
+        return friends;
+      })
       .catchError((error) => boxService.getAll());
     return friends;
   }

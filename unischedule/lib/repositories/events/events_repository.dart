@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:unischedule/models/models.dart';
 import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/services/services.dart';
+import 'package:unischedule/providers/providers.dart';
 
 part 'events_repository.g.dart';
 
@@ -26,8 +27,17 @@ class EventsRepositoryImpl extends EventsRepository {
 
   @override
   Future<List<EventModel>> fetchEvents() async {
-    List<EventModel> events = await client.getRequest('user/0MebgXs8fBYREjDKMlwq/events') // TODO change endpoint
+    final userId = ref.watch(authenticationStatusProvider)?.uid;
+    if (userId == null) {
+      throw Exception(StringConstants.unauthorizedRequest);
+    }
+    List<EventModel> events = await client.getRequest('user/$userId/events')
       .then((response) => response.map<EventModel>((json) => EventModel.fromJson(json)).toList())
+      .then((events) async {
+        await boxService.clear();
+        await boxService.putAll({ for (var event in events) event.id : event });
+        return events;
+      })
       .catchError((error) => boxService.getAll());
     return events;
   }
@@ -36,7 +46,7 @@ class EventsRepositoryImpl extends EventsRepository {
   Future<void> addEvent(EventModel event) async {
     boxService.put(event.id, event);
     // TODO save event in the database
-    //await client.postRequest("user/0MebgXs8fBYREjDKMlwq/events", event.toJson()); // TODO change endpoint
+    //await client.postRequest("user/$userid/events", event.toJson());
   }
 }
 

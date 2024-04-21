@@ -59,6 +59,7 @@ class SignupDialog extends ConsumerWidget {
             const SizedBox(height: 15.0),
             TextField(
               controller: emailController,
+              keyboardType: TextInputType.emailAddress,
               maxLength: 50,
               cursorColor: ColorConstants.blue,
               buildCounter: (BuildContext context, {required int currentLength, required int? maxLength, required bool isFocused}) => null,

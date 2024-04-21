@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:unischedule/models/models.dart';
 import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/services/services.dart';
+import 'package:unischedule/providers/providers.dart';
 
 part 'groups_repository.g.dart';
 
@@ -25,8 +26,17 @@ class GroupsRepositoryImpl extends GroupsRepository {
 
   @override
   Future<List<GroupModel>> fetchGroups() async {
-    List<GroupModel> groups = await client.getRequest('user/0MebgXs8fBYREjDKMlwq/groups') // TODO change endpoint
+    final userId = ref.watch(authenticationStatusProvider)?.uid;
+    if (userId == null) {
+      throw Exception(StringConstants.unauthorizedRequest);
+    }
+    List<GroupModel> groups = await client.getRequest('user/$userId/groups')
       .then((response) => response.map<GroupModel>((json) => GroupModel.fromJson(json)).toList())
+      .then((groups) async {
+        await boxService.clear();
+        await boxService.putAll({ for (var group in groups) group.id : group });
+        return groups;
+      })
       .catchError((error) => boxService.getAll());
     return groups;
   }

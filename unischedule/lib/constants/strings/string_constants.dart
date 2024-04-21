@@ -23,7 +23,7 @@ class StringConstants {
   // Authentication
   static const String appName = 'UniSchedule';
   static final Function(String) welcomeUser = (String name) => name.isEmpty ? 'Welcome!' : 'Welcome $name!';
-  static final Function(String) localAuthMessage = (String name) => 'Is it you? $name';
+  static final Function(String) localAuthMessage = (String name) => 'Is it you, $name?';
   static const String loginWithFingerprint = 'Login with Fingerprint';
   static const String login = 'Login';
   static const String loginTitle = 'Login to UniSchedule';
@@ -39,7 +39,7 @@ class StringConstants {
 
 
   // Home
-  static final Function(String) helloUser = (String name) => 'Hey, $name!';
+  static final Function(String) helloUser = (String name) => name.isEmpty ? 'Hey!' : 'Hey, $name!';
   static const String myGroups = 'My Groups';
   static const String myEvents = 'My Events';
 

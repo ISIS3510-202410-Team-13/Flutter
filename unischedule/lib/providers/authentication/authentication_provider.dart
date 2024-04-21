@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:unischedule/services/local_storage/hive_box_service.dart';
 
 final authenticationStatusProvider = StateNotifierProvider<AuthenticationStatusNotifier, User?>((ref) {
     return AuthenticationStatusNotifier();
@@ -38,6 +39,8 @@ class AuthenticationStatusNotifier extends StateNotifier<User?> {
         return SignUpStatus.weakPassword;
       } else if (e.code == 'email-already-in-use') {
         return SignUpStatus.emailAlreadyInUse;
+      } else {
+        print('Error ${e.code}: ${e.message}');
       }
     }
     return SignUpStatus.notDetermined;
@@ -66,5 +69,7 @@ class AuthenticationStatusNotifier extends StateNotifier<User?> {
 
   void signOut() async {
     await FirebaseAuth.instance.signOut();
+    await HiveBoxServiceFactory.resetHive();
+    // TODO delete scheduled notifications?
   }
 }
