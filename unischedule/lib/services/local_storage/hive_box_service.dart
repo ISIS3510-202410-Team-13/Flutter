@@ -18,12 +18,13 @@ class HiveBoxServiceFactory {
 
     await Hive.openBox<FriendModel>(LocalStorageConstants.friendBox);
     await Hive.openBox<EventModel>(LocalStorageConstants.eventBox);
-
+    await Hive.openBox<EventModel>(LocalStorageConstants.eventSyncBox);
     await Hive.openBox<GroupModel>(LocalStorageConstants.groupBox);
 
     friendModelBox = HiveBoxService(LocalStorageConstants.friendBox);
     eventModelBox = HiveBoxService(LocalStorageConstants.eventBox);
 
+    eventSyncModelBox = HiveBoxService(LocalStorageConstants.eventSyncBox);
     groupModelBox = HiveBoxService(LocalStorageConstants.groupBox);
   }
 }
