@@ -64,7 +64,6 @@ class GroupCard extends StatelessWidget {
             left: 10,
             top: 12,
             child: ProfileIconsRow(
-                memberCount: group.members.length,
                 imagePaths: group.profilePictures
             ),
           ),
