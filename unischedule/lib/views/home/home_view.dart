@@ -66,16 +66,45 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 ),
                 Expanded(
                   child: groupsProvider.when(
-                    data: (groups) => ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: groups.length,
-                      itemBuilder: (context, index) {
-                        final GroupModel group = groups[index];
-                        return GroupCard(group: group);
-                      },
-                    ),
+                    data: (groups) {
+                      final bool allGroupsEmpty = groups.isEmpty;
+                      final connectivityStatus = ref.watch(connectivityStatusProvider);
+
+                      return connectivityStatus == ConnectivityStatus.isDisconnected && allGroupsEmpty
+                          ? Center(
+                        child: Text(
+                          "No groups to display at the moment. Please check your internet connection!",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: Colors.grey),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                          : allGroupsEmpty
+                          ? Center(
+                        child: Text(
+                          "You currently have no groups to display. ",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: Colors.grey),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                          : ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: groups.length,
+                        itemBuilder: (context, index) {
+                          final GroupModel group = groups[index];
+                          return GroupCard(group: group);
+                        },
+                      );
+                    },
                     loading: () => const Center(child: CircularProgressIndicator()),
-                    error: (error, stack) => Padding( //TODO Change this to a custom error widget (toast)
+                    error: (error, stack) => Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                       child: Text(
                           error.toString(),
@@ -83,6 +112,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                       ),
                     ),
                   ),
+
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
@@ -96,16 +126,45 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 ),
                 Expanded(
                   child: eventsProvider.when(
-                    data: (events) => ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: events.length,
-                      itemBuilder: (context, index) {
-                        final EventModel event = events[index];
-                        return EventCard(event: event);
-                      },
-                    ),
+                    data: (events) {
+                      final bool allEventsEmpty = events.isEmpty;
+                      final connectivityStatus = ref.watch(connectivityStatusProvider);
+
+                      return connectivityStatus == ConnectivityStatus.isDisconnected && allEventsEmpty
+                          ? Center(
+                        child: Text(
+                          "No events to display at the moment. Please check your internet connection!",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: Colors.grey),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                          : allEventsEmpty
+                          ? Center(
+                        child: Text(
+                          "You currently have no events to display.",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: Colors.grey),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                          : ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: events.length,
+                        itemBuilder: (context, index) {
+                          final EventModel event = events[index];
+                          return EventCard(event: event);
+                        },
+                      );
+                    },
                     loading: () => const Center(child: CircularProgressIndicator()),
-                    error: (error, stack) => Padding( //TODO Change this to a custom error widget (toast)
+                    error: (error, stack) => Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                       child: Text(
                           error.toString(),
@@ -113,6 +172,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                       ),
                     ),
                   ),
+
                 ),
               ],
             ),
