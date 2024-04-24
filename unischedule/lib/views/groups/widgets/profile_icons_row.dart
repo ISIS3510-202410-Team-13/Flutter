@@ -4,13 +4,18 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:unischedule/constants/constants.dart';
 
 class ProfileIconsRow extends StatelessWidget {
+  const ProfileIconsRow({
+    super.key,
+    required this.imagePaths,
+    required this.memberCount,
+  });
+
   final List<String> imagePaths;
-  const ProfileIconsRow({super.key, required this.imagePaths});
+  final int memberCount;
 
   @override
   Widget build(BuildContext context) {
-    final memberCount = imagePaths.length;
-    final remainingCountText = imagePaths.length > 3 ? '+${memberCount - 3}' : '';
+    final remainingCountText = memberCount > 3 ? '+${memberCount - 3}' : '+0';
     print([memberCount, imagePaths]);
     return Container(
       width: 120,
@@ -59,7 +64,7 @@ class ProfileIconsRow extends StatelessWidget {
               ),
             ),
           Container(
-            padding: const EdgeInsets.fromLTRB(6, 8, 16, 8),
+            padding: const EdgeInsets.fromLTRB(6, 8, 16, 15),
             alignment: Alignment.centerRight,
             child: Text(
               remainingCountText,
