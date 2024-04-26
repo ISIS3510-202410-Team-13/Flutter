@@ -19,11 +19,13 @@ class UniScheduleAppShell extends ConsumerStatefulWidget {
     required this.appBarTitle,
     required this.appBarColor,
     required this.useFAB,
+    required this.fabAction,
   });
   final Widget body;
   final String appBarTitle;
   final Color appBarColor;
   final bool useFAB;
+  final VoidCallback? fabAction;
 
   @override
   ConsumerState<UniScheduleAppShell> createState() => _UniScheduleAppShellState();
@@ -54,7 +56,7 @@ class _UniScheduleAppShellState extends ConsumerState<UniScheduleAppShell> {
       backgroundColor: ColorConstants.desertStorm,
       bottomNavigationBar: const UniScheduleBottomNavBar(),
       drawer: const UniScheduleDrawer(),
-      floatingActionButton: widget.useFAB ? const UniScheduleFloatingActionButton() : null,
+      floatingActionButton: widget.useFAB ?  UniScheduleFloatingActionButton(onPressed: widget.fabAction) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
