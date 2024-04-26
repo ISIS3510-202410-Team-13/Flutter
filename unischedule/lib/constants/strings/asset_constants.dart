@@ -8,4 +8,6 @@ class AssetConstants {
   static const String icComment = 'assets/icons/comment.svg';
   static const String icMagnifyingGlass = 'assets/icons/magnifying-glass.svg';
   static const String icSquarePlus = 'assets/icons/square-plus.svg';
+  static const String icCloud = 'assets/icons/plane.svg';
+  static const String icCloudSlash = 'assets/icons/plane-slash.svg';
 }

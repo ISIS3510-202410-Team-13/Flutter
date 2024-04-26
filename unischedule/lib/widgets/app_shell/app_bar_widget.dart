@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unischedule/constants/constants.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:unischedule/providers/providers.dart';
 
-class UniScheduleAppBar extends StatelessWidget implements PreferredSizeWidget {
+
+
+class UniScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const UniScheduleAppBar({
     super.key,
     required this.color,
@@ -17,7 +21,8 @@ class UniScheduleAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(StyleConstants.appBarHeight);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final connectivityStatus = ref.watch(connectivityStatusProvider);
     return AppBar(
       backgroundColor: ColorConstants.transparent,
       elevation: 0,
@@ -39,6 +44,12 @@ class UniScheduleAppBar extends StatelessWidget implements PreferredSizeWidget {
         },
       ),
       actions: <Widget>[
+        // Add Non-clickable Connectivity Icon
+        if (connectivityStatus == ConnectivityStatus.isDisconnected) // Assuming true means online
+    Icon(Icons.wifi_off,color: color,size: 28,)
+        else
+        Icon(Icons.wifi,color: color,size: 28,),
+        // Existing Notification Button
         IconButton(
           icon: SvgPicture.asset(
             AssetConstants.icBell,
@@ -51,6 +62,8 @@ class UniScheduleAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
       ],
+
+
     );
   }
 }
