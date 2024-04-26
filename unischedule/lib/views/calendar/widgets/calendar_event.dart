@@ -34,7 +34,7 @@ class CalendarEvent extends StatelessWidget {
     final dayOffset = dayOfWeek - 1;
 
     final fullWidth = MediaQuery.of(context).size.width - 80; // 30 offset + (25 + 25) padding
-    final fullHeight = (endHour-startHour) * (500/(endHour-startHour)+10);  // Each hour 10 text + 60 sized box
+    final fullHeight = (endHour-startHour) * (425/(endHour-startHour)+10);  // Each hour 10 text + 60 sized box
 
     final boxWidth = fullWidth / 7;
     final boxHeight = fullHeight * duration / (endHour-startHour);
