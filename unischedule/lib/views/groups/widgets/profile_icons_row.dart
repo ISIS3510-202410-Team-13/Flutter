@@ -16,7 +16,6 @@ class ProfileIconsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final remainingCountText = memberCount > 3 ? '+${memberCount - 3}' : '';
-    print([memberCount, imagePaths]);
     return Container(
       width: memberCount > 3 ? 120 : 20*(memberCount + 1),
       decoration: BoxDecoration(

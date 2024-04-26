@@ -34,6 +34,6 @@ class AvailableSpacesParamsModel {
   });
 
   String get dayOfWeek => dayOfWeekId[start.weekday]!;
-  String get startTime => DateFormat('hh:mm').format(start);
-  String get endTime => DateFormat('hh:mm').format(addMinutesUntilMidnight(start, duration));
+  String get startTime => DateFormat('hhmm').format(start);
+  String get endTime => DateFormat('hhmm').format(addMinutesUntilMidnight(start, duration));
 }
