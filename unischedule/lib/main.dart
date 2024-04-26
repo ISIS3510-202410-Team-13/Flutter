@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:timezone/data/latest.dart';
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -28,11 +28,11 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  initializeTimeZones();
+  tz.initializeTimeZones();
 
   // Services
   await HiveBoxServiceFactory.initHive();
-  NotificationService().initNotification();
+  await NotificationService().initNotification();
 
   runApp(
     const ProviderScope(

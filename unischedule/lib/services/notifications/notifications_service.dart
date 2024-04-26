@@ -6,7 +6,7 @@ class NotificationService {
   final notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   Future<void> initNotification() async {
-    AndroidInitializationSettings initializationSettingsAndroid = const AndroidInitializationSettings('flutter_logo');
+    AndroidInitializationSettings initializationSettingsAndroid = const AndroidInitializationSettings('unischedule_icon');
 
     var initializationSettingsIOS = DarwinInitializationSettings(
       requestAlertPermission: true,
@@ -25,7 +25,6 @@ class NotificationService {
       onDidReceiveNotificationResponse:
         (NotificationResponse notificationResponse) async {}
     );
-
     await requestPermission();
   }
 
@@ -41,6 +40,8 @@ class NotificationService {
 
   Future<PermissionStatus> requestPermission() async {
     var settings = await Permission.notification.request();
+    await notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
+    await notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestExactAlarmsPermission();
     return settings;
   }
 
@@ -51,11 +52,11 @@ class NotificationService {
     String? payLoad
   }) async {
     return notificationsPlugin.show(
-      id, title, body, await notificationDetails()
+      id, title, body, notificationDetails()
     );
   }
 
-  Future scheduleNotification({
+  Future<void> scheduleNotification({
       int id = 0,
       String? title,
       String? body,
@@ -67,9 +68,9 @@ class NotificationService {
       title,
       body,
       tz.TZDateTime.from(scheduledNotificationDateTime, tz.local),
-      await notificationDetails(),
+      notificationDetails(),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 }
