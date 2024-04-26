@@ -15,10 +15,10 @@ class ProfileIconsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final remainingCountText = memberCount > 3 ? '+${memberCount - 3}' : '+0';
+    final remainingCountText = memberCount > 3 ? '+${memberCount - 3}' : '';
     print([memberCount, imagePaths]);
     return Container(
-      width: 120,
+      width: memberCount > 3 ? 120 : 20*(memberCount + 1),
       decoration: BoxDecoration(
         color: ColorConstants.white,
         borderRadius: BorderRadius.circular(20),
@@ -26,12 +26,12 @@ class ProfileIconsRow extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          for (int i = min(3,memberCount) - 1; i >= 0; i--)
+          for (int i = min(3, memberCount) - 1; i >= 0; i--)
             Positioned(
               left: i * 20.0,
               child: CircleAvatar(
                 radius: 20,
-                backgroundColor: ColorConstants.limerick,
+                backgroundColor: ColorConstants.white,
                 child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -47,7 +47,7 @@ class ProfileIconsRow extends StatelessWidget {
                     filterQuality: FilterQuality.none,
                     maxHeightDiskCache: 100,
                     imageBuilder: (context, imageProvider) => CircleAvatar(
-                      radius: 20,
+                      radius: 30,
                       backgroundImage: imageProvider,
                     ),
                     placeholder: (context, url) => const CircleAvatar(
@@ -64,11 +64,12 @@ class ProfileIconsRow extends StatelessWidget {
               ),
             ),
           Container(
-            padding: const EdgeInsets.fromLTRB(6, 8, 16, 15),
-            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.fromLTRB(6, 10, 15, 10),
+            alignment: Alignment.topRight,
             child: Text(
               remainingCountText,
               style: Theme.of(context).textTheme.headlineSmall,
+              textAlign: TextAlign.center,
             ),
           ),
         ],
