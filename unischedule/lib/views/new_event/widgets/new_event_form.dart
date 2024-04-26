@@ -159,6 +159,8 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                       children: [
                         Expanded(
                           child: TextField(
+                            maxLength: 50,
+                            buildCounter: (BuildContext context, {required int currentLength, required int? maxLength, required bool isFocused}) => null,
                             onChanged: (value) =>
                                 setState(() => _eventName = value),
                             style: const TextStyle(
@@ -237,14 +239,12 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                             focusedBorderWidth: 0,
                             clearIcon: const Icon(Icons.clear),
                             padding: const EdgeInsets.all(0),
-                            hint:
-                                'Assistants', // TODO replace with String Constant
+                            hint: 'Assistants', // TODO replace with String Constant
                             hintStyle: const TextStyle(
                               // TODO replace with text theme Constant
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(
-                                  0xFF475569), // TODO replace with Color Constant
+                              color: Color(0xFF475569), // TODO replace with Color Constant
                             ),
                             hintPadding: const EdgeInsets.all(0),
                           ),
@@ -285,8 +285,8 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                                 // TODO replace with text theme Constant
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
-                                color: Color(
-                                    0xFF475569), // TODO replace with Color Constant
+                                color: Color(0xFF475569), // TODO replace with Color Constant
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
                             items: reminders.map((String value) {
