@@ -13,6 +13,7 @@ import 'package:unischedule/services/services.dart';
 import 'place_recommendation_dialog.dart';
 import 'color_picker_button.dart';
 import 'package:uuid/uuid.dart';
+import '';
 
 class NewEventForm extends ConsumerStatefulWidget {
   const NewEventForm({super.key});
@@ -48,6 +49,7 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
 
   @override
   Widget build(BuildContext context) {
+    final connectivityStatus = ref.watch(connectivityStatusProvider);
     const assistants = <String>[
       'Laura',
       'Gotty',
@@ -101,10 +103,10 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: ColorConstants.white,
+                    color: ColorConstants.limerick,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                        color: const Color(0xFFD0D5DD),
+                        color: ColorConstants.limerick,
                         width: 1), // TODO replace with Color Constant
                   ),
                   child: const Text(
@@ -113,7 +115,7 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                       // TODO replace with text theme Constant
                       fontFamily: 'Poppins',
                       fontSize: 14,
-                      color: Color(0xFF475569),
+                      color: ColorConstants.white,
                     ),
                   ),
                 ),
@@ -122,10 +124,10 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: ColorConstants.limerick,
+                    color:  ColorConstants.white,
                     borderRadius: BorderRadius.circular(16),
                     border:
-                        Border.all(color: ColorConstants.limerick, width: 1),
+                        Border.all(color: const Color(0xFFD0D5DD), width: 1),
                   ),
                   child: const Text(
                     'Recurrent', // TODO replace with String Constant
@@ -133,7 +135,7 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
                       fontFamily:
                           'Poppins', // TODO replace with text theme Constant
                       fontSize: 14,
-                      color: ColorConstants.white,
+                      color: Color(0xFF475569),
                     ),
                   ),
                 ),
@@ -602,58 +604,65 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
             const SizedBox(height: 12),
             InkWell(
               onTap: () {
-                showGeneralDialog(
-                  context: context,
-                  barrierDismissible: true,
-                  barrierLabel: MaterialLocalizations.of(context)
-                      .modalBarrierDismissLabel,
-                  barrierColor: Colors.black45,
-                  transitionDuration: const Duration(milliseconds: 200),
-                  pageBuilder: (BuildContext buildContext, Animation animation,
-                      Animation secondaryAnimation) {
-                    return Center(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                        child: const PlaceRecommendationsDialog(),
-                      ),
-                    );
-                  },
+              if (connectivityStatus == ConnectivityStatus.isConnected) {
+              showGeneralDialog(
+              context: context,
+              barrierDismissible: true,
+              barrierLabel: MaterialLocalizations.of(context)
+                .modalBarrierDismissLabel,
+              barrierColor: Colors.black45,
+              transitionDuration: const Duration(milliseconds: 200),
+              pageBuilder: (BuildContext buildContext, Animation animation,
+                Animation secondaryAnimation) {
+                return Center(
+                child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: const PlaceRecommendationsDialog(),
+                ),
                 );
               },
+              );
+              }
+              },
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF9DCC18)
-                      .withOpacity(0.15), // TODO replace with Color Constant
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                      color: const Color(0xFFD0D5DD),
-                      width: 1), // TODO replace with Color Constant
-                ),
-                width: double.infinity,
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  const Text(
-                      'Find a Place on Campus', // TODO replace with String Constant
-                      style: TextStyle(
-                          // TODO replace with text theme Constant
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          color: Color(
-                              0xFF475569), // TODO replace with Color Constant
-                          fontWeight: FontWeight.bold)),
-                  const SizedBox(width: 12),
-                  SvgPicture.asset(
-                      'assets/icons/location-dot.svg', // TODO replace with Asset Constant
-                      width: 24, // TODO replace with Style Constant
-                      height: 24, // TODO replace with Style Constant
-                      color: const Color(
-                          0xFF475569)), // TODO replace with Color Constant
-                ]),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              decoration: BoxDecoration(
+              color: connectivityStatus == ConnectivityStatus.isConnected
+                ? const Color(0xFF9DCC18).withOpacity(0.15)
+                : Colors.grey.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: const Color(0xFFD0D5DD),
+                width: 1),
+              ),
+              width: double.infinity,
+              child:
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(
+                connectivityStatus == ConnectivityStatus.isConnected
+                ? 'Find a Place on Campus' 
+                : 'No Internet Connection',
+                style: TextStyle(
+                fontFamily: 'Poppins', 
+                fontSize: 16,
+                color: Color(0xFF475569),
+                fontWeight: FontWeight.bold)),
+              const SizedBox(width: 12),
+              connectivityStatus == ConnectivityStatus.isConnected
+                ? SvgPicture.asset(
+                    'assets/icons/location-dot.svg',
+                    width: 24,
+                    height: 24,
+                    color: const Color(0xFF475569))
+                : Icon(
+                    Icons.signal_wifi_off,
+                    size: 24,
+                    color: const Color(0xFF475569),
+                  ),
+              ]),
               ),
             ),
-
             // TODO this is a temporal button to create the event
             const SizedBox(height: 20),
             InkWell(
