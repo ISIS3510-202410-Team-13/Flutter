@@ -17,7 +17,7 @@ Widget build(BuildContext context) {
   return Column(
     children: List.generate((endHour - startHour + 1) * 2, (index) {
       if (index == 0) return const SizedBox(height: 6);
-      if (index % 2 == 0) return SizedBox(height: 500/(endHour - startHour) * 1);
+      if (index % 2 == 0) return SizedBox(height: 425/(endHour - startHour) * 1);
 
       final time = '${startHour + index ~/ 2}:00';
       return Row(

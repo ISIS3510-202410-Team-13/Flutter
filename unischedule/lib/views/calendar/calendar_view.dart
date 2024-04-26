@@ -1,9 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/constants/constants.dart';
-import 'package:unischedule/models/events/event_model.dart';
 import 'package:unischedule/providers/providers.dart';
 import 'package:unischedule/widgets/widgets.dart';
 import 'widgets/calendar_event.dart';
@@ -18,35 +16,38 @@ class CalendarView extends ConsumerStatefulWidget {
 }
 
 class _CalendarViewState extends ConsumerState<CalendarView> {
-
   @override
   Widget build(BuildContext context) {
-
     final personalEvents = ref.watch(fetchEventsProvider);
 
     late int earliestStart;
     late int latestEnd;
 
-    personalEvents.when(
-      data: (events) {
+   personalEvents.when(
+    data: (events) {
+      earliestStart = 8;
+      latestEnd = 17;
 
-        if (events.isEmpty) {
-          earliestStart = 8;
-          latestEnd = 17;
-        } else {
-          final startTimes = events.map((event) => DateTime.fromMillisecondsSinceEpoch(event.startDate['_seconds']! * 1000).hour).toList();
-          final endTimes = events.map((event) => DateTime.fromMillisecondsSinceEpoch(event.endDate['_seconds']! * 1000).hour).toList();
-          earliestStart = startTimes.reduce(min);
-          latestEnd = endTimes.reduce(max);
+      events.forEach((event) {
+        final startDate = DateTime.fromMillisecondsSinceEpoch(event.startDate['_seconds']! * 1000);
+        final endDate = DateTime.fromMillisecondsSinceEpoch(event.endDate['_seconds']! * 1000);
+
+        earliestStart = min(earliestStart, startDate.hour);
+        latestEnd = max(latestEnd, endDate.hour);
+
+        if (startDate.day != endDate.day) {
+          earliestStart = 0;
+          latestEnd = 23;
+          return;
         }
-        if (latestEnd < 23) {
-          latestEnd = latestEnd + 1;
-        }
-        print([events.isEmpty, earliestStart, latestEnd]);
-      },
-      error: (error, stack) => {}, /* TODO manejar error */
-      loading: () => {} /* TODO manejar loading */
-    );
+      });
+      latestEnd = min(latestEnd + 1, 24);
+      print([events.isEmpty, earliestStart, latestEnd]);
+    },
+    error: (error, stack) => print("Error: $error"), // Print basic error message
+    loading: () => print("Loading..."), // Print loading message
+  );
+
 
     return Stack(
       children: <Widget>[
@@ -56,7 +57,8 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             SizedBox(height: Scaffold.of(context).appBarMaxHeight),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
                 child: Column(
                   children: [
                     const CalendarWeekDays(),
@@ -64,18 +66,74 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                       child: SingleChildScrollView(
                         child: Stack(
                           children: [
-                            CalendarTimeLines(earliestStart: earliestStart, latestEnd: latestEnd),
+                            CalendarTimeLines(
+                                earliestStart: earliestStart,
+                                latestEnd: latestEnd),
                             ...personalEvents.when(
-                              data: (events) => events.map((event) => CalendarEvent(
-                                title: event.name,
-                                startDate: DateTime.fromMillisecondsSinceEpoch(event.startDate['_seconds']! * 1000),
-                                endDate: DateTime.fromMillisecondsSinceEpoch(event.endDate['_seconds']! * 1000),
-                                color: event.color,
-                                earliestStart: earliestStart!,
-                                latestEnd: latestEnd!,
-                              )).toList(),
+                              data: (events) => events.expand((event) {
+                                final startDateTime =
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        event.startDate['_seconds']! * 1000);
+                                final endDateTime =
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        event.endDate['_seconds']! * 1000);
+                                final eventsList = <Widget>[];
+                                if (DateTime.fromMillisecondsSinceEpoch(
+                                            event.startDate['_seconds']! * 1000)
+                                        .day ==
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                            event.endDate['_seconds']! * 1000)
+                                        .day) {
+                                  eventsList.add(
+                                    CalendarEvent(
+                                      title: event.name,
+                                      startDate: startDateTime,
+                                      endDate: endDateTime,
+                                      color: event.color,
+                                      earliestStart: earliestStart!,
+                                      latestEnd: latestEnd!,
+                                    ),
+                                  );
+                                } else {
+                                  final firstEventEndDateTime = DateTime(
+                                      startDateTime.year,
+                                      startDateTime.month,
+                                      startDateTime.day,
+                                      23,
+                                      59);
+                                  final secondEventStartDateTime = DateTime(
+                                      endDateTime.year,
+                                      endDateTime.month,
+                                      endDateTime.day,
+                                      0,
+                                      0);
+                                  eventsList.add(
+                                    CalendarEvent(
+                                      title: event.name,
+                                      startDate: startDateTime,
+                                      endDate: firstEventEndDateTime,
+                                      color: event.color,
+                                      earliestStart: earliestStart!,
+                                      latestEnd: latestEnd!,
+                                    ),
+                                  );
+                                  eventsList.add(
+                                    CalendarEvent(
+                                      title: event.name,
+                                      startDate: secondEventStartDateTime,
+                                      endDate: endDateTime,
+                                      color: event.color,
+                                      earliestStart: earliestStart!,
+                                      latestEnd: latestEnd!,
+                                    ),
+                                  );
+                                }
+                                return eventsList;
+                              }).toList(),
                               error: (error, _) => <Widget>[],
-                              loading: () => const [Center(child: CircularProgressIndicator())],
+                              loading: () => const [
+                                Center(child: CircularProgressIndicator())
+                              ],
                             )
                           ],
                         ),
@@ -91,5 +149,3 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     );
   }
 }
-
-
