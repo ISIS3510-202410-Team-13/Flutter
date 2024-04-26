@@ -4,15 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:unischedule/constants/constants.dart';
 
 class UniScheduleFloatingActionButton extends StatelessWidget {
-  const UniScheduleFloatingActionButton({super.key});
+  final VoidCallback? onPressed;
+  const UniScheduleFloatingActionButton({super.key, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: () {
+      onPressed: onPressed,
         // TODO use a provider to automatically navigate depending on current route
-        context.push(RouteConstants.newEvent);
-      },
       backgroundColor: ColorConstants.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),

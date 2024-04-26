@@ -23,18 +23,26 @@ Widget _getAppShell(BuildContext context, GoRouterState state, Widget child) {
   String appBarTitle = '';
   Color appBarColor = ColorConstants.white;
   bool useFAB = false;
+  VoidCallback? fabAction;
+
   switch(state.topRoute?.path) {
     case RouteConstants.calendar:
       appBarTitle = 'April';  // TODO implement dynamic month
       useFAB = true;
+      fabAction = () => context.push(RouteConstants.newEvent);
+      break;
     case RouteConstants.friends:
       appBarTitle = StringConstants.friendsTitle;
       appBarColor = ColorConstants.black;
       useFAB = true;
+      fabAction = null;
+      break;
     case RouteConstants.groups:
       appBarTitle = StringConstants.groupsTitle;
       appBarColor = ColorConstants.black;
       useFAB = true;
+      fabAction = null;// en un futuro podria ser: fabAction = () => context.push(RouteConstants.newEventCalendar);
+      break;
   }
 
   return UniScheduleAppShell(
@@ -43,6 +51,7 @@ Widget _getAppShell(BuildContext context, GoRouterState state, Widget child) {
     appBarTitle: appBarTitle,
     appBarColor: appBarColor,
     useFAB: useFAB,
+    fabAction: fabAction,
   );
 }
 
