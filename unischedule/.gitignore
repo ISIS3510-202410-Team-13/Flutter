@@ -478,3 +478,8 @@ ios/Podfile
 # freezer
 **/*.g.dart
 **/*.freezed.dart
+
+# Firebase
+ios/Runner/GoogleService-Info.plist
+android/app/google-services.json
+lib/firebase_options.dart
