@@ -17,7 +17,7 @@ class _PlaceRecommendationsDialogState extends ConsumerState<PlaceRecommendation
 
   @override
   Widget build(BuildContext context) {
-    var availableSpaces = ref.watch(fetchAvailableSpacesProvider).value ?? <AvailableSpacesModel>[];
+    var availableSpacesProvider = ref.watch(fetchAvailableSpacesProvider);
 
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -42,58 +42,62 @@ class _PlaceRecommendationsDialogState extends ConsumerState<PlaceRecommendation
                   decoration: TextDecoration.none,
                 )),
             Expanded(
-              child: ListView.separated(
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                  itemBuilder: (BuildContext context, int index) => Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                                '${availableSpaces[index].building}-${availableSpaces[index].room}',
-                                style: const TextStyle( // TODO use text theme
-                                  fontFamily: 'Poppins',
-                                  fontSize: 20,
-                                  color: Color(0xFF475569), // TODO use ColorConstants
-                                  decoration: TextDecoration.none,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            const SizedBox(height: 4),
-                            Text(
-                              // TODO use String Constants
-                                'Available from ${availableSpaces[index].availableFrom.substring(0, 2)}:${availableSpaces[index].availableFrom.substring(2)} to ${availableSpaces[index].availableUntil.substring(0, 2)}:${availableSpaces[index].availableUntil.substring(2)}',
-                                style: const TextStyle( // TODO use text theme
-                                  fontFamily: 'Poppins',
-                                  fontSize: 12,
-                                  color: Color(0xFF475569), // TODO use ColorConstants
-                                  decoration: TextDecoration.none,
-                                  fontWeight: FontWeight.normal,
-                                )),
-                          ],
-                        ),
-                        Container(
-                          width: 80,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8), // Borde redondeado
-                            image: DecorationImage(
-                              image: AssetImage(
-                                  'assets/images/buildings/${availableSpaces[index].building}.jpg'), // TODO use AssetConstants
-                              fit: BoxFit.cover,
-                            ),
+              child: availableSpacesProvider.when(
+                data: (List<AvailableSpacesModel> availableSpaces) =>
+                  ListView.separated(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    separatorBuilder: (BuildContext context, int index) => const Divider(height: 1, color: Color(0xFFD0D5DD)), // TODO use ColorConstants
+                    itemCount: availableSpaces.length,
+                    itemBuilder: (BuildContext context, int index) => Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  '${availableSpaces[index].building}-${availableSpaces[index].room}',
+                                  style: const TextStyle( // TODO use text theme
+                                    fontFamily: 'Poppins',
+                                    fontSize: 20,
+                                    color: Color(0xFF475569), // TODO use ColorConstants
+                                    decoration: TextDecoration.none,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              const SizedBox(height: 4),
+                              Text(
+                                // TODO use String Constants
+                                  'Available from ${availableSpaces[index].availableFrom.substring(0, 2)}:${availableSpaces[index].availableFrom.substring(2)} to ${availableSpaces[index].availableUntil.substring(0, 2)}:${availableSpaces[index].availableUntil.substring(2)}',
+                                  style: const TextStyle( // TODO use text theme
+                                    fontFamily: 'Poppins',
+                                    fontSize: 12,
+                                    color: Color(0xFF475569), // TODO use ColorConstants
+                                    decoration: TextDecoration.none,
+                                    fontWeight: FontWeight.normal,
+                                  )),
+                            ],
                           ),
-                        )
-                      ],
+                          Container(
+                            width: 80,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8), // Borde redondeado
+                              image: DecorationImage(
+                                image: AssetImage(
+                                    'assets/images/buildings/${availableSpaces[index].building}.jpg'), // TODO use AssetConstants
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                  separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(height: 1, color: Color(0xFFD0D5DD)), // TODO use ColorConstants
-                  itemCount: availableSpaces.length),
+                error: (error, stackTrace) => Text('Sorry for the inconvenience, we could not fetch your recommendations: $error'), // TODO use StringConstants
+                loading: () => const Center(child: CircularProgressIndicator()),
+              )
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
