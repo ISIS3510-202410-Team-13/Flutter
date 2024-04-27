@@ -3,12 +3,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:unischedule/services/local_storage/hive_box_service.dart';
 
 final authenticationStatusProvider = StateNotifierProvider<AuthenticationStatusNotifier, User?>((ref) {
-    return AuthenticationStatusNotifier();
-  },
-);
+  return AuthenticationStatusNotifier();
+},);
 
 enum SignUpStatus { notDetermined, success, weakPassword, emailAlreadyInUse, nameIsNotSet }
-enum LogInStatus { notDetermined, success, userNotFound, wrongPassword }
+enum LogInStatus {
+  notDetermined,
+  success,
+  userNotFound,
+  wrongPassword,
+  invalidEmailFormat,
+  tooManyRequests,
+  emptyEmail,
+  emptyPassword
+}
 
 class AuthenticationStatusNotifier extends StateNotifier<User?> {
   AuthenticationStatusNotifier() : super(null) {
@@ -20,7 +28,6 @@ class AuthenticationStatusNotifier extends StateNotifier<User?> {
   void _setAuthenticationStatus(User? user) {
     // TODO add logic to update things based on user authentication, such as local storage
     state = user;
-
   }
 
   Future<SignUpStatus> signUp({
@@ -53,12 +60,17 @@ class AuthenticationStatusNotifier extends StateNotifier<User?> {
 
   Future<LogInStatus> logIn({
     required String emailAddress,
-    required String password
+    required String password,
   }) async {
+    if (emailAddress.isEmpty) {
+      return LogInStatus.emptyEmail;
+    } else if (password.isEmpty) {
+      return LogInStatus.emptyPassword;
+    }
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailAddress,
-          password: password
+        email: emailAddress,
+        password: password,
       );
       return LogInStatus.success;
     } on FirebaseAuthException catch (e) {
@@ -67,6 +79,12 @@ class AuthenticationStatusNotifier extends StateNotifier<User?> {
         return LogInStatus.userNotFound;
       } else if (e.code == 'wrong-password') {
         return LogInStatus.wrongPassword;
+      } else if (e.code == 'invalid-email') {
+        return LogInStatus.invalidEmailFormat;
+      } else if (e.code == 'too-many-requests') {
+        return LogInStatus.tooManyRequests;
+      } else {
+        print('Error ${e.code}: ${e.message}');
       }
     }
     return LogInStatus.notDetermined;
