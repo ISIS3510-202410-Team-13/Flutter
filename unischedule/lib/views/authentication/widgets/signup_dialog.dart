@@ -112,45 +112,102 @@ class SignupDialog extends ConsumerWidget {
                 fixedSize: const Size(200, double.infinity),
                 padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
-              onPressed: () {
-                ref.read(authenticationStatusProvider.notifier).signUp(
+              onPressed: () async {
+                // Validate user input (consider using a form key for better management)
+                if (nameController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(StringConstants.nameIsNotSet),
+                      backgroundColor: ColorConstants.blue,
+                    ),
+                  );
+                  return;
+                }
+
+                if (emailController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(StringConstants.emptyEmail),
+                      backgroundColor: ColorConstants.blue,
+                    ),
+                  );
+                  return;
+                }
+
+                if (!RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*$').hasMatch(emailController.text)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(StringConstants.invalidEmailFormat),
+                      backgroundColor: ColorConstants.blue,
+                    ),
+                  );
+                  return;
+                }
+
+                if (emailController.text.length > 50) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(StringConstants.emailTooLong),
+                      backgroundColor: ColorConstants.blue,
+                    ),
+                  );
+                  return;
+                }
+
+                if (passwordController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(StringConstants.emptyPassword),
+                      backgroundColor: ColorConstants.blue,
+                    ),
+                  );
+                  return;
+                }
+
+                if (passwordController.text.length > 50) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(StringConstants.passwordTooLong),
+                      backgroundColor: ColorConstants.blue,
+                    ),
+                  );
+                  return;
+                }
+
+                // Call signup function with proper error handling
+                final signUpStatus = await ref.read(authenticationStatusProvider.notifier).signUp(
                   name: nameController.text,
                   emailAddress: emailController.text,
                   password: passwordController.text,
-                ).then((status) {
-                  if (status == SignUpStatus.success) {
-                    context.go(RouteConstants.home);
-                  } else if (status == SignUpStatus.weakPassword) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(StringConstants.weakPassword),
-                        backgroundColor: ColorConstants.red,
-                      ),
-                    );
-                  } else if (status == SignUpStatus.emailAlreadyInUse) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(StringConstants.emailAlreadyInUse),
-                        backgroundColor: ColorConstants.red,
-                      ),
-                    );
-                  } else if (status == SignUpStatus.nameIsNotSet) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(StringConstants.nameIsNotSet),
-                        backgroundColor: ColorConstants.red,
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(StringConstants.anErrorOccurred),
-                        backgroundColor: ColorConstants.red,
-                      ),
-                    );
-                  }
-                });
+                );
+
+                if (signUpStatus == SignUpStatus.success) {
+                  context.go(RouteConstants.home);
+                } else if (signUpStatus == SignUpStatus.weakPassword) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(StringConstants.weakPassword),
+                      backgroundColor: ColorConstants.blue,
+                    ),
+                  );
+                } else if (signUpStatus == SignUpStatus.emailAlreadyInUse) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(StringConstants.emailAlreadyInUse),
+                      backgroundColor: ColorConstants.blue,
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(StringConstants.anErrorOccurred),
+                      backgroundColor: ColorConstants.blue,
+                    ),
+                  );
+                }
               },
+
+
               child: const Text(StringConstants.signup),
             ),
           ],

@@ -9,7 +9,6 @@ class LoginDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 
@@ -35,10 +34,8 @@ class LoginDialog extends ConsumerWidget {
             const SizedBox(height: 25.0),
             TextField(
               controller: emailController,
-              maxLength: 50,
               keyboardType: TextInputType.emailAddress,
               cursorColor: ColorConstants.blue,
-              buildCounter: (BuildContext context, {required int currentLength, required int? maxLength, required bool isFocused}) => null,
               decoration: const InputDecoration(
                 focusColor: ColorConstants.blue,
                 suffixIconColor: ColorConstants.blue,
@@ -60,9 +57,7 @@ class LoginDialog extends ConsumerWidget {
             TextField(
               controller: passwordController,
               obscureText: true,
-              maxLength: 50,
               cursorColor: ColorConstants.blue,
-              buildCounter: (BuildContext context, {required int currentLength, required int? maxLength, required bool isFocused}) => null,
               decoration: const InputDecoration(
                 focusColor: ColorConstants.blue,
                 suffixIconColor: ColorConstants.blue,
@@ -89,6 +84,23 @@ class LoginDialog extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
               onPressed: () {
+                if (emailController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(StringConstants.emptyEmail), // Define in constants.dart
+                      backgroundColor: ColorConstants.blue,
+                    ),
+                  );
+                  return;
+                } else if (passwordController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(StringConstants.emptyPassword), // Define in constants.dart
+                      backgroundColor: ColorConstants.blue,
+                    ),
+                  );
+                  return;
+                }
                 ref.read(authenticationStatusProvider.notifier).logIn(
                   emailAddress: emailController.text,
                   password: passwordController.text,
@@ -99,21 +111,37 @@ class LoginDialog extends ConsumerWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text(StringConstants.wrongPassword),
-                        backgroundColor: ColorConstants.red,
+                        backgroundColor: ColorConstants.blue,
                       ),
                     );
-                  } else if (status == LogInStatus.userNotFound) {
+
+                  }  else if (status == LogInStatus.userNotFound) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text(StringConstants.userNotFound),
-                        backgroundColor: ColorConstants.red,
+                        backgroundColor: ColorConstants.blue,
+                      ),
+                    );
+                  } else if (status == LogInStatus.invalidEmailFormat) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(StringConstants.invalidEmailFormat),
+                        backgroundColor: ColorConstants.blue,
+                      ),
+                    );
+                  } else if (status == LogInStatus.tooManyRequests) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(StringConstants.tooManyRequests),
+                        backgroundColor: ColorConstants.blue,
                       ),
                     );
                   } else {
+                    // Assuming all other errors are network-related for simplicity
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text(StringConstants.anErrorOccurred),
-                        backgroundColor: ColorConstants.red,
+                        backgroundColor: ColorConstants.blue,
                       ),
                     );
                   }
