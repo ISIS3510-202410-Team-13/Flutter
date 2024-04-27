@@ -12,4 +12,7 @@ class HTTPConstants {
 
   // EVENTS
   static const String EVENTS_BASE_URL = 'https://unischedule-5ee93.uc.r.appspot.com/';
+
+  // FEATURE ANALYTICS
+  static const String FEATURE_ANALYTICS_BASE_URL = 'https://unischedule-5ee93.uc.r.appspot.com/';
 }

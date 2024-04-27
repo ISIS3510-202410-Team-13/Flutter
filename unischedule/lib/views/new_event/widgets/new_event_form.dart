@@ -439,6 +439,7 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
             const SizedBox(height: 20),
             InkWell(
               onTap: () {
+                ref.read(registerButtonTapProvider(buttonName: AnalyticsConstants.DATE_TIME_PICKER));
                 DatePicker.showDateTimePicker(
                   context,
                   showTitleActions: true,
@@ -604,69 +605,70 @@ class _NewEventFormState extends ConsumerState<NewEventForm> {
             const SizedBox(height: 12),
             InkWell(
               onTap: () {
-              if (connectivityStatus == ConnectivityStatus.isConnected) {
-              showGeneralDialog(
-              context: context,
-              barrierDismissible: true,
-              barrierLabel: MaterialLocalizations.of(context)
-                .modalBarrierDismissLabel,
-              barrierColor: Colors.black45,
-              transitionDuration: const Duration(milliseconds: 200),
-              pageBuilder: (BuildContext buildContext, Animation animation,
-                Animation secondaryAnimation) {
-                return Center(
-                child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: const PlaceRecommendationsDialog(),
-                ),
-                );
-              },
-              );
-              }
+                if (connectivityStatus == ConnectivityStatus.isConnected) {
+                  ref.read(registerButtonTapProvider(buttonName: AnalyticsConstants.FIND_PLACE_BUTTON));
+                  showGeneralDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    barrierLabel: MaterialLocalizations.of(context)
+                      .modalBarrierDismissLabel,
+                    barrierColor: Colors.black45,
+                    transitionDuration: const Duration(milliseconds: 200),
+                    pageBuilder: (BuildContext buildContext, Animation animation,
+                      Animation secondaryAnimation) {
+                      return Center(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                          child: const PlaceRecommendationsDialog(),
+                        ),
+                      );
+                    },
+                  );
+                }
               },
               child: Container(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              decoration: BoxDecoration(
-              color: connectivityStatus == ConnectivityStatus.isConnected
-                ? const Color(0xFF9DCC18).withOpacity(0.15)
-                : Colors.grey.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: const Color(0xFFD0D5DD),
-                width: 1),
-              ),
-              width: double.infinity,
-              child:
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                connectivityStatus == ConnectivityStatus.isConnected
-                ? 'Find a Place on Campus' 
-                : 'No Internet Connection',
-                style: TextStyle(
-                fontFamily: 'Poppins', 
-                fontSize: 16,
-                color: Color(0xFF475569),
-                fontWeight: FontWeight.bold)),
-              const SizedBox(width: 12),
-              connectivityStatus == ConnectivityStatus.isConnected
-                ? SvgPicture.asset(
-                    'assets/icons/location-dot.svg',
-                    width: 24,
-                    height: 24,
-                    color: const Color(0xFF475569))
-                : Icon(
-                    Icons.signal_wifi_off,
-                    size: 24,
-                    color: const Color(0xFF475569),
-                  ),
-              ]),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                decoration: BoxDecoration(
+                  color: connectivityStatus == ConnectivityStatus.isConnected
+                    ? const Color(0xFF9DCC18).withOpacity(0.15)
+                    : Colors.grey.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: const Color(0xFFD0D5DD),
+                    width: 1),
+                ),
+                width: double.infinity,
+                child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Text(
+                      connectivityStatus == ConnectivityStatus.isConnected
+                      ? 'Find a Place on Campus'
+                      : 'No Internet Connection',
+                      style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      color: Color(0xFF475569),
+                      fontWeight: FontWeight.bold)),
+                    const SizedBox(width: 12),
+                    connectivityStatus == ConnectivityStatus.isConnected
+                      ? SvgPicture.asset(
+                          'assets/icons/location-dot.svg',
+                          width: 24,
+                          height: 24,
+                          color: const Color(0xFF475569))
+                      : Icon(
+                          Icons.signal_wifi_off,
+                          size: 24,
+                          color: const Color(0xFF475569),
+                        ),
+                  ]),
               ),
             ),
             // TODO this is a temporal button to create the event
             const SizedBox(height: 20),
             InkWell(
               onTap: () {
+                ref.read(registerButtonTapProvider(buttonName: AnalyticsConstants.CREATE_EVENT_BUTTON));
                 DateTime notificationTime = _eventStartTime.subtract(
                     Duration(minutes: _getReminderMinutes(_selectedReminder)));
                 String eventId = _uuid.v4();

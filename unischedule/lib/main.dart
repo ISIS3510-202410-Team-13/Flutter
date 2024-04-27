@@ -51,6 +51,24 @@ class UniScheduleApp extends ConsumerStatefulWidget {
 }
 
 class _UniScheduleAppState extends ConsumerState<UniScheduleApp> {
+
+  late LifecycleObserver _lifecycleObserver;
+
+  @override
+  void initState() {
+    super.initState();
+    _lifecycleObserver = LifecycleObserver(ref);
+    ref.read(registerEventProvider(eventName: AnalyticsConstants.APP_INIT));
+    WidgetsBinding.instance.addObserver(_lifecycleObserver);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(_lifecycleObserver);
+    ref.read(registerEventProvider(eventName: AnalyticsConstants.APP_DISPOSED));
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final goRouter = ref.watch(goRouterProvider);
@@ -74,5 +92,32 @@ class _EagerInitialization extends ConsumerWidget {
     ref.watch(fetchFriendsProvider);
     ref.watch(fetchGroupsProvider);
     return child;
+  }
+}
+
+class LifecycleObserver with WidgetsBindingObserver {
+  LifecycleObserver(this.ref);
+  final WidgetRef ref;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        ref.read(registerEventProvider(eventName: AnalyticsConstants.APP_RESUMED));
+        break;
+      case AppLifecycleState.paused:
+        ref.read(registerEventProvider(eventName: AnalyticsConstants.APP_PAUSED));
+        break;
+      case AppLifecycleState.inactive:
+        ref.read(registerEventProvider(eventName: AnalyticsConstants.APP_INACTIVE));
+        break;
+      case AppLifecycleState.detached:
+        ref.read(registerEventProvider(eventName: AnalyticsConstants.APP_DETACHED));
+        break;
+      case AppLifecycleState.hidden:
+        ref.read(registerEventProvider(eventName: AnalyticsConstants.APP_HIDDEN));
+        break;
+    }
   }
 }

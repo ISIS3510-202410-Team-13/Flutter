@@ -15,13 +15,11 @@ class ConnectivityStatusNotifier extends StateNotifier<ConnectivityStatus> {
         .listen((result) => _setConnectivityStatus(result));  }
 
   Future<void> checkConnectivity() async {
-    print("wtf");
     var connectivityResult = await Connectivity().checkConnectivity();
     _setConnectivityStatus(connectivityResult.first);
   }
 
   void _setConnectivityStatus(ConnectivityResult results) {
-    print(results); // Acceso al primer elemento (conectividad actual)
     switch (results) {
       case ConnectivityResult.mobile:
       case ConnectivityResult.wifi:

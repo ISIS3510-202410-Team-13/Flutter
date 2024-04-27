@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:unischedule/constants/analytics/analytics_constants.dart';
 import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/providers/authentication/authentication_provider.dart';
+import 'package:unischedule/providers/feature_analytics/feature_analytics_provider.dart';
 
 class UniScheduleDrawer extends ConsumerWidget {
   const UniScheduleDrawer({super.key});
@@ -68,6 +70,7 @@ class UniScheduleDrawer extends ConsumerWidget {
 
                     InkWell(
                       onTap: () {
+                        ref.read(registerButtonTapProvider(buttonName: AnalyticsConstants.SIGNOUT_BUTTON));
                         ref.read(authenticationStatusProvider.notifier).signOut();
                         context.go(RouteConstants.root);
                       },
