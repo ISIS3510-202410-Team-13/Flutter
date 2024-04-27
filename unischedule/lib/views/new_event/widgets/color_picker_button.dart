@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/constants/constants.dart';
+import 'package:unischedule/providers/feature_analytics/feature_analytics_provider.dart';
 
-class ColorPickerButton extends StatefulWidget {
+class ColorPickerButton extends ConsumerStatefulWidget {
   final void Function(String) onColorSelected;  // Callback para devolver el color en formato HEX
 
-  const ColorPickerButton({Key? key, required this.onColorSelected}) : super(key: key);
+  const ColorPickerButton({super.key, required this.onColorSelected});
 
   @override
-  _ColorPickerButtonState createState() => _ColorPickerButtonState();
+  ConsumerState<ColorPickerButton> createState() => _ColorPickerButtonState();
 }
 
-class _ColorPickerButtonState extends State<ColorPickerButton> {
+class _ColorPickerButtonState extends ConsumerState<ColorPickerButton> {
   Color currentColor = ColorConstants.limerick; // Usa el color por defecto de tus constantes
 
   void changeColor(Color color) {
@@ -23,6 +25,7 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
         onPressed: () {
+          ref.read(registerButtonTapProvider(buttonName: AnalyticsConstants.COLOR_PICKER_BUTTON));
           showDialog(
             context: context,
             builder: (BuildContext context) {

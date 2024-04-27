@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/constants/constants.dart';
+import 'package:unischedule/providers/providers.dart';
 import 'login_dialog.dart';
 import 'signup_dialog.dart';
 
-class NewUserOptions extends StatelessWidget {
+class NewUserOptions extends ConsumerWidget {
   const NewUserOptions({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         ElevatedButton(
-          onPressed: () => {
+          onPressed: () {
+            ref.read(registerButtonTapProvider(buttonName: AnalyticsConstants.LOGIN_BUTTON));
             showDialog(
               context: context,
               builder: (context) => ScaffoldMessenger(
@@ -20,14 +23,16 @@ class NewUserOptions extends StatelessWidget {
                   backgroundColor: ColorConstants.transparent,
                   body: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onTap: () => Navigator.of(context).pop(),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
                     child: GestureDetector(
                       child: const LoginDialog(),
                     )
                   ),
                 ),
               ),
-            ),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: ColorConstants.blue,
@@ -39,7 +44,8 @@ class NewUserOptions extends StatelessWidget {
         ),
         const SizedBox(height: 15.0),
         ElevatedButton(
-          onPressed: () => {
+          onPressed: () {
+            ref.read(registerButtonTapProvider(buttonName: AnalyticsConstants.SIGN_UP_BUTTON));
             showDialog(
               context: context,
               builder: (context) => ScaffoldMessenger(
@@ -54,7 +60,7 @@ class NewUserOptions extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: ColorConstants.white,

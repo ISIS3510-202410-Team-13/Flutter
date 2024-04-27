@@ -9,3 +9,4 @@ export 'styles/style_constants.dart';
 export 'theme/app_theme.dart';
 export 'theme/text_theme.dart';
 export 'types/type_constants.dart';
+export 'analytics/analytics_constants.dart';
