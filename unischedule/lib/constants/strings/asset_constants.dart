@@ -10,4 +10,7 @@ class AssetConstants {
   static const String icSquarePlus = 'assets/icons/square-plus.svg';
   static const String icCloud = 'assets/icons/plane.svg';
   static const String icCloudSlash = 'assets/icons/plane-slash.svg';
+
+  // Buildings
+  static final Function(String) imageBuilding = (String building) => 'assets/images/buildings/$building.jpg';
 }
