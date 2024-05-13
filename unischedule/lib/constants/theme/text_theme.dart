@@ -52,7 +52,11 @@ TextTheme textTheme(BuildContext context) {
       fontWeight: FontWeight.w600,
     ),
 
-    titleLarge: null, // TODO: Add custom text styles here
+    titleLarge: const TextStyle(
+      fontFamily: StyleConstants.fontFamily,
+      fontSize: 28,
+      fontWeight: FontWeight.bold,
+    ),
 
     titleMedium: const TextStyle(
       fontFamily: StyleConstants.fontFamily,
@@ -60,7 +64,11 @@ TextTheme textTheme(BuildContext context) {
       fontWeight: FontWeight.bold,
     ),
 
-    titleSmall: null, // TODO: Add custom text styles here
+    titleSmall: const TextStyle(
+      fontFamily: StyleConstants.fontFamily,
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+    ),
 
     bodyLarge: null, // TODO: Add custom text styles here
 
@@ -78,7 +86,9 @@ TextTheme textTheme(BuildContext context) {
 
     labelMedium: null, // TODO: Add custom text styles here
 
-    labelSmall: null, // TODO: Add custom text styles here
-
+    labelSmall: const TextStyle(
+      fontFamily: StyleConstants.fontFamily,
+      fontSize: 12,
+    ),
   );
 }

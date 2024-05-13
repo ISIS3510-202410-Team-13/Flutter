@@ -7,6 +7,7 @@ class AnalyticsConstants {
   static const String DATE_TIME_PICKER = 'Date Time Picker';
   static const String FIND_PLACE_BUTTON = 'Find Place on Campus';
   static const String CREATE_EVENT_BUTTON = 'Create Event';
+  static const String SUBMIT_RATING_BUTTON = 'Submit Rating';
 
   // General Events
   static const String APP_RESUMED = 'App Resumed';

@@ -10,6 +10,7 @@ abstract class FeatureAnalyticsRepository {
   Future<void> registerButtonTap(String buttonName);
   Future<void> registerPageView(String pageName);
   Future<void> registerEvent(String eventName);
+  Future<void> submitRating(double rating, String classroom);
 }
 
 class FeatureAnalyticsRepositoryImpl extends FeatureAnalyticsRepository {
@@ -25,12 +26,14 @@ class FeatureAnalyticsRepositoryImpl extends FeatureAnalyticsRepository {
   @override
   Future<void> registerButtonTap(buttonName) async {
     final userId = ref.watch(authenticationStatusProvider)?.uid ?? 'anonymous';
+    final userType = ref.watch(authenticationStatusProvider.notifier).getUserType();
     try {
       await client.postRequest(
         'analytics/$userId/button-tap',
         data: {
           'timestamp': DateTime.now().toIso8601String(),
           'buttonName': buttonName,
+          'userType': userType,
         }
       );
     } catch (error) {
@@ -41,12 +44,14 @@ class FeatureAnalyticsRepositoryImpl extends FeatureAnalyticsRepository {
   @override
   Future<void> registerPageView(pageName) async {
     final userId = ref.watch(authenticationStatusProvider)?.uid ?? 'anonymous';
+    final userType = ref.watch(authenticationStatusProvider.notifier).getUserType();
     try {
       await client.postRequest(
         'analytics/$userId/page-view',
         data: {
           'timestamp': DateTime.now().toIso8601String(),
           'pageName': pageName,
+          'userType': userType,
         }
       );
     } catch (error) {
@@ -57,16 +62,37 @@ class FeatureAnalyticsRepositoryImpl extends FeatureAnalyticsRepository {
   @override
   Future<void> registerEvent(eventName) async {
     final userId = ref.watch(authenticationStatusProvider)?.uid ?? 'anonymous';
+    final userType = ref.watch(authenticationStatusProvider.notifier).getUserType();
     try {
       await client.postRequest(
         'analytics/$userId/event',
         data: {
           'timestamp': DateTime.now().toIso8601String(),
           'eventName': eventName,
+          'userType': userType,
         }
       );
     } catch (error) {
       print('Failed to register event: $error');
+    }
+  }
+
+  @override
+  Future<void> submitRating(rating, classroom) async {
+    final userId = ref.watch(authenticationStatusProvider)?.uid ?? 'anonymous';
+    final userType = ref.watch(authenticationStatusProvider.notifier).getUserType();
+    try {
+      await client.postRequest(
+        'analytics/$userId/rating',
+        data: {
+          'timestamp': DateTime.now().toIso8601String(),
+          'rating': rating,
+          'classroom': classroom,
+          'userType': userType,
+        }
+      );
+    } catch (error) {
+      print('Failed to submit rating: $error');
     }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:unischedule/services/local_storage/hive_box_service.dart';
@@ -94,5 +96,14 @@ class AuthenticationStatusNotifier extends StateNotifier<User?> {
     await FirebaseAuth.instance.signOut();
     await HiveBoxServiceFactory.resetHive();
     // TODO delete scheduled notifications?
+  }
+
+  String getUserType() {
+    if (state == null) {
+      return 'anonymous';
+    } else {
+      // TODO implement logic to determine user type
+      return ['Occasional', 'Regular', 'New', 'Returning'][Random().nextInt(4)];
+    }
   }
 }
