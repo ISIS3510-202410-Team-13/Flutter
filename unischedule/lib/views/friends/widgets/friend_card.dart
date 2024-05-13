@@ -7,7 +7,15 @@ import 'package:unischedule/constants/constants.dart';
 
 class FriendCard extends StatelessWidget {
   final FriendModel friend;
-  const FriendCard({super.key, required this.friend});
+  final Widget? actionIcon; // Parámetro para el icono de acción
+  final VoidCallback? onActionTap; // Callback para la acción al tocar el icono
+
+  const FriendCard({
+    super.key,
+    required this.friend,
+    this.actionIcon, // Parámetro opcional
+    this.onActionTap, // Parámetro opcional
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -62,20 +70,14 @@ class FriendCard extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: InkWell(
-              child: SvgPicture.asset(
-                AssetConstants.icComment,
-                width: StyleConstants.iconWidth,
-                height: StyleConstants.iconHeight,
-                color: ColorConstants.gullGrey,
-              ),
-              onTap: () {
-                context.push(RouteConstants.chat, extra: friend.id);
-              }
+          if (actionIcon != null && onActionTap != null) // Condicional para mostrar el icono
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: InkWell(
+                child: actionIcon,
+                onTap: onActionTap,
+              )
             ),
-          ),
         ],
       ),
     );

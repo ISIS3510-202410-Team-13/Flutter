@@ -41,7 +41,7 @@ Widget _getAppShell(BuildContext context, GoRouterState state, Widget child) {
       appBarTitle = StringConstants.groupsTitle;
       appBarColor = ColorConstants.black;
       useFAB = true;
-      fabAction = null;// en un futuro podria ser: fabAction = () => context.push(RouteConstants.newEventCalendar);
+      fabAction = () => context.push(RouteConstants.newGroup);// en un futuro podria ser: fabAction = () => context.push(RouteConstants.newEventCalendar);
       break;
   }
 
