@@ -2,21 +2,22 @@ import 'dart:ui';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/providers/providers.dart';
 import 'package:unischedule/routes/root_routes.dart';
 import 'package:unischedule/services/services.dart';
 import 'firebase_options.dart';
 
-Future<void> main() async {
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  // Flutter
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
@@ -29,16 +30,25 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
   ]);
   tz.initializeTimeZones();
-
-  // Services
+  await setupLocalNotifications();
   await HiveBoxServiceFactory.initHive();
   await NotificationService().initNotification();
 
   runApp(
     const ProviderScope(
-        child: UniScheduleApp(),
+      child: UniScheduleApp(),
     )
   );
+}
+
+Future<void> setupLocalNotifications() async {
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
 class UniScheduleApp extends ConsumerStatefulWidget {
@@ -51,8 +61,8 @@ class UniScheduleApp extends ConsumerStatefulWidget {
 }
 
 class _UniScheduleAppState extends ConsumerState<UniScheduleApp> {
-
   late LifecycleObserver _lifecycleObserver;
+  String? _fcmToken;
 
   @override
   void initState() {
@@ -60,6 +70,48 @@ class _UniScheduleAppState extends ConsumerState<UniScheduleApp> {
     _lifecycleObserver = LifecycleObserver(ref);
     ref.read(registerEventProvider(eventName: AnalyticsConstants.APP_INIT));
     WidgetsBinding.instance.addObserver(_lifecycleObserver);
+    _initializeFCM();
+  }
+
+  void _initializeFCM() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+
+    _fcmToken = await messaging.getToken();
+    print("FCM Token: $_fcmToken");
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      showNotification(message);
+    });
+  }
+
+  void showNotification(RemoteMessage message) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'your_channel_id', 'your_channel_name',
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+    );
+
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      message.notification?.title,
+      message.notification?.body,
+      platformChannelSpecifics,
+      payload: 'Custom_Sound',
+    );
   }
 
   @override
