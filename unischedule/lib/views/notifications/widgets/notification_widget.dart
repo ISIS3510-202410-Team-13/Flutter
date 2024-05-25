@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:unischedule/models/notifications/notification.dart' as model;
 import 'package:unischedule/constants/colors/color_constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class NotificationWidget extends StatelessWidget {
   final model.Notification notification;
@@ -23,7 +24,7 @@ class NotificationWidget extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.normal,
-                  fontSize: 14
+                  fontSize: 14,
                 ),
               ),
             ),
@@ -45,9 +46,22 @@ class NotificationWidget extends StatelessWidget {
             Stack(
               clipBehavior: Clip.none,  // Permite que el punto rojo se salga del stack
               children: [
-                CircleAvatar(
-                  radius: 26.5, // 53px / 2 para ajustar el tamaño del círculo
-                  backgroundImage: NetworkImage(notification.imageUrl),
+                CachedNetworkImage(
+                  imageUrl: notification.imageUrl,
+                  imageBuilder: (context, imageProvider) => CircleAvatar(
+                    radius: 26.5, // 53px / 2 para ajustar el tamaño del círculo
+                    backgroundImage: imageProvider,
+                  ),
+                  placeholder: (context, url) => CircleAvatar(
+                    radius: 26.5,
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.image, color: Colors.white),
+                  ),
+                  errorWidget: (context, url, error) => CircleAvatar(
+                    radius: 26.5,
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.error, color: Colors.red),
+                  ),
                 ),
                 // Punto rojo para notificaciones no vistas, posicionado fuera del Stack
                 if (!notification.viewed)
