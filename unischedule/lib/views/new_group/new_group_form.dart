@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/constants/colors/color_constants.dart';
 import 'package:unischedule/models/friends/friend_model.dart';
+import 'package:unischedule/models/groups/group_model.dart';
+import 'package:unischedule/providers/authentication/authentication_provider.dart';
 import 'package:unischedule/providers/friends/friends_provider.dart';
+import 'package:unischedule/providers/groups/groups_provider.dart';
 import 'package:unischedule/views/friends/widgets/friend_card.dart';
 import 'package:unischedule/views/new_event/widgets/color_picker_button.dart';
+import 'package:uuid/uuid.dart';
 
 class NewGroupForm extends ConsumerStatefulWidget {
   const NewGroupForm({super.key});
@@ -17,10 +21,20 @@ class _NewGroupFormState extends ConsumerState<NewGroupForm> {
   String _groupName = ''; // Almacenar el nombre del grupo
   List<String> _groupMembers = []; // Lista para guardar los miembros del grupo
   String _groupColor = '#9DCC18'; // Color por defecto en formato HEX
+  final Uuid _uuid = Uuid();
+  List<FriendModel> allFriends = []; // Almacenar todos los amigos
+
+  @override
+  void initState() {
+    super.initState();
+    // Cargar amigos inicialmente
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      allFriends = ref.read(fetchFriendsProvider).asData?.value ?? [];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final allFriends = ref.watch(fetchFriendsProvider).asData?.value ?? [];
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -76,11 +90,12 @@ class _NewGroupFormState extends ConsumerState<NewGroupForm> {
                       title: const Text('Members',
                           style: TextStyle(fontFamily: 'Poppins')),
                       trailing: IconButton(
-                        icon: const Icon(Icons.add, color: ColorConstants.limerick),
+                        icon: const Icon(Icons.add,
+                            color: ColorConstants.limerick),
                         onPressed: () => _showFriendsDialog(allFriends),
                       ),
                     ),
-                    ..._groupMembers.map((memberName) { 
+                    ..._groupMembers.map((memberName) {
                       FriendModel? friend;
                       try {
                         friend =
@@ -158,52 +173,59 @@ class _NewGroupFormState extends ConsumerState<NewGroupForm> {
     );
   }
 
-void _showFriendsDialog(List<FriendModel> allFriends) {
-  // Filtrar amigos disponibles que no están ya en el grupo
-  List<FriendModel> availableFriends = allFriends
-      .where((friend) => !_groupMembers.contains(friend.name))
-      .toList();
+  void _showFriendsDialog(List<FriendModel> allFriends) {
+    // Filtrar amigos disponibles que no están ya en el grupo
+    List<FriendModel> availableFriends = allFriends
+        .where((friend) => !_groupMembers.contains(friend.name))
+        .toList();
 
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        title: const Text('Select Friends', style: TextStyle(fontFamily: 'Poppins')),
-        content: availableFriends.isEmpty
-            ? const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Text("No more friends to add to the group", 
-                style: TextStyle(fontSize: 16, fontFamily: 'Poppins', fontWeight: FontWeight.w500, color: ColorConstants.gullGrey),
-                textAlign: TextAlign.center,
-              ),
-            )
-          : Container(
-              width: MediaQuery.of(context).size.width,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: availableFriends.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      if (!_groupMembers.contains(availableFriends[index].name)) {
-                        setState(() {
-                          _groupMembers.add(availableFriends[index].name);
-                        });
-                        Navigator.pop(context); // Cierra el diálogo después de seleccionar
-                      }
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.transparent,
+          title: const Text('Select Friends',
+              style: TextStyle(fontFamily: 'Poppins')),
+          content: availableFriends.isEmpty
+              ? const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    "No more friends to add to the group",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                        color: ColorConstants.gullGrey),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              : Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: availableFriends.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          if (!_groupMembers
+                              .contains(availableFriends[index].name)) {
+                            setState(() {
+                              _groupMembers.add(availableFriends[index].name);
+                            });
+                            Navigator.pop(
+                                context); // Cierra el diálogo después de seleccionar
+                          }
+                        },
+                        child: FriendCard(friend: availableFriends[index]),
+                      );
                     },
-                    child: FriendCard(friend: availableFriends[index]),
-                  );
-                },
-              ),
-            ),
-      );
-    },
-  );
-}
-
+                  ),
+                ),
+        );
+      },
+    );
+  }
 
   void _removeMember(String memberName) {
     setState(() {
@@ -211,10 +233,34 @@ void _showFriendsDialog(List<FriendModel> allFriends) {
     });
   }
 
-  void _createGroup() {
-    print('Group Name: $_groupName');
-    print('Members: $_groupMembers');
-    print('Group Color: $_groupColor');
-    Navigator.pop(context);
+  void _createGroup() async {
+    final user = ref.watch(authenticationStatusProvider);
+    final memberIds = _groupMembers
+        .map(
+            (name) => allFriends.firstWhere((friend) => friend.name == name).id)
+        .toList();
+    final newGroup = GroupModel(
+      id: _uuid.v4(),
+      name: _groupName,
+      members: [user?.uid, ...memberIds].cast<String>(),
+      groupPicture: 'https://picsum.photos/1080',
+      color: _groupColor,
+      icon: '📚',
+      events: [],
+      profilePictures: [],
+      memberCount: memberIds.length + 1,
+    );
+    try {
+      ref.read(addGroupProvider(group: newGroup).future);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Group created successfully!'),
+          backgroundColor: ColorConstants.limerick));
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Failed to create group.'),
+          backgroundColor: ColorConstants.red));
+      print('Error creating group: $e');
+    }
   }
 }

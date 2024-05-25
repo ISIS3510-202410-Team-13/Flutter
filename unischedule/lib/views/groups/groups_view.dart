@@ -34,6 +34,10 @@ class _GroupsViewState extends ConsumerState<GroupsView> {
     super.dispose();
   }
 
+  Future<void> _refreshGroups() async {
+    await ref.refresh(fetchGroupsProvider);
+  }
+
   @override
   Widget build(BuildContext context) {
     final allGroups = ref.watch(fetchGroupsProvider).asData?.value ?? [];
@@ -52,48 +56,38 @@ class _GroupsViewState extends ConsumerState<GroupsView> {
           Expanded(
             child: connectivityStatus == ConnectivityStatus.isDisconnected && allGroupsEmpty
                 ? Center(
-              child: Text(
-                "No groups to display at the moment. Please check your internet connection to view your groups.",
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 19,
-                    color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-            )
+                    child: Text(
+                      "No groups to display at the moment. Please check your internet connection to view your groups.",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 19,
+                          color: Colors.grey),
+                      textAlign: TextAlign.center,
+                    ),
+                  )
                 : allGroupsEmpty
                 ? Center(
-              child: Text(
-                "You currently have no groups to display. Add one to see them here.",
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 19,
-                    color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-            )
-                : filteredGroups.isEmpty
-                ? Center(
-              child: Text(
-                "No matching groups found.",
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 19,
-                    color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-            )
-                : ListView.builder(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 0, vertical: 0),
-              itemCount: filteredGroups.length,
-              itemBuilder: (context, index) {
-                return GroupCard(group: filteredGroups[index]);
-              },
-            ),
+                    child: Text(
+                      "You currently have no groups to display. Add one to see them here.",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 19,
+                          color: Colors.grey),
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                : RefreshIndicator(
+                    onRefresh: _refreshGroups,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                      itemCount: filteredGroups.length,
+                      itemBuilder: (context, index) {
+                        return GroupCard(group: filteredGroups[index]);
+                      },
+                    ),
+                  ),
           ),
         ],
       ),
