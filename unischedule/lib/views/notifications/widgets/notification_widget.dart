@@ -9,6 +9,29 @@ class NotificationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (notification is model.ConnectivityNotification) {
+      return Container(
+        color: ColorConstants.gullGrey, // Fondo gris
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Icon(Icons.warning, color: Colors.white), // Puedes cambiar el color si prefieres otro
+            SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                'No internet connection. You might be missing new notifications!',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: notification.viewed ? Colors.white : Colors.lightGreen[50],
@@ -72,15 +95,16 @@ class NotificationWidget extends StatelessWidget {
         return FileSharedWidget(notification as model.FileSharedNotification);
       case 'GroupJoined':
         return GroupJoinedWidget(notification as model.GroupJoinedNotification);
+      case 'Connectivity':
+        return Text(
+          'No internet connection. You might be missing new notifications!',
+          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        );
       default:
         return SizedBox();
     }
   }
 }
-
-
-
-
 
 class FriendRequestWidget extends StatelessWidget {
   final model.FriendRequestNotification notification;
@@ -129,9 +153,6 @@ class FriendRequestWidget extends StatelessWidget {
   }
 }
 
-
-
-
 class MessageWidget extends StatelessWidget {
   final model.MessageNotification notification;
 
@@ -164,9 +185,6 @@ class MessageWidget extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class NewFeatureWidget extends StatelessWidget {
   final model.NewFeatureNotification notification;
@@ -203,9 +221,6 @@ class NewFeatureWidget extends StatelessWidget {
   }
 }
 
-
-
-
 class FileSharedWidget extends StatelessWidget {
   final model.FileSharedNotification notification;
 
@@ -239,9 +254,6 @@ class FileSharedWidget extends StatelessWidget {
   }
 }
 
-
-
-
 class GroupJoinedWidget extends StatelessWidget {
   final model.GroupJoinedNotification notification;
 
@@ -265,5 +277,3 @@ class GroupJoinedWidget extends StatelessWidget {
     );
   }
 }
-
-
