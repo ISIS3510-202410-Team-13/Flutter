@@ -8,6 +8,7 @@ class HiveBoxServiceFactory {
   static late final HiveBoxService<EventModel> eventModelBox;
   static late final HiveBoxService<EventModel> eventSyncModelBox;
   static late final HiveBoxService<GroupModel> groupModelBox;
+  static late final HiveBoxService<NotificationModel> notificationModelBox;
 
   static Future<void> initHive() async {
     await Hive.initFlutter();
@@ -15,23 +16,26 @@ class HiveBoxServiceFactory {
     Hive.registerAdapter(FriendModelAdapter());
     Hive.registerAdapter(EventModelAdapter());
     Hive.registerAdapter(GroupModelAdapter());
+    Hive.registerAdapter(NotificationModelAdapter());
 
     await Hive.openBox<FriendModel>(LocalStorageConstants.friendBox);
     await Hive.openBox<EventModel>(LocalStorageConstants.eventBox);
     await Hive.openBox<EventModel>(LocalStorageConstants.eventSyncBox);
     await Hive.openBox<GroupModel>(LocalStorageConstants.groupBox);
+    await Hive.openBox<NotificationModel>(LocalStorageConstants.notificationBox);
 
     friendModelBox = HiveBoxService(LocalStorageConstants.friendBox);
     eventModelBox = HiveBoxService(LocalStorageConstants.eventBox);
-
     eventSyncModelBox = HiveBoxService(LocalStorageConstants.eventSyncBox);
     groupModelBox = HiveBoxService(LocalStorageConstants.groupBox);
+    notificationModelBox = HiveBoxService(LocalStorageConstants.notificationBox);
   }
 
   static Future<void> resetHive() async {
     await friendModelBox.clear();
     await eventModelBox.clear();
     await groupModelBox.clear();
+    await notificationModelBox.clear();
   }
 }
 
