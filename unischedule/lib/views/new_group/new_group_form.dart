@@ -4,6 +4,7 @@ import 'package:unischedule/constants/colors/color_constants.dart';
 import 'package:unischedule/models/friends/friend_model.dart';
 import 'package:unischedule/models/groups/group_model.dart';
 import 'package:unischedule/providers/authentication/authentication_provider.dart';
+import 'package:unischedule/providers/connectivity/connectivity_provider.dart';
 import 'package:unischedule/providers/friends/friends_provider.dart';
 import 'package:unischedule/providers/groups/groups_provider.dart';
 import 'package:unischedule/views/friends/widgets/friend_card.dart';
@@ -35,6 +36,7 @@ class _NewGroupFormState extends ConsumerState<NewGroupForm> {
 
   @override
   Widget build(BuildContext context) {
+    final connectivityStatus = ref.watch(connectivityStatusProvider);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -148,17 +150,25 @@ class _NewGroupFormState extends ConsumerState<NewGroupForm> {
             ),
             const SizedBox(height: 20),
             InkWell(
-              onTap: _createGroup,
+              onTap: connectivityStatus == ConnectivityStatus.isConnected
+                  ? _createGroup
+                  : null,
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF9DCC18),
+                  color: connectivityStatus == ConnectivityStatus.isConnected
+                      ? const Color(0xFF9DCC18)
+                      : Colors.grey,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFF9DCC18), width: 1),
+                  border: Border.all(color:  connectivityStatus == ConnectivityStatus.isConnected
+                      ? const Color(0xFF9DCC18)
+                      : Colors.grey, width: 1),
                 ),
                 width: double.infinity,
-                child: const Text('Create Group',
+                child: Text(connectivityStatus == ConnectivityStatus.isConnected
+                      ? 'Create Group'
+                      : 'No Internet Connection',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Poppins',
