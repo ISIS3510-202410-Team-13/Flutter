@@ -38,6 +38,23 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> with Sing
   List<model.Notification> _mapToSpecificNotifications(List<NotificationModel> notifications) {
     return notifications.map((notification) {
       switch (notification.title) {
+        case 'FriendRequest':
+          return model.FriendRequestNotification(
+            notification.description, // Assuming description contains userName
+            notification.id,
+            notification.timeAgo,
+            notification.imageUrl,
+            notification.viewed,
+          );
+        case 'Message':
+          return model.MessageNotification(
+            notification.description, // Assuming description contains friendName
+            notification.title, // Assuming title contains message
+            notification.id,
+            notification.timeAgo,
+            notification.imageUrl,
+            notification.viewed,
+          );
         case 'New Feature Alert!':
           return model.NewFeatureNotification(
             notification.title,
@@ -47,14 +64,34 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> with Sing
             "https://storage.googleapis.com/unischedule-profile_pictures/logo.png",
             notification.viewed,
           );
-      // Añadir aquí otros casos para los diferentes tipos de notificaciones
+        case 'FileShared':
+          return model.FileSharedNotification(
+            notification.description, // Assuming description contains friendName
+            notification.title, // Assuming title contains fileName
+            notification.timeAgo, // Assuming timeAgo contains fileSize
+            notification.id,
+            notification.timeAgo,
+            notification.imageUrl,
+            notification.viewed,
+          );
+        case 'GroupJoined':
+          return model.GroupJoinedNotification(
+            notification.description, // Assuming description contains friendName
+            notification.title, // Assuming title contains groupName
+            notification.id,
+            notification.timeAgo,
+            notification.imageUrl,
+            notification.viewed,
+          );
+        case 'Connectivity':
+          return model.ConnectivityNotification(notification.id);
         default:
           return model.NewFeatureNotification(
             notification.title,
             notification.description,
             notification.id,
             notification.timeAgo,
-            "https://storage.googleapis.com/unischedule-profile_pictures/logo.png",
+            notification.imageUrl,
             notification.viewed,
           );
       }
@@ -64,6 +101,7 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> with Sing
   @override
   Widget build(BuildContext context) {
     final allNotificationsFuture = ref.watch(fetchNotificationsProvider);
+    final connectivityStatus = ref.watch(connectivityStatusProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -72,7 +110,7 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> with Sing
           controller: _tabController,
           tabs: const [
             Tab(text: 'Unread'),
-            Tab(text: 'All'),
+            Tab(text: '    All    '),
           ],
         ),
       ),
@@ -84,6 +122,17 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> with Sing
           final allNotifications = _mapToSpecificNotifications(reversedNotificationModels);
           final unreadNotifications = allNotifications.where((n) => !n.viewed).toList();
 
+          if (connectivityStatus == ConnectivityStatus.isDisconnected) {
+            allNotifications.insert(
+              0,
+              model.ConnectivityNotification('connectivity_warning'),
+            );
+            unreadNotifications.insert(
+              0,
+              model.ConnectivityNotification('connectivity_warning'),
+            );
+          }
+
           return TabBarView(
             controller: _tabController,
             children: [
@@ -94,9 +143,11 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> with Sing
                   final notification = unreadNotifications[index];
                   return GestureDetector(
                     onTap: () async {
-                      final notificationModel = reversedNotificationModels.firstWhere((n) => n.id == notification.id);
-                      if (!notificationModel.viewed) {
-                        await _markAsRead(notificationModel);
+                      if (notification is! model.ConnectivityNotification) {
+                        final notificationModel = reversedNotificationModels.firstWhere((n) => n.id == notification.id);
+                        if (!notificationModel.viewed) {
+                          await _markAsRead(notificationModel);
+                        }
                       }
                     },
                     child: NotificationWidget(notification),
@@ -110,9 +161,11 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> with Sing
                   final notification = allNotifications[index];
                   return GestureDetector(
                     onTap: () async {
-                      final notificationModel = reversedNotificationModels.firstWhere((n) => n.id == notification.id);
-                      if (!notificationModel.viewed) {
-                        await _markAsRead(notificationModel);
+                      if (notification is! model.ConnectivityNotification) {
+                        final notificationModel = reversedNotificationModels.firstWhere((n) => n.id == notification.id);
+                        if (!notificationModel.viewed) {
+                          await _markAsRead(notificationModel);
+                        }
                       }
                     },
                     child: NotificationWidget(notification),

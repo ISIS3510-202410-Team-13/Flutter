@@ -43,3 +43,8 @@ class GroupJoinedNotification extends Notification {
   GroupJoinedNotification(this.friendName, this.groupName, String id, String timeAgo, String imageUrl, bool viewed)
       : super(id, timeAgo, imageUrl, 'GroupJoined', viewed);
 }
+
+class ConnectivityNotification extends Notification {
+  ConnectivityNotification(String id)
+      : super(id, '', '', 'Connectivity', false);
+}
