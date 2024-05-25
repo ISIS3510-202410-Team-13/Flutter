@@ -1,38 +1,25 @@
-// lib/notifications_view.dart
 import 'package:flutter/material.dart';
-import 'widgets/notifications_app_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:unischedule/repositories/notifications/notifications_repository.dart';
 import 'widgets/notification_widget.dart';
+import 'package:unischedule/models/notifications/notification_model.dart';
+import 'package:unischedule/providers/providers.dart';
 import 'package:unischedule/models/notifications/notification.dart' as model;
 
-
-
-class NotificationsView extends StatefulWidget {
+class NotificationsView extends ConsumerStatefulWidget {
   const NotificationsView({Key? key}) : super(key: key);
 
   @override
-  State<NotificationsView> createState() => _NotificationsViewState();
+  _NotificationsViewState createState() => _NotificationsViewState();
 }
 
-class _NotificationsViewState extends State<NotificationsView> with SingleTickerProviderStateMixin {
+class _NotificationsViewState extends ConsumerState<NotificationsView> with SingleTickerProviderStateMixin {
   TabController? _tabController;
-
-  // Listas de ejemplo para notificaciones
-  List<model.Notification> allNotifications = [
-    model.FriendRequestNotification('User 6', '5m', "https://storage.googleapis.com/unischedule-profile_pictures/user_7.png", false),
-    model.MessageNotification('Friend 1', 'Looks perfect, send it for technical review tomorrow!', '1h', "https://storage.googleapis.com/unischedule-profile_pictures/user_1.png", false),
-    model.NewFeatureNotification('New Feature Alert!', 'We’re pleased to introduce the latest enhancements in our scheduling experience.', '5h', "https://storage.googleapis.com/unischedule-profile_pictures/ICONO_SNOW_1.png", true),
-    model.FileSharedNotification('Friend 2', 'File_name.docx', '512 KB', '7h', "https://storage.googleapis.com/unischedule-profile_pictures/user_2.png", true),
-    model.GroupJoinedNotification('Friend 3 ', 'Group 2', '11h', "https://storage.googleapis.com/unischedule-profile_pictures/user_3.png", false),
-      ];
-
-  List<model.Notification> unreadNotifications = [];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    // Filtrar las notificaciones no leídas
-    unreadNotifications = allNotifications.where((n) => !n.viewed).toList();
   }
 
   @override
@@ -41,33 +28,102 @@ class _NotificationsViewState extends State<NotificationsView> with SingleTicker
     super.dispose();
   }
 
+  Future<void> _markAsRead(NotificationModel notification) async {
+    final notificationsRepository = ref.read(notificationsRepositoryProvider);
+    final updatedNotification = notification.copyWith(viewed: true);
+    await notificationsRepository.saveNotification(updatedNotification);
+    ref.refresh(fetchNotificationsProvider);
+  }
+
+  List<model.Notification> _mapToSpecificNotifications(List<NotificationModel> notifications) {
+    return notifications.map((notification) {
+      switch (notification.title) {
+        case 'New Feature Alert!':
+          return model.NewFeatureNotification(
+            notification.title,
+            notification.description,
+            notification.id,
+            notification.timeAgo,
+            "https://storage.googleapis.com/unischedule-profile_pictures/logo.png",
+            notification.viewed,
+          );
+      // Añadir aquí otros casos para los diferentes tipos de notificaciones
+        default:
+          return model.NewFeatureNotification(
+            notification.title,
+            notification.description,
+            notification.id,
+            notification.timeAgo,
+            "https://storage.googleapis.com/unischedule-profile_pictures/logo.png",
+            notification.viewed,
+          );
+      }
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final allNotificationsFuture = ref.watch(fetchNotificationsProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notifications'),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
-            Tab(text: '      All      '),
             Tab(text: 'Unread'),
+            Tab(text: 'All'),
           ],
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          // Pestaña de Todas las Notificaciones
-          ListView.builder(
-            itemCount: allNotifications.length,
-            itemBuilder: (context, index) => NotificationWidget(allNotifications[index]),
-          ),
-          // Pestaña de Notificaciones No Leídas
-          ListView.builder(
-            itemCount: unreadNotifications.length,
-            itemBuilder: (context, index) => NotificationWidget(unreadNotifications[index]),
-          ),
-        ],
+      body: allNotificationsFuture.when(
+        data: (notificationModels) {
+          // Invertir la lista de notificaciones
+          final reversedNotificationModels = notificationModels.reversed.toList();
+
+          final allNotifications = _mapToSpecificNotifications(reversedNotificationModels);
+          final unreadNotifications = allNotifications.where((n) => !n.viewed).toList();
+
+          return TabBarView(
+            controller: _tabController,
+            children: [
+              // Pestaña de Notificaciones No Leídas
+              ListView.builder(
+                itemCount: unreadNotifications.length,
+                itemBuilder: (context, index) {
+                  final notification = unreadNotifications[index];
+                  return GestureDetector(
+                    onTap: () async {
+                      final notificationModel = reversedNotificationModels.firstWhere((n) => n.id == notification.id);
+                      if (!notificationModel.viewed) {
+                        await _markAsRead(notificationModel);
+                      }
+                    },
+                    child: NotificationWidget(notification),
+                  );
+                },
+              ),
+              // Pestaña de Todas las Notificaciones
+              ListView.builder(
+                itemCount: allNotifications.length,
+                itemBuilder: (context, index) {
+                  final notification = allNotifications[index];
+                  return GestureDetector(
+                    onTap: () async {
+                      final notificationModel = reversedNotificationModels.firstWhere((n) => n.id == notification.id);
+                      if (!notificationModel.viewed) {
+                        await _markAsRead(notificationModel);
+                      }
+                    },
+                    child: NotificationWidget(notification),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+        loading: () => Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error: $err')),
       ),
       backgroundColor: const Color(0xFFF8F8F8),
     );

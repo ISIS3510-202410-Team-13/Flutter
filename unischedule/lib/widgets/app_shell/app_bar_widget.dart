@@ -5,8 +5,6 @@ import 'package:unischedule/constants/constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/providers/providers.dart';
 
-
-
 class UniScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const UniScheduleAppBar({
     super.key,
@@ -23,6 +21,8 @@ class UniScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivityStatus = ref.watch(connectivityStatusProvider);
+    final allNotificationsFuture = ref.watch(fetchNotificationsProvider);
+
     return AppBar(
       backgroundColor: ColorConstants.transparent,
       elevation: 0,
@@ -34,10 +34,10 @@ class UniScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
       ),
       leading: IconButton(
         icon: SvgPicture.asset(
-            AssetConstants.icBars,
-            width: StyleConstants.iconWidth,
-            height: StyleConstants.iconHeight,
-            color: color,
+          AssetConstants.icBars,
+          width: StyleConstants.iconWidth,
+          height: StyleConstants.iconHeight,
+          color: color,
         ),
         onPressed: () {
           Scaffold.of(context).openDrawer();
@@ -45,25 +45,29 @@ class UniScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
       ),
       actions: <Widget>[
         // Add Non-clickable Connectivity Icon
-        if (connectivityStatus == ConnectivityStatus.isDisconnected) // Assuming true means online
-    Icon(Icons.wifi_off,color: color,size: 28,)
+        if (connectivityStatus == ConnectivityStatus.isDisconnected)
+          Icon(Icons.wifi_off, color: color, size: 28)
         else
-        Icon(Icons.wifi,color: color,size: 28,),
+          Icon(Icons.wifi, color: color, size: 28),
         // Existing Notification Button
-        IconButton(
-          icon: SvgPicture.asset(
-            AssetConstants.icBell,
-            width: StyleConstants.iconWidth,
-            height: StyleConstants.iconHeight,
-            color: color,
-          ),
-          onPressed: () {
-            context.push(RouteConstants.notifications);
+        allNotificationsFuture.when(
+          data: (notifications) {
+            final unreadCount = notifications.where((n) => !n.viewed).length;
+            return IconButton(
+              icon: Icon(
+                unreadCount >= 1 ? Icons.notifications_active : Icons.notifications,
+                color: color,
+                size: 28,
+              ),
+              onPressed: () {
+                context.push(RouteConstants.notifications);
+              },
+            );
           },
+          loading: () => Icon(Icons.notifications, color: color, size: 28),
+          error: (err, stack) => Icon(Icons.error, color: color, size: 28),
         ),
       ],
-
-
     );
   }
 }

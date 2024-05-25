@@ -8,10 +8,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:unischedule/constants/constants.dart';
+import 'package:unischedule/models/notifications/notification_model.dart';
 import 'package:unischedule/providers/providers.dart';
 import 'package:unischedule/routes/root_routes.dart';
 import 'package:unischedule/services/services.dart';
 import 'firebase_options.dart';
+import 'package:unischedule/repositories/repositories.dart';
+
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -95,24 +98,42 @@ class _UniScheduleAppState extends ConsumerState<UniScheduleApp> {
     });
   }
 
-  void showNotification(RemoteMessage message) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'your_channel_id', 'your_channel_name',
-      importance: Importance.max,
-      priority: Priority.high,
-      showWhen: false,
-    );
+void showNotification(RemoteMessage message) async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    'your_channel_id', 'your_channel_name',
+    importance: Importance.max,
+    priority: Priority.high,
+    showWhen: false,
+  );
 
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+  const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      message.notification?.title,
-      message.notification?.body,
-      platformChannelSpecifics,
-      payload: 'Custom_Sound',
-    );
-  }
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    message.notification?.title,
+    message.notification?.body,
+    platformChannelSpecifics,
+    payload: 'Custom_Sound',
+  );
+
+  // Crear una instancia de NotificationModel
+  final notification = NotificationModel(
+    id: message.messageId ?? '',
+    title: message.notification?.title ?? '',
+    description: message.notification?.body ?? '',
+    timeAgo: 'just now',
+    imageUrl: '', // Asigna la URL de la imagen si está disponible
+    viewed: false,
+  );
+
+  // Guardar la notificación en Hive
+  final notificationsRepository = ref.read(notificationsRepositoryProvider);
+  await notificationsRepository.saveNotification(notification);
+
+  ref.refresh(fetchNotificationsProvider);
+}
+
+
 
   @override
   void dispose() {

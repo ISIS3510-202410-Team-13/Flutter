@@ -15,4 +15,7 @@ class HTTPConstants {
 
   // FEATURE ANALYTICS
   static const String FEATURE_ANALYTICS_BASE_URL = 'https://unischedule-5ee93.uc.r.appspot.com/';
+
+    // NOTIFICATIONS
+  static const String NOTIFICATIONS_BASE_URL = 'https://unischedule-5ee93.uc.r.appspot.com/';
 }
