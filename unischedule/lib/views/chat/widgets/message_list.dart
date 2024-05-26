@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:unischedule/constants/colors/color_constants.dart';
+import 'package:unischedule/models/chat/message_model.dart';
 import 'package:unischedule/services/chat/chat_service.dart';
 
 import 'chat_bubble.dart';
@@ -31,7 +32,8 @@ class MessageList extends StatelessWidget {
           );
         }
 
-        final messages = snapshot.data?.docs.reversed;
+        final messages = snapshot.data?.messages;
+        final lastTyped = snapshot.data?.lastTyped;
         if (messages == null || messages.isEmpty) {
           return const Padding(
             padding: EdgeInsets.all(20.0),
@@ -41,15 +43,14 @@ class MessageList extends StatelessWidget {
           );
         }
 
-        final messagesByDate = <String, List<Map<String, dynamic>>>{};
+        final messagesByDate = <String, List<MessageModel>>{};
         for (final message in messages) {
-          final messageData = message.data() as Map<String, dynamic>;
-          final timestamp = messageData['timestamp'] as Timestamp;
+          final timestamp = message.timestamp;
           final date = DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch).toIso8601String().substring(0, 10);
           if (messagesByDate[date] == null) {
-            messagesByDate[date] = [];
+            messagesByDate[date] = <MessageModel>[];
           }
-          messagesByDate[date]?.add(messageData);
+          messagesByDate[date]?.add(message);
         }
 
         final orderedDates = messagesByDate.keys.toList()..sort();
@@ -66,7 +67,7 @@ class MessageList extends StatelessWidget {
     );
   }
 
-  Widget _buildMessagesByDate(String date, List<Map<String, dynamic>> messages) {
+  Widget _buildMessagesByDate(String date, List<MessageModel> messages) {
     DateFormat df = DateFormat('MMMM dd, yyyy');
     return Column(
       children: [
@@ -99,10 +100,10 @@ class MessageList extends StatelessWidget {
         ),
         for (final message in messages)
           ChatBubble(
-            message: message['message'],
-            isMe: message['senderId'] == userId,
-            name: message['name'],
-            profilePicture: message['profilePicture'],
+            message: message.message,
+            isMe: message.senderId == userId,
+            name: message.name,
+            profilePicture: message.profilePicture,
           ),
       ],
     );

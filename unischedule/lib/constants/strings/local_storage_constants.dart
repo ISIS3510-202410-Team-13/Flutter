@@ -5,6 +5,8 @@ class LocalStorageConstants {
   static const int eventSyncModelTypeId = 2;
   static const int groupModelTypeId = 3;
   static const int notificationModelTypeId = 4;
+  static const int chatModelTypeId = 5;
+  static const int messageModelTypeId = 6;
 
   // Box names
   static const String friendBox = 'friendBox';
@@ -12,4 +14,5 @@ class LocalStorageConstants {
   static const String eventBox = 'eventBox';
   static const String eventSyncBox = 'eventSyncBox';
   static const String notificationBox = 'notificationBox';
+  static const String chatBox = 'chatBox';
 }

@@ -6,9 +6,11 @@ class ChatBottomBar extends StatefulWidget {
   const ChatBottomBar({
     super.key,
     required this.otherUserId,
+    required this.messageController,
   });
 
   final String otherUserId;
+  final TextEditingController messageController;
 
   @override
   State<ChatBottomBar> createState() => _ChatBottomBarState();
@@ -16,7 +18,6 @@ class ChatBottomBar extends StatefulWidget {
 
 class _ChatBottomBarState extends State<ChatBottomBar> {
 
-  final _messageController = TextEditingController();
   bool hasText = false;
 
   @override
@@ -53,7 +54,7 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
               ),
               padding: const EdgeInsets.only(left: 16, right: 4),
               child: TextField(
-                controller: _messageController,
+                controller: widget.messageController,
                 textAlignVertical: TextAlignVertical.center,
                 clipBehavior: Clip.antiAlias,
                 maxLength: 1000,
@@ -61,6 +62,7 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
                 onChanged: (value) {
                   setState(() {
                     hasText = value.isNotEmpty;
+                    ChatService().updateLastTyped(widget.otherUserId, value);
                   });
                 },
                 decoration: const InputDecoration(
@@ -84,14 +86,13 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
           IconButton(
             icon: Icon(
               Icons.send,
-              color: hasText ? ColorConstants.limerick : ColorConstants.gullGrey,
+              color: (hasText) ? ColorConstants.limerick : ColorConstants.gullGrey,
               size: 28
             ),
             onPressed: () {
-              if (_messageController.text.isNotEmpty) {
-                print(_messageController.text);
-                ChatService().sendMessage(_messageController.text, widget.otherUserId)
-                  .then((value) => value ? _messageController.clear() : null);
+              if (hasText) {
+                ChatService().sendMessage(widget.messageController.text, widget.otherUserId);
+                widget.messageController.clear();
               }
             },
           ),

@@ -9,6 +9,7 @@ class HiveBoxServiceFactory {
   static late final HiveBoxService<EventModel> eventSyncModelBox;
   static late final HiveBoxService<GroupModel> groupModelBox;
   static late final HiveBoxService<NotificationModel> notificationModelBox;
+  static late final HiveBoxService<ChatModel> chatModelBox;
 
   static Future<void> initHive() async {
     await Hive.initFlutter();
@@ -17,18 +18,22 @@ class HiveBoxServiceFactory {
     Hive.registerAdapter(EventModelAdapter());
     Hive.registerAdapter(GroupModelAdapter());
     Hive.registerAdapter(NotificationModelAdapter());
+    Hive.registerAdapter(MessageModelAdapter());
+    Hive.registerAdapter(ChatModelAdapter());
 
     await Hive.openBox<FriendModel>(LocalStorageConstants.friendBox);
     await Hive.openBox<EventModel>(LocalStorageConstants.eventBox);
     await Hive.openBox<EventModel>(LocalStorageConstants.eventSyncBox);
     await Hive.openBox<GroupModel>(LocalStorageConstants.groupBox);
     await Hive.openBox<NotificationModel>(LocalStorageConstants.notificationBox);
+    await Hive.openBox<ChatModel>(LocalStorageConstants.chatBox);
 
     friendModelBox = HiveBoxService(LocalStorageConstants.friendBox);
     eventModelBox = HiveBoxService(LocalStorageConstants.eventBox);
     eventSyncModelBox = HiveBoxService(LocalStorageConstants.eventSyncBox);
     groupModelBox = HiveBoxService(LocalStorageConstants.groupBox);
     notificationModelBox = HiveBoxService(LocalStorageConstants.notificationBox);
+    chatModelBox = HiveBoxService(LocalStorageConstants.chatBox);
   }
 
   static Future<void> resetHive() async {
@@ -36,6 +41,7 @@ class HiveBoxServiceFactory {
     await eventModelBox.clear();
     await groupModelBox.clear();
     await notificationModelBox.clear();
+    await chatModelBox.clear();
   }
 }
 

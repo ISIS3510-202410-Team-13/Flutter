@@ -1,18 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
+import 'package:unischedule/constants/constants.dart';
 
 part 'message_model.freezed.dart';
 part 'message_model.g.dart';
 
 @freezed
+@HiveType(typeId: LocalStorageConstants.messageModelTypeId)
 class MessageModel with _$MessageModel {
   const factory MessageModel({
-    required String message,
-    required String name,
-    required String profilePicture,
-    required String senderId,
+    @HiveField(0) required String message,
+    @HiveField(1) required String name,
+    @HiveField(2) required String profilePicture,
+    @HiveField(3) required String senderId,
     @TimestampConverter()
-    required Timestamp timestamp,
+    @HiveField(4) required Timestamp timestamp,
   }) = _MessageModel;
 
   factory MessageModel.fromJson(Map<String, dynamic> json) => _$MessageModelFromJson(json);
