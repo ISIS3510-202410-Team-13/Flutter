@@ -58,4 +58,13 @@ class StringConstants {
 
   // Groups
   static const String groupsTitle = 'Groups';
+
+  // New Event
+  static const String placeRecommendations = 'Place Recommendations';
+  static const String rateYourRecommendations = 'Rate your recommendations';
+  static const String cancelButton = 'Cancel';
+  static const String confirmButton = 'Confirm';
+  static const String submitButton = 'Submit';
+  static final Function(String, String) available = (String from, String to) => 'Available from $from to $to';
+  static final Function(String) recommendationError = (String error) => 'Sorry for the inconvenience, we could not fetch your recommendations: $error';
 }

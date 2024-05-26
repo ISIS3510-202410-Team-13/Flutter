@@ -27,11 +27,23 @@ Future<void> registerPageView(
 
 @riverpod
 Future<void> registerEvent(
-    RegisterEventRef ref, {
-      required String eventName,
-    }
+  RegisterEventRef ref, {
+    required String eventName,
+  }
 ){
   final featureAnalyticsRepository = ref.watch(featureAnalyticsRepositoryProvider);
   ref.keepAlive();
   return featureAnalyticsRepository.registerEvent(eventName);
+}
+
+@riverpod
+Future<void> submitRating(
+  SubmitRatingRef ref, {
+    required double rating,
+    required String classroom,
+  }
+){
+  final featureAnalyticsRepository = ref.watch(featureAnalyticsRepositoryProvider);
+  ref.keepAlive();
+  return featureAnalyticsRepository.submitRating(rating, classroom);
 }

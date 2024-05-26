@@ -5,7 +5,7 @@ import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/providers/feature_analytics/feature_analytics_provider.dart';
 
 class ColorPickerButton extends ConsumerStatefulWidget {
-  final void Function(String) onColorSelected;  // Callback para devolver el color en formato HEX
+  final void Function(String) onColorSelected;
 
   const ColorPickerButton({super.key, required this.onColorSelected});
 
@@ -14,11 +14,11 @@ class ColorPickerButton extends ConsumerStatefulWidget {
 }
 
 class _ColorPickerButtonState extends ConsumerState<ColorPickerButton> {
-  Color currentColor = ColorConstants.limerick; // Usa el color por defecto de tus constantes
+  Color currentColor = ColorConstants.limerick;
 
   void changeColor(Color color) {
     setState(() => currentColor = color);
-    widget.onColorSelected('#${color.value.toRadixString(16).padLeft(8, '0').substring(2)}'); // Convierte a HEX y envía a través del callback
+    widget.onColorSelected('#${color.value.toRadixString(16).padLeft(8, '0').substring(2)}');
   }
 
   @override

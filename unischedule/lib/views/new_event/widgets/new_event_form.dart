@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,7 +12,6 @@ import 'package:unischedule/services/services.dart';
 import 'place_recommendation_dialog.dart';
 import 'color_picker_button.dart';
 import 'package:uuid/uuid.dart';
-import '';
 
 class NewEventForm extends ConsumerStatefulWidget {
   const NewEventForm({super.key});

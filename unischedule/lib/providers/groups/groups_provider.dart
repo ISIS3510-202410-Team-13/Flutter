@@ -13,3 +13,16 @@ Future<List<GroupModel>> fetchGroups(FetchGroupsRef ref) {
 
   return groupsRepository.fetchGroups();
 }
+
+@riverpod
+Future<void> addGroup(
+    AddGroupRef ref, {
+      required GroupModel group,
+    }
+){
+  final groupsRepository = ref.watch(groupsRepositoryProvider);
+  ref.keepAlive();
+
+  return groupsRepository.addGroup(group)
+      .then((_) => ref.refresh(fetchGroupsProvider));
+}

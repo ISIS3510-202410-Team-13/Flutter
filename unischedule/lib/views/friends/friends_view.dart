@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:unischedule/constants/colors/color_constants.dart';
+import 'package:unischedule/constants/strings/asset_constants.dart';
+import 'package:unischedule/constants/strings/route_constants.dart';
+import 'package:unischedule/constants/styles/style_constants.dart';
 import 'package:unischedule/models/models.dart';
 import 'package:unischedule/providers/providers.dart';
+import 'package:unischedule/services/chat/chat_service.dart';
 import 'package:unischedule/utils/filter.dart';
 import 'package:unischedule/widgets/widgets.dart';
 import 'widgets/friend_card.dart';
@@ -50,50 +57,64 @@ class _FriendsViewState extends ConsumerState<FriendsView> {
           UniScheduleSearchBar(searchController: _searchController),
           const SizedBox(height: 8),
           Expanded(
-            child: connectivityStatus == ConnectivityStatus.isDisconnected && allFriendsEmpty
+            child: connectivityStatus == ConnectivityStatus.isDisconnected &&
+                    allFriendsEmpty
                 ? Center(
-              child: Text(
-                "No friends to display at the moment. Please check your internet connection to view your friends.",
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 19,
-                    color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-            )
+                    child: Text(
+                      "No friends to display at the moment. Please check your internet connection to view your friends.",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 19,
+                          color: Colors.grey),
+                      textAlign: TextAlign.center,
+                    ),
+                  )
                 : allFriendsEmpty
-                ? Center(
-              child: Text(
-                "You currently have no friends to display. Add one to see them here.",
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 19,
-                    color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-            )
-                : filteredFriends.isEmpty
-                ? Center(
-              child: Text(
-                "No matching friends found.",
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 19,
-                    color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-            )
-                : ListView.builder(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 0, vertical: 0),
-              itemCount: filteredFriends.length,
-              itemBuilder: (context, index) {
-                return FriendCard(friend: filteredFriends[index]);
-              },
-            ),
+                    ? Center(
+                        child: Text(
+                          "You currently have no friends to display. Add one to see them here.",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 19,
+                              color: Colors.grey),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    : filteredFriends.isEmpty
+                        ? Center(
+                            child: Text(
+                              "No matching friends found.",
+                              style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 19,
+                                  color: Colors.grey),
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        : ListView.builder(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 0),
+                            itemCount: filteredFriends.length,
+                            itemBuilder: (context, index) {
+                              return FriendCard(
+                                  friend: filteredFriends[index],
+                                  actionIcon: SvgPicture.asset(
+                                    AssetConstants.icComment,
+                                    width: StyleConstants.iconWidth,
+                                    height: StyleConstants.iconHeight,
+                                    color: ColorConstants.gullGrey,
+                                  ),
+                                  onActionTap: () {
+                                    context.push(
+                                      RouteConstants.chat,
+                                      extra: filteredFriends[index].id
+                                    );
+                                  });
+                            },
+                          ),
           ),
         ],
       ),

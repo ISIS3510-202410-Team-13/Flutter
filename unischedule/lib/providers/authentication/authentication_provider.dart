@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:unischedule/services/local_storage/hive_box_service.dart';
@@ -44,6 +46,8 @@ class AuthenticationStatusNotifier extends StateNotifier<User?> {
         password: password,
       );
       await credential.user!.updateDisplayName(name);
+      final randomPhotoPlaceholder = 'https://storage.googleapis.com/unischedule-profile_pictures/user_${Random().nextInt(24)}.png';
+      await credential.user!.updatePhotoURL(randomPhotoPlaceholder);
       return SignUpStatus.success;
     } on FirebaseAuthException catch (e) {
       // TODO add errors for missing @, no internet connection, etc.
@@ -94,5 +98,14 @@ class AuthenticationStatusNotifier extends StateNotifier<User?> {
     await FirebaseAuth.instance.signOut();
     await HiveBoxServiceFactory.resetHive();
     // TODO delete scheduled notifications?
+  }
+
+  String getUserType() {
+    if (state == null) {
+      return 'anonymous';
+    } else {
+      // TODO implement logic to determine user type
+      return ['Occasional', 'Regular', 'New', 'Returning'][Random().nextInt(4)];
+    }
   }
 }

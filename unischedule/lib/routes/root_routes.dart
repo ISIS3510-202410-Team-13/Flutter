@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unischedule/constants/constants.dart';
 import 'package:unischedule/providers/providers.dart';
+import 'package:unischedule/views/new_group/new_group_view.dart';
 import 'package:unischedule/views/views.dart';
 import 'shell_routes.dart';
 
@@ -18,8 +19,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       getShellRoute(),
       _createRoute(RouteConstants.root, (state) => AuthenticationView(key: state.pageKey)),
       _createRoute(RouteConstants.notifications, (state) => NotificationsView(key: state.pageKey)),
-      _createRoute(RouteConstants.chat, (state) => ChatView(key: state.pageKey)),
+      _createRoute(RouteConstants.chat, (state) => ChatView(key: state.pageKey, otherUserId: state.extra as String)),
       _createRoute(RouteConstants.newEvent, (state) => NewEventView(key: state.pageKey)),
+      _createRoute(RouteConstants.newGroup, (state) => NewGroupView(key: state.pageKey)),
     ],
   );
 });

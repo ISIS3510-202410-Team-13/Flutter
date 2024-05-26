@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:unischedule/constants/constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/providers/providers.dart';
+import 'package:unischedule/models/notifications/notification_model.dart';
 
 class UniScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const UniScheduleAppBar({

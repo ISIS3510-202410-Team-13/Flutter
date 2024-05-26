@@ -10,6 +10,7 @@ part 'groups_repository.g.dart';
 abstract class GroupsRepository {
   // TODO add here all CRUD operations
   Future<List<GroupModel>> fetchGroups();
+  Future<void> addGroup(GroupModel group);
 }
 
 class GroupsRepositoryImpl extends GroupsRepository {
@@ -40,6 +41,24 @@ class GroupsRepositoryImpl extends GroupsRepository {
       })
       .catchError((error) => boxService.getAll());
     return groups;
+  }
+
+  @override
+  Future<void> addGroup(GroupModel group) async {
+    final userId = ref.watch(authenticationStatusProvider)?.uid;
+    if (userId == null) {
+      throw Exception(StringConstants.unauthorizedRequest);
+    }
+    boxService.put(group.id, group);
+    try {
+      final response = await client.postRequest('/groups', data: group.toJson());
+      boxService.put(response['groupId'], group);
+      boxService.delete(group.id);
+    } catch (error) {
+      print('Failed to add group: $error');
+      //TODO: Add Synchronization for Eventual Connectivity Strategy
+      //groupsyncModelBox.put(group.id, group);
+    }
   }
 }
 

@@ -7,7 +7,6 @@ import 'package:unischedule/utils/time.dart';
 
 part 'available_spaces_provider.g.dart';
 
-// TODO add here all use cases as functions
 @riverpod
 Future<List<AvailableSpacesModel>> fetchAvailableSpaces(FetchAvailableSpacesRef ref) async {
   final availableSpacesRepository = ref.watch(availableSpacesRepositoryProvider);
@@ -34,6 +33,6 @@ class AvailableSpacesParamsModel {
   });
 
   String get dayOfWeek => dayOfWeekId[start.weekday]!;
-  String get startTime => DateFormat('hhmm').format(start);
-  String get endTime => DateFormat('hhmm').format(addMinutesUntilMidnight(start, duration));
+  String get startTime => DateFormat('Hm').format(start).replaceAll(':', '');
+  String get endTime => DateFormat('Hm').format(addMinutesUntilMidnight(start, duration)).replaceAll(':', '');
 }
