@@ -15,3 +15,15 @@ Future<List<FriendModel>> fetchFriends(FetchFriendsRef ref) {
 
   return friendsRepository.fetchFriends();
 }
+
+@riverpod
+FriendModel? getFriend(
+    GetFriendRef ref, {
+      required String friendId,
+    }
+) {
+  final friend = ref.watch(fetchFriendsProvider).whenData(
+    (value) => value.firstWhere((element) => element.id == friendId)
+  );
+  return friend.value;
+}

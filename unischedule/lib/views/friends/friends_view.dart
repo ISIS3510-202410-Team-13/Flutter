@@ -107,8 +107,10 @@ class _FriendsViewState extends ConsumerState<FriendsView> {
                                     color: ColorConstants.gullGrey,
                                   ),
                                   onActionTap: () {
-                                    context.push(RouteConstants.chat,
-                                        extra: filteredFriends[index].id);
+                                    context.push(
+                                      RouteConstants.chat,
+                                      extra: filteredFriends[index].id
+                                    );
                                   });
                             },
                           ),

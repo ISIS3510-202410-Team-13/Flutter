@@ -19,7 +19,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       getShellRoute(),
       _createRoute(RouteConstants.root, (state) => AuthenticationView(key: state.pageKey)),
       _createRoute(RouteConstants.notifications, (state) => NotificationsView(key: state.pageKey)),
-      _createRoute(RouteConstants.chat, (state) => ChatView(key: state.pageKey)),
+      _createRoute(RouteConstants.chat, (state) => ChatView(key: state.pageKey, otherUserId: state.extra as String)),
       _createRoute(RouteConstants.newEvent, (state) => NewEventView(key: state.pageKey)),
       _createRoute(RouteConstants.newGroup, (state) => NewGroupView(key: state.pageKey)),
     ],
