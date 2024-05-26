@@ -7,6 +7,7 @@ class LocalStorageConstants {
   static const int notificationModelTypeId = 4;
   static const int chatModelTypeId = 5;
   static const int messageModelTypeId = 6;
+  static const int timestampModelTypeId = 7;
 
   // Box names
   static const String friendBox = 'friendBox';

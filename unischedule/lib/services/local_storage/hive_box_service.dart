@@ -20,6 +20,7 @@ class HiveBoxServiceFactory {
     Hive.registerAdapter(NotificationModelAdapter());
     Hive.registerAdapter(MessageModelAdapter());
     Hive.registerAdapter(ChatModelAdapter());
+    Hive.registerAdapter(TimestampAdapter());
 
     await Hive.openBox<FriendModel>(LocalStorageConstants.friendBox);
     await Hive.openBox<EventModel>(LocalStorageConstants.eventBox);

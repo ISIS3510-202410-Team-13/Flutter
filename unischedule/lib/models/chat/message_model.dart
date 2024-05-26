@@ -41,3 +41,21 @@ class TimestampConverter implements JsonConverter<Timestamp, dynamic> {
   @override
   dynamic toJson(Timestamp timestamp) => timestamp;
 }
+
+class TimestampAdapter extends TypeAdapter<Timestamp> {
+  @override
+  final int typeId = LocalStorageConstants.timestampModelTypeId;
+
+  @override
+  Timestamp read(BinaryReader reader) {
+    final seconds = reader.readInt();
+    final nanoseconds = reader.readInt();
+    return Timestamp(seconds, nanoseconds);
+  }
+
+  @override
+  void write(BinaryWriter writer, Timestamp obj) {
+    writer.writeInt(obj.seconds);
+    writer.writeInt(obj.nanoseconds);
+  }
+}
