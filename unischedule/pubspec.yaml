@@ -41,6 +41,7 @@ dependencies:
   firebase_in_app_messaging: 
   firebase_messaging:
   uuid: ^3.0.6
+  cloud_firestore: ^4.17.4
 
 dev_dependencies:
   flutter_test:
