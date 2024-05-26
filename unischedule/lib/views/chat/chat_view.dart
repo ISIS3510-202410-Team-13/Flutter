@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:unischedule/constants/colors/color_constants.dart';
 import 'package:unischedule/providers/providers.dart';
+import 'widgets/chat_bottom_bar.dart';
 import 'widgets/chat_top_bar.dart';
 
 class ChatView extends ConsumerStatefulWidget {
@@ -37,13 +38,20 @@ class _ChatViewState extends ConsumerState<ChatView> {
         otherUserName: otherUser.name,
         otherUserPhotoUrl: otherUser.profilePicture,
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Go back!'),
-        ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text('Message $index'),
+                );
+              },
+            ),
+          ),
+          ChatBottomBar(),
+        ],
       ),
     );
   }
