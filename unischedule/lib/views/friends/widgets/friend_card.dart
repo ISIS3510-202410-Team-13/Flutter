@@ -57,7 +57,7 @@ class FriendCard extends StatelessWidget {
                 errorWidget: (context, url, error) => const CircleAvatar(
                   radius: 26.5,
                   backgroundColor: ColorConstants.white,
-                  child: Icon(Icons.error, color: ColorConstants.red),
+                  child: Icon(Icons.person, color: ColorConstants.gullGrey),
                 ),
               )),
           const SizedBox(width: 16),

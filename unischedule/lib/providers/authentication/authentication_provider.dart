@@ -46,6 +46,8 @@ class AuthenticationStatusNotifier extends StateNotifier<User?> {
         password: password,
       );
       await credential.user!.updateDisplayName(name);
+      final randomPhotoPlaceholder = 'https://storage.googleapis.com/unischedule-profile_pictures/user_${Random().nextInt(24)}.png';
+      await credential.user!.updatePhotoURL(randomPhotoPlaceholder);
       return SignUpStatus.success;
     } on FirebaseAuthException catch (e) {
       // TODO add errors for missing @, no internet connection, etc.

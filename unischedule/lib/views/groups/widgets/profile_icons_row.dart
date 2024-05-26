@@ -56,7 +56,7 @@ class ProfileIconsRow extends StatelessWidget {
                     errorWidget: (context, url, error) => const CircleAvatar(
                       radius: 20,
                       backgroundColor: ColorConstants.white,
-                      child: Icon(Icons.error, color: ColorConstants.red),
+                      child: Icon(Icons.person, color: ColorConstants.gullGrey),
                     ),
                   )
                 ),
