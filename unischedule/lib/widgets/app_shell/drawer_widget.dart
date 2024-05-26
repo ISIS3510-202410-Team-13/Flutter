@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -34,12 +35,28 @@ class UniScheduleDrawer extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    const CircleAvatar(
+                    CircleAvatar(
                       radius: 62,
                       backgroundColor: ColorConstants.white,
-                      child: CircleAvatar(
-                        radius: 60,
-                        backgroundImage: AssetImage('assets/images/profile_pics/user_1.png'), // TODO replace with user profile picture
+                      child: CachedNetworkImage(
+                        imageUrl: user?.photoURL ?? 'assets/images/profile_pics/user_1.png',
+                        fadeInDuration: const Duration(milliseconds: 100),
+                        fadeOutDuration: const Duration(milliseconds: 100),
+                        filterQuality: FilterQuality.none,
+                        maxHeightDiskCache: 100,
+                        imageBuilder: (context, imageProvider) => CircleAvatar(
+                          radius: 60,
+                          backgroundImage: imageProvider,
+                        ),
+                        placeholder: (context, url) => const CircleAvatar(
+                          radius: 60,
+                          backgroundColor: ColorConstants.gullGrey,
+                        ),
+                        errorWidget: (context, url, error) => const CircleAvatar(
+                          radius: 60,
+                          backgroundColor: ColorConstants.white,
+                          child: Icon(Icons.person, color: ColorConstants.gullGrey),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 10),

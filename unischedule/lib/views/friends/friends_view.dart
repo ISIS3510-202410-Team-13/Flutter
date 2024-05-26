@@ -8,6 +8,7 @@ import 'package:unischedule/constants/strings/route_constants.dart';
 import 'package:unischedule/constants/styles/style_constants.dart';
 import 'package:unischedule/models/models.dart';
 import 'package:unischedule/providers/providers.dart';
+import 'package:unischedule/services/chat/chat_service.dart';
 import 'package:unischedule/utils/filter.dart';
 import 'package:unischedule/widgets/widgets.dart';
 import 'widgets/friend_card.dart';
